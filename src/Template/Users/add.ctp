@@ -1,3 +1,9 @@
+<?php
+$session = $this->request->getSession();
+$user_data = $session->read('Auth.User');
+//pr($user_data);
+$user_id = $user_data['id'];
+?>
 <section class="content-header">
   <h1>
     User
@@ -30,6 +36,8 @@
           <?php
             echo $this->Form->input('username');
             echo $this->Form->input('password');
+
+            echo $this->Form->input('parent', ['type' => 'hidden', 'value' => $user_id]);
 
             // Author profile (belongsTo + hasOne)
             //echo $this->Form->control('author.profile.id');
