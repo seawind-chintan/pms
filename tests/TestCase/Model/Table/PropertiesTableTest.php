@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\PropertyTypesTable;
+use App\Model\Table\PropertiesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\PropertyTypesTable Test Case
+ * App\Model\Table\PropertiesTable Test Case
  */
-class PropertyTypesTableTest extends TestCase
+class PropertiesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\PropertyTypesTable
+     * @var \App\Model\Table\PropertiesTable
      */
-    public $PropertyTypes;
+    public $Properties;
 
     /**
      * Fixtures
@@ -24,7 +24,6 @@ class PropertyTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.property_types',
         'app.properties'
     ];
 
@@ -36,8 +35,8 @@ class PropertyTypesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('PropertyTypes') ? [] : ['className' => PropertyTypesTable::class];
-        $this->PropertyTypes = TableRegistry::get('PropertyTypes', $config);
+        $config = TableRegistry::exists('Properties') ? [] : ['className' => PropertiesTable::class];
+        $this->Properties = TableRegistry::get('Properties', $config);
     }
 
     /**
@@ -47,7 +46,7 @@ class PropertyTypesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->PropertyTypes);
+        unset($this->Properties);
 
         parent::tearDown();
     }

@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\PropertyTypesTable;
+use App\Model\Table\PropertyImagesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\PropertyTypesTable Test Case
+ * App\Model\Table\PropertyImagesTable Test Case
  */
-class PropertyTypesTableTest extends TestCase
+class PropertyImagesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\PropertyTypesTable
+     * @var \App\Model\Table\PropertyImagesTable
      */
-    public $PropertyTypes;
+    public $PropertyImages;
 
     /**
      * Fixtures
@@ -24,7 +24,7 @@ class PropertyTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.property_types',
+        'app.property_images',
         'app.properties'
     ];
 
@@ -36,8 +36,8 @@ class PropertyTypesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('PropertyTypes') ? [] : ['className' => PropertyTypesTable::class];
-        $this->PropertyTypes = TableRegistry::get('PropertyTypes', $config);
+        $config = TableRegistry::exists('PropertyImages') ? [] : ['className' => PropertyImagesTable::class];
+        $this->PropertyImages = TableRegistry::get('PropertyImages', $config);
     }
 
     /**
@@ -47,7 +47,7 @@ class PropertyTypesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->PropertyTypes);
+        unset($this->PropertyImages);
 
         parent::tearDown();
     }

@@ -4,18 +4,19 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * PropertyType Entity
+ * PropertyImage Entity
  *
  * @property int $id
- * @property string $name
- * @property string $notes
+ * @property int $property_id
+ * @property $image
+ * @property string $image_dir
  * @property int $status
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Property[] $properties
+ * @property \Publishing\Model\Entity\Property $Property
  */
-class PropertyType extends Entity
+class PropertyImage extends Entity
 {
 
     /**
@@ -28,11 +29,12 @@ class PropertyType extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'notes' => true,
+        'property_id' => true,
+        'image' => true,
+        'image_dir' => true,
         'status' => true,
         'created' => true,
         'modified' => true,
-        'properties' => true
+        'Property' => true
     ];
 }

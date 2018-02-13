@@ -44,6 +44,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
+            'authorize' => ['Controller'], // Added this line
             'loginRedirect' => [
                 'controller' => 'Users',
                 'action' => 'index'
@@ -63,9 +64,32 @@ class AppController extends Controller
         //$this->loadComponent('Csrf');
     }
 
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 1) {
+            return true;
+        }
+
+        if (isset($user['role']) && $user['role'] === 2) {
+            if($this->request->getParam('controller') == "Users"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Properties"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Rooms"){
+                return true;
+            }
+        }
+
+        // Default deny
+        return false;
+    }
+
     public function beforeFilter(Event $event)
     {
-        //$this->Auth->allow(['index', 'view', 'display']);
+        $this->Auth->allow(['logout', 'login']);
     }
 
     public function beforeRender(Event $event)

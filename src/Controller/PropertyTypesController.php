@@ -35,7 +35,7 @@ class PropertyTypesController extends AppController
     public function view($id = null)
     {
         $propertyType = $this->PropertyTypes->get($id, [
-            'contain' => []
+            'contain' => ['Properties']
         ]);
 
         $this->set('propertyType', $propertyType);
