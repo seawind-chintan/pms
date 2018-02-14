@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 14, 2018 at 01:22 PM
+-- Generation Time: Feb 14, 2018 at 04:03 PM
 -- Server version: 5.5.58-0ubuntu0.14.04.1
 -- PHP Version: 5.6.33-1+ubuntu14.04.1+deb.sury.org+1
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `properties` (
   KEY `type` (`type`,`user`),
   KEY `user` (`user`),
   KEY `type_2` (`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `properties`
@@ -112,33 +112,9 @@ CREATE TABLE IF NOT EXISTS `properties` (
 
 INSERT INTO `properties` (`id`, `code`, `name`, `type`, `user`, `address`, `images`, `images_dir`, `start_time`, `end_time`, `sunday_open`, `monday_open`, `tuesday_open`, `wednesday_open`, `thursday_open`, `friday_open`, `saturday_open`, `notes`, `status`, `created`, `modified`) VALUES
 (1, 'SW001', 'Swad Restaurant', 2, 3, 'maninagar , ahmedabad', '', '1sC-58qTU0Y2', '11:30:00', '23:59:00', 1, 1, 1, 1, 1, 1, 1, 'test notes', 1, '2018-02-13 05:10:00', '2018-02-13 05:10:00'),
-(2, 'AVPI', 'Palace Inn', 1, 2, 'S.g Highway, Ahmedabad', '20225774-317331188714749-7763899870015913984-n.jpg,Rlogo.png', 'ed6fb62b-4324-4d17-80bb-0caedc151b43', '10:30:00', '23:59:00', 1, 0, 0, 1, 1, 1, 1, '', 1, '2018-02-13 06:00:51', '2018-02-14 07:52:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `property_images`
---
-
-CREATE TABLE IF NOT EXISTS `property_images` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `property_id` int(11) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `image_dir` varchar(255) DEFAULT NULL,
-  `status` int(3) NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `property` (`property_id`),
-  KEY `property_id` (`property_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `property_images`
---
-
-INSERT INTO `property_images` (`id`, `property_id`, `image`, `image_dir`, `status`, `created`, `modified`) VALUES
-(1, 2, 'df', 'dfgdfg', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(2, 'AVPI', 'Palace Inn', 1, 2, 'S.g Highway, Ahmedabad', '20225774-317331188714749-7763899870015913984-n.jpg,Rlogo.png', 'ed6fb62b-4324-4d17-80bb-0caedc151b43', '10:30:00', '23:59:00', 1, 0, 0, 1, 1, 1, 1, '', 1, '2018-02-13 06:00:51', '2018-02-14 07:52:10'),
+(6, 'AVYS', 'Yummy Sizzlers', 2, 2, 'ahmedabad', 'Panasonic-LUMIX-G-Macro-30mm-f2-8-Lens-Sample-Images5.jpg,Panasonic-LUMIX-G-Macro-30mm-f2-8-Lens-Sample-Images.jpg', 'w_po-TT7-TtVG-YOw_T63LH-O', '07:59:00', '07:59:00', 1, 0, 0, 0, 0, 0, 1, '', 1, '2018-02-14 08:00:06', '2018-02-14 08:00:06'),
+(7, 'ddfsdf', 'dsfsdfd', 1, 2, '', 'Cb-logo-sans-words-transparent-bg.png', 'LgtwP7rEfk__a3Wqwhf_T_PLt', '08:25:00', '08:25:00', 0, 0, 0, 1, 0, 0, 0, '', 0, '2018-02-14 08:26:01', '2018-02-14 08:28:51');
 
 -- --------------------------------------------------------
 
@@ -180,19 +156,22 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `code` varchar(10) NOT NULL,
   `type` int(11) NOT NULL,
   `description` text,
+  `user_id` int(11) NOT NULL,
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0:Draft;1:Published;2:Deleted;',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `type` (`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  KEY `type` (`type`),
+  KEY `type_2` (`type`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `name`, `slug`, `number`, `code`, `type`, `description`, `status`, `created`, `modified`) VALUES
-(2, 'River View', 'river-view-1', '001', 'RV001', 2, 'River View\r\nRiver View\r\nRiver View\r\nRiver View\r\nRiver View', 1, '2018-01-08 08:12:37', '2018-01-08 08:12:37');
+INSERT INTO `rooms` (`id`, `name`, `slug`, `number`, `code`, `type`, `description`, `user_id`, `status`, `created`, `modified`) VALUES
+(3, 'River View Room', 'River-View-Room', '001', 'RVR001', 4, 'cfsdfsdfsddfg', 2, 1, '2018-02-14 09:57:03', '2018-02-14 09:57:03');
 
 -- --------------------------------------------------------
 
@@ -204,22 +183,21 @@ CREATE TABLE IF NOT EXISTS `room_statuses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0:Draft;1:Published;2:Deleted;',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `room_statuses`
 --
 
-INSERT INTO `room_statuses` (`id`, `name`, `slug`, `status`, `created`, `modified`) VALUES
-(1, 'Vacant', 'vacant', 1, '2018-01-08 06:29:56', '2018-01-08 06:29:56'),
-(2, 'Vacant Dirty', 'vacant-dirty', 1, '2018-01-08 07:51:32', '2018-01-08 07:51:32'),
-(3, 'Out Of Order', 'out-of-order', 1, '2018-01-08 07:51:52', '2018-01-08 07:51:52'),
-(4, 'In Maintanance', 'in-maintanance', 1, '2018-01-08 07:52:21', '2018-01-08 07:52:21'),
-(5, 'Reserved', 'reserved', 1, '2018-01-08 07:52:42', '2018-01-08 07:52:42');
+INSERT INTO `room_statuses` (`id`, `name`, `slug`, `user_id`, `status`, `created`, `modified`) VALUES
+(6, 'Booked', 'booked', 2, 1, '2018-02-14 09:46:09', '2018-02-14 09:46:09'),
+(7, 'Empty', 'empty', 2, 1, '2018-02-14 09:46:38', '2018-02-14 09:46:38');
 
 -- --------------------------------------------------------
 
@@ -234,19 +212,20 @@ CREATE TABLE IF NOT EXISTS `room_types` (
   `price` float(11,2) NOT NULL,
   `total_rooms` int(11) NOT NULL DEFAULT '0',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '0:Draft;1:Published;2:Deleted;',
+  `user_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `room_types`
 --
 
-INSERT INTO `room_types` (`id`, `name`, `slug`, `price`, `total_rooms`, `status`, `created`, `modified`) VALUES
-(1, 'Deluxe', 'deluxe', 2000.00, 2, 1, '2018-01-08 06:05:31', '2018-01-08 06:25:40'),
-(2, 'Super Deluxe', 'super-deluxe', 4000.00, 3, 1, '2018-01-08 07:51:07', '2018-01-08 07:51:07'),
-(3, 'dfsdf', 'fsdfsdf', 3.00, 0, 0, '2018-01-29 08:01:49', '2018-01-29 08:01:49');
+INSERT INTO `room_types` (`id`, `name`, `slug`, `price`, `total_rooms`, `status`, `user_id`, `created`, `modified`) VALUES
+(4, 'Normal', 'normal', 5000.00, 5, 1, 2, '2018-02-14 09:47:11', '2018-02-14 09:47:11'),
+(5, 'Deluxe', 'deluxe', 7000.00, 2, 1, 2, '2018-02-14 09:47:47', '2018-02-14 09:47:47');
 
 -- --------------------------------------------------------
 
@@ -393,16 +372,23 @@ ALTER TABLE `properties`
   ADD CONSTRAINT `properties_ibfk_2` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `property_images`
---
-ALTER TABLE `property_images`
-  ADD CONSTRAINT `property_images_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `rooms`
 --
 ALTER TABLE `rooms`
+  ADD CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`type`) REFERENCES `room_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `room_statuses`
+--
+ALTER TABLE `room_statuses`
+  ADD CONSTRAINT `room_statuses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `room_types`
+--
+ALTER TABLE `room_types`
+  ADD CONSTRAINT `room_types_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `states`
