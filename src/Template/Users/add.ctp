@@ -105,12 +105,12 @@ function showCities(id)
 //dataString="state_id="+id;
 jQuery('#userdetail-city').parent().attr('id', "city-area")
   $.ajax({
-            url: "/club36/states/getcities/"+id,
+            url: "<?=DEFAULT_URL?>states/getcities/"+id,
             type: "POST",
             /*data: dataString,*/
             success: function(data)
              {
-              alert(data);
+              //alert(data);
               jQuery('#city-area').html(data);
              },
         });

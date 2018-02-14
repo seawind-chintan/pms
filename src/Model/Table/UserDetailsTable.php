@@ -39,6 +39,29 @@ class UserDetailsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        
+        /*$this->addBehavior('Josegonzalez/Upload.Upload', [
+            'profile_pic',
+        ]);*/
+        // Add the behaviour and configure any options you want
+        $this->addBehavior('Proffer.Proffer', [
+            'profile_pic' => [    // The name of your upload field
+                'root' => WWW_ROOT . 'img/uploads', // Customise the root upload folder here, or omit to use the default
+                'dir' => 'profile_pic_dir',   // The name of the field to store the folder
+                'thumbnailSizes' => [ // Declare your thumbnails
+                    'square' => [   // Define the prefix of your thumbnail
+                        'w' => 200, // Width
+                        'h' => 200, // Height
+                        'jpeg_quality'  => 100
+                    ],
+                    'portrait' => [     // Define a second thumbnail
+                        'w' => 300,
+                        'h' => 300
+                    ],
+                ],
+                'thumbnailMethod' => 'gd'   // Options are Imagick or Gd
+            ]
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -95,9 +118,16 @@ class UserDetailsTable extends Table
             ->scalar('address')
             ->allowEmpty('address');
 
-        $validator
-            ->scalar('profile_pic')
-            ->allowEmpty('profile_pic');
+        $validator->provider('proffer', 'Proffer\Model\Validation\ProfferRules');
+        // Set the thumbnail resize dimensions
+        $validator->add('profile_pic', 'proffer', [
+            'rule' => ['dimensions', [
+                'min' => ['w' => 100, 'h' => 100],
+                'max' => ['w' => 500, 'h' => 500]
+            ]],
+            'message' => 'Image is not correct dimensions.',
+            'provider' => 'proffer'
+        ])->allowEmpty('profile_pic');
 
         return $validator;
     }

@@ -40,12 +40,11 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-        date_default_timezone_set('Asia/Kolkata');
-//        echo $today = date("Y-m-d H:i:s");
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
+            'authorize' => ['Controller'], // Added this line
             'loginRedirect' => [
                 'controller' => 'Users',
                 'action' => 'index'
@@ -65,17 +64,61 @@ class AppController extends Controller
         //$this->loadComponent('Csrf');
     }
 
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 1) {
+            return true;
+        }
+
+        if (isset($user['role']) && $user['role'] === 2) {
+            if($this->request->getParam('controller') == "Users"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Properties"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Rooms"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "RoomTypes"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "RoomStatuses"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Countries"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "States"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Cities"){
+                return true;
+            }
+        }
+
+        // Default deny
+        return false;
+    }
+
     public function beforeFilter(Event $event)
     {
-        //$this->Auth->allow(['index', 'view', 'display']);
+        $this->Auth->allow(['logout', 'login']);
     }
 
     public function beforeRender(Event $event)
     {
         $this->viewBuilder()->setTheme('AdminLTE');
     }
-    function status_array()
-    {
-        return $status_options = array(0=>'Draft',1=>'Published');
+
+    public function generateRandomString($length = 10) {
+        $characters = '01-23-45_6789_abcdef_ghijklm-nopqr_stuvw-xyzA_BCDEFG-HIJKL_MNOP-QRSTUVWXYZ-_';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

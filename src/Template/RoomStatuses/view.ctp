@@ -1,44 +1,55 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\RoomStatus $roomStatus
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Room Status'), ['action' => 'edit', $roomStatus->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Room Status'), ['action' => 'delete', $roomStatus->id], ['confirm' => __('Are you sure you want to delete # {0}?', $roomStatus->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Room Statuses'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Room Status'), ['action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="roomStatuses view large-9 medium-8 columns content">
-    <h3><?= h($roomStatus->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($roomStatus->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Slug') ?></th>
-            <td><?= h($roomStatus->slug) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($roomStatus->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Status') ?></th>
-            <td><?= $this->Number->format($roomStatus->status) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($roomStatus->created) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Modified') ?></th>
-            <td><?= h($roomStatus->modified) ?></td>
-        </tr>
-    </table>
+<section class="content-header">
+  <h1>
+    <?php echo __('Room Status'); ?>
+  </h1>
+  <ol class="breadcrumb">
+    <li>
+    <?= $this->Html->link('<i class="fa fa-dashboard"></i> ' . __('Back'), ['action' => 'index'], ['escape' => false])?>
+    </li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <i class="fa fa-info"></i>
+                <h3 class="box-title"><?php echo __('Information'); ?></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                                                                                                                <dt><?= __('Name') ?></dt>
+                                        <dd>
+                                            <?= h($roomStatus->name) ?>
+                                        </dd>
+                                                                                                                                                            <dt><?= __('Slug') ?></dt>
+                                        <dd>
+                                            <?= h($roomStatus->slug) ?>
+                                        </dd>
+                                                                                                                                                    <dt><?= __('User') ?></dt>
+                                <dd>
+                                    <?= $roomStatus->has('user') ? $roomStatus->user->id : '' ?>
+                                </dd>
+                                                                                                
+                                            
+                                                                                                                                                            <dt><?= __('Status') ?></dt>
+                                <dd>
+                                    <?= $this->Number->format($roomStatus->status) ?>
+                                </dd>
+                                                                                                
+                                                                                                                                                                                                
+                                            
+                                    </dl>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- ./col -->
 </div>
+<!-- div -->
+
+</section>

@@ -1,0 +1,24 @@
+{
+    "name": "falco442/cake-3-admin-theme",
+    "description": "AdminTheme plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "require": {
+        "php": ">=5.5.9",
+        "cakephp/cakephp": ">=3.3.2 <4.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdminTheme\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AdminTheme\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    },
+    "license": "MIT"
+}

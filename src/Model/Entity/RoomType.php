@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property float $price
  * @property int $total_rooms
  * @property int $status
+ * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */
@@ -33,6 +34,7 @@ class RoomType extends Entity
         'price' => true,
         'total_rooms' => true,
         'status' => true,
+        'user_id' => true,
         'created' => true,
         'modified' => true
     ];

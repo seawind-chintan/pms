@@ -1,60 +1,71 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Room $room
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Room'), ['action' => 'edit', $room->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Room'), ['action' => 'delete', $room->id], ['confirm' => __('Are you sure you want to delete # {0}?', $room->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Rooms'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Room'), ['action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="rooms view large-9 medium-8 columns content">
-    <h3><?= h($room->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($room->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Slug') ?></th>
-            <td><?= h($room->slug) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Number') ?></th>
-            <td><?= h($room->number) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Code') ?></th>
-            <td><?= h($room->code) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($room->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Type') ?></th>
-            <td><?= $this->Number->format($room->type) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Status') ?></th>
-            <td><?= $this->Number->format($room->status) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($room->created) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Modified') ?></th>
-            <td><?= h($room->modified) ?></td>
-        </tr>
-    </table>
-    <div class="row">
-        <h4><?= __('Description') ?></h4>
-        <?= $this->Text->autoParagraph(h($room->description)); ?>
+<section class="content-header">
+  <h1>
+    <?php echo __('Room'); ?>
+  </h1>
+  <ol class="breadcrumb">
+    <li>
+    <?= $this->Html->link('<i class="fa fa-dashboard"></i> ' . __('Back'), ['action' => 'index'], ['escape' => false])?>
+    </li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <i class="fa fa-info"></i>
+                <h3 class="box-title"><?php echo __('Information'); ?></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                                                                                                                <dt><?= __('Name') ?></dt>
+                                        <dd>
+                                            <?= h($room->name) ?>
+                                        </dd>
+                                                                                                                                                            <dt><?= __('Slug') ?></dt>
+                                        <dd>
+                                            <?= h($room->slug) ?>
+                                        </dd>
+                                                                                                                                                            <dt><?= __('Number') ?></dt>
+                                        <dd>
+                                            <?= h($room->number) ?>
+                                        </dd>
+                                                                                                                                                            <dt><?= __('Code') ?></dt>
+                                        <dd>
+                                            <?= h($room->code) ?>
+                                        </dd>
+                                                                                                                                                    <dt><?= __('User') ?></dt>
+                                <dd>
+                                    <?= $room->has('user') ? $room->user->id : '' ?>
+                                </dd>
+                                                                                                
+                                            
+                                                                                                                                                            <dt><?= __('Type') ?></dt>
+                                <dd>
+                                    <?= $this->Number->format($room->type) ?>
+                                </dd>
+                                                                                                                <dt><?= __('Status') ?></dt>
+                                <dd>
+                                    <?= $this->Number->format($room->status) ?>
+                                </dd>
+                                                                                                
+                                                                                                                                                                                                
+                                            
+                                                                        <dt><?= __('Description') ?></dt>
+                            <dd>
+                            <?= $this->Text->autoParagraph(h($room->description)); ?>
+                            </dd>
+                                                            </dl>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
     </div>
+    <!-- ./col -->
 </div>
+<!-- div -->
+
+</section>

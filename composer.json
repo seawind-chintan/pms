@@ -9,7 +9,9 @@
         "cakephp/cakephp": "3.5.*",
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",
+        "davidyell/proffer": "^0.8",
         "falco442/cake-3-admin-theme": "^1.4",
+        "josegonzalez/cakephp-upload": "^3.7",
         "josegonzalez/dotenv": "2.*",
         "maiconpinto/cakephp-adminlte-theme": "^1.0",
         "mobiledetect/mobiledetectlib": "2.*"

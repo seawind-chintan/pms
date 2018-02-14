@@ -233,3 +233,5 @@ Configure::write('Theme', [
     'folder' => ROOT,
     'skin' => 'blue' // default is 'blue'
 ]);
+Plugin::load('Josegonzalez/Upload');
+Plugin::load('Proffer');
