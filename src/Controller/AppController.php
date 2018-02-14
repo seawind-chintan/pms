@@ -81,6 +81,15 @@ class AppController extends Controller
             elseif($this->request->getParam('controller') == "Rooms"){
                 return true;
             }
+            elseif($this->request->getParam('controller') == "Countries"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "States"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "Cities"){
+                return true;
+            }
         }
 
         // Default deny

@@ -99,7 +99,7 @@ jQuery('#user-detail-city').parent().attr('id', "city-area")
             /*data: dataString,*/
             success: function(data)
              {
-              alert(data);
+              //alert(data);
               jQuery('#city-area').html(data);
              },
         });

@@ -6,4 +6,4 @@ foreach ($cities as $citykey => $city) {
   $citiesoptions[$city->id] = $city->name;
 }
 $selected = array();
-echo $this->Form->input('userdetail.city', array('label'=>'Select Country','class' => 'form-control', 'options' => $citiesoptions, 'selected' => $selected));
+echo $this->Form->input('userdetail.city', array('label'=>'Select City','class' => 'form-control', 'options' => $citiesoptions, 'selected' => $selected));
