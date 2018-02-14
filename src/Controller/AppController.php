@@ -99,6 +99,9 @@ class AppController extends Controller
             elseif($this->request->getParam('controller') == "Packages"){
                 return true;
             }
+            elseif($this->request->getParam('controller') == "Channels"){
+                return true;
+            }
         }
 
         // Default deny
