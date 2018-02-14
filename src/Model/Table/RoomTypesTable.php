@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * RoomTypes Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Users
+ *
  * @method \App\Model\Entity\RoomType get($primaryKey, $options = [])
  * @method \App\Model\Entity\RoomType newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\RoomType[] newEntities(array $data, array $options = [])
@@ -37,6 +39,11 @@ class RoomTypesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -79,5 +86,19 @@ class RoomTypesTable extends Table
             ->notEmpty('status');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
+
+        return $rules;
     }
 }

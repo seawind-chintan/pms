@@ -81,6 +81,12 @@ class AppController extends Controller
             elseif($this->request->getParam('controller') == "Rooms"){
                 return true;
             }
+            elseif($this->request->getParam('controller') == "RoomTypes"){
+                return true;
+            }
+            elseif($this->request->getParam('controller') == "RoomStatuses"){
+                return true;
+            }
             elseif($this->request->getParam('controller') == "Countries"){
                 return true;
             }

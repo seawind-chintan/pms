@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string $code
  * @property int $type
  * @property string $description
+ * @property int $user_id
  * @property int $status
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -36,6 +37,7 @@ class Room extends Entity
         'code' => true,
         'type' => true,
         'description' => true,
+        'user_id' => true,
         'status' => true,
         'created' => true,
         'modified' => true

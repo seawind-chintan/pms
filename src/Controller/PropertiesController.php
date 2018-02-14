@@ -74,11 +74,8 @@ class PropertiesController extends AppController
         $property = $this->Properties->newEntity();
         if ($this->request->is('post')) {
             $property = $this->Properties->patchEntity($property, $this->request->data);
-            /*pr($property);exit;
-            $lastRecord = $this->Properties->find('first', array('columns' => array('id'), 'order' => 'id DESC'));
-            $lastId = (int) $lastRecord['Property']['id'];
-            $lastId++;*/
-
+            //pr($property);exit;
+            
             $image_dir = $this->generateRandomString(25);
 
             // for properties images
@@ -227,8 +224,8 @@ class PropertiesController extends AppController
             // for news images
             //pr($this->request->data);exit;
             // for edit images only
-            $insert_properties_data_array['add_image'] = $this->request->data['add_image'];
-            if(isset($insert_properties_data_array['add_image'])){
+            if(isset($this->request->data['add_image'])){
+                $insert_properties_data_array['add_image'] = $this->request->data['add_image'];
                 if (count($insert_properties_data_array['add_image']) > 0)
                 {   
                     if(!empty($insert_properties_data_array['images'])){
@@ -239,7 +236,7 @@ class PropertiesController extends AppController
                     } else {
                         $insert_properties_data_array['images'] = $insert_properties_data_array['add_image'];
                         $insert_properties_data_array['add_image'] = false;
-                        $insert_properties_data_array['images'] = implode(',', $insert_news_data_array['images']);
+                        $insert_properties_data_array['images'] = implode(',', $insert_properties_data_array['images']);
                     }
                 }
             }

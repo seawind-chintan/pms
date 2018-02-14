@@ -16,7 +16,10 @@ class RoomsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.rooms'
+        'app.rooms',
+        'app.users',
+        'app.user_roles',
+        'app.user_details'
     ];
 
     /**

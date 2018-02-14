@@ -1,59 +1,67 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\RoomType[]|\Cake\Collection\CollectionInterface $roomTypes
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Room Type'), ['action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="roomTypes index large-9 medium-8 columns content">
-    <h3><?= __('Room Types') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('slug') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('price') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('total_rooms') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('status') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Room Types
+    <div class="pull-right"><?= $this->Html->link(__('New'), ['action' => 'add'], ['class'=>'btn btn-success btn-xs']) ?></div>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title"><?= __('List of') ?> Room Types</h3>
+          <div class="box-tools">
+            <form action="<?php echo $this->Url->build(); ?>" method="POST">
+              <div class="input-group input-group-sm"  style="width: 180px;">
+                <input type="text" name="search" class="form-control" placeholder="<?= __('Fill in to start search') ?>">
+                <span class="input-group-btn">
+                <button class="btn btn-info btn-flat" type="submit"><?= __('Filter') ?></button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><?= $this->Paginator->sort('name') ?></th>
+                <th><?= $this->Paginator->sort('price') ?></th>
+                <th><?= $this->Paginator->sort('total_rooms') ?></th>
+                <th><?= $this->Paginator->sort('status') ?></th>
+                <th><?= __('Actions') ?></th>
+              </tr>
+            </thead>
+            <tbody>
             <?php foreach ($roomTypes as $roomType): ?>
-            <tr>
-                <td><?= $this->Number->format($roomType->id) ?></td>
+              <tr>
                 <td><?= h($roomType->name) ?></td>
-                <td><?= h($roomType->slug) ?></td>
                 <td><?= $this->Number->format($roomType->price) ?></td>
                 <td><?= $this->Number->format($roomType->total_rooms) ?></td>
                 <td><?= $this->Number->format($roomType->status) ?></td>
-                <td><?= h($roomType->created) ?></td>
-                <td><?= h($roomType->modified) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $roomType->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $roomType->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $roomType->id], ['confirm' => __('Are you sure you want to delete # {0}?', $roomType->id)]) ?>
+                <td class="actions" style="white-space:nowrap">
+                  <?= $this->Html->link(__('View'), ['action' => 'view', $roomType->id], ['class'=>'btn btn-info btn-xs']) ?>
+                  <?= $this->Html->link(__('Edit'), ['action' => 'edit', $roomType->id], ['class'=>'btn btn-warning btn-xs']) ?>
+                  <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $roomType->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
                 </td>
-            </tr>
+              </tr>
             <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <ul class="pagination pagination-sm no-margin pull-right">
+            <?php echo $this->Paginator->numbers(); ?>
+          </ul>
+        </div>
+      </div>
+      <!-- /.box -->
     </div>
-</div>
+  </div>
+</section>
+<!-- /.content -->

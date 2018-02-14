@@ -33,7 +33,6 @@
                 <th><?= $this->Paginator->sort('code') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= $this->Paginator->sort('type') ?></th>
-                <th><?= $this->Paginator->sort('user') ?></th>
                 <th><?= $this->Paginator->sort('start_time') ?></th>
                 <th><?= $this->Paginator->sort('end_time') ?></th>
                 <th><?= __('Actions') ?></th>
@@ -46,7 +45,6 @@
                 <td><?= h($property->code) ?></td>
                 <td><?= h($property->name) ?></td>
                 <td><?= $property->has('Type') ? $this->Html->link($property->Type->name, ['controller' => 'PropertyTypes', 'action' => 'view', $property->Type->id]) : '' ?></td>
-                <td><?= $this->Number->format($property->user) ?></td>
                 <td><?= h($property->start_time) ?></td>
                 <td><?= h($property->end_time) ?></td>
                 <td class="actions" style="white-space:nowrap">

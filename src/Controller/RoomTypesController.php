@@ -20,6 +20,9 @@ class RoomTypesController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'contain' => ['Users']
+        ];
         $roomTypes = $this->paginate($this->RoomTypes);
 
         $this->set(compact('roomTypes'));
@@ -35,7 +38,7 @@ class RoomTypesController extends AppController
     public function view($id = null)
     {
         $roomType = $this->RoomTypes->get($id, [
-            'contain' => []
+            'contain' => ['Users']
         ]);
 
         $this->set('roomType', $roomType);
@@ -44,28 +47,30 @@ class RoomTypesController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
         $roomType = $this->RoomTypes->newEntity();
         if ($this->request->is('post')) {
-            $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->getData());
+            $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->data);
             if ($this->RoomTypes->save($roomType)) {
-                $this->Flash->success(__('The room type has been saved.'));
-
+                $this->Flash->success(__('The {0} has been saved.', 'Room Type'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Type'));
             }
-            $this->Flash->error(__('The room type could not be saved. Please, try again.'));
         }
-        $this->set(compact('roomType'));
+        $users = $this->RoomTypes->Users->find('list', ['limit' => 200]);
+        $this->set(compact('roomType', 'users'));
+        $this->set('_serialize', ['roomType']);
     }
 
     /**
      * Edit method
      *
      * @param string|null $id Room Type id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
@@ -74,22 +79,24 @@ class RoomTypesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->getData());
+            $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->data);
             if ($this->RoomTypes->save($roomType)) {
-                $this->Flash->success(__('The room type has been saved.'));
-
+                $this->Flash->success(__('The {0} has been saved.', 'Room Type'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Type'));
             }
-            $this->Flash->error(__('The room type could not be saved. Please, try again.'));
         }
-        $this->set(compact('roomType'));
+        $users = $this->RoomTypes->Users->find('list', ['limit' => 200]);
+        $this->set(compact('roomType', 'users'));
+        $this->set('_serialize', ['roomType']);
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Room Type id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
@@ -97,11 +104,10 @@ class RoomTypesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $roomType = $this->RoomTypes->get($id);
         if ($this->RoomTypes->delete($roomType)) {
-            $this->Flash->success(__('The room type has been deleted.'));
+            $this->Flash->success(__('The {0} has been deleted.', 'Room Type'));
         } else {
-            $this->Flash->error(__('The room type could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Room Type'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }

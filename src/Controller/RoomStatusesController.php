@@ -20,6 +20,9 @@ class RoomStatusesController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'contain' => ['Users']
+        ];
         $roomStatuses = $this->paginate($this->RoomStatuses);
 
         $this->set(compact('roomStatuses'));
@@ -35,7 +38,7 @@ class RoomStatusesController extends AppController
     public function view($id = null)
     {
         $roomStatus = $this->RoomStatuses->get($id, [
-            'contain' => []
+            'contain' => ['Users']
         ]);
 
         $this->set('roomStatus', $roomStatus);
@@ -44,28 +47,30 @@ class RoomStatusesController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
         $roomStatus = $this->RoomStatuses->newEntity();
         if ($this->request->is('post')) {
-            $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->getData());
+            $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->data);
             if ($this->RoomStatuses->save($roomStatus)) {
-                $this->Flash->success(__('The room status has been saved.'));
-
+                $this->Flash->success(__('The {0} has been saved.', 'Room Status'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Status'));
             }
-            $this->Flash->error(__('The room status could not be saved. Please, try again.'));
         }
-        $this->set(compact('roomStatus'));
+        $users = $this->RoomStatuses->Users->find('list', ['limit' => 200]);
+        $this->set(compact('roomStatus', 'users'));
+        $this->set('_serialize', ['roomStatus']);
     }
 
     /**
      * Edit method
      *
      * @param string|null $id Room Status id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
@@ -74,22 +79,24 @@ class RoomStatusesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->getData());
+            $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->data);
             if ($this->RoomStatuses->save($roomStatus)) {
-                $this->Flash->success(__('The room status has been saved.'));
-
+                $this->Flash->success(__('The {0} has been saved.', 'Room Status'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Status'));
             }
-            $this->Flash->error(__('The room status could not be saved. Please, try again.'));
         }
-        $this->set(compact('roomStatus'));
+        $users = $this->RoomStatuses->Users->find('list', ['limit' => 200]);
+        $this->set(compact('roomStatus', 'users'));
+        $this->set('_serialize', ['roomStatus']);
     }
 
     /**
      * Delete method
      *
      * @param string|null $id Room Status id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
@@ -97,11 +104,10 @@ class RoomStatusesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $roomStatus = $this->RoomStatuses->get($id);
         if ($this->RoomStatuses->delete($roomStatus)) {
-            $this->Flash->success(__('The room status has been deleted.'));
+            $this->Flash->success(__('The {0} has been deleted.', 'Room Status'));
         } else {
-            $this->Flash->error(__('The room status could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Room Status'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }
