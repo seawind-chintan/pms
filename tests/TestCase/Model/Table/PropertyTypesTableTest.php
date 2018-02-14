@@ -24,8 +24,7 @@ class PropertyTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.property_types',
-        'app.properties'
+        'app.property_types'
     ];
 
     /**

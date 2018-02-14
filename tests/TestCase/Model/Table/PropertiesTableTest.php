@@ -24,7 +24,8 @@ class PropertiesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.properties'
+        'app.properties',
+        'app.property_images'
     ];
 
     /**

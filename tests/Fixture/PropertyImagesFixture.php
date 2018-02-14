@@ -51,8 +51,8 @@ class PropertyImagesFixture extends TestFixture
             'image' => 'Lorem ipsum dolor sit amet',
             'image_dir' => 'Lorem ipsum dolor sit amet',
             'status' => 1,
-            'created' => '2018-02-13 13:24:50',
-            'modified' => '2018-02-13 13:24:50'
+            'created' => '2018-02-14 05:15:39',
+            'modified' => '2018-02-14 05:15:39'
         ],
     ];
 }

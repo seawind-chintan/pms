@@ -22,7 +22,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <?= $this->Form->create($property, array('role' => 'form')) ?>
+        <?= $this->Form->create($property, array('role' => 'form', 'type' => 'file')) ?>
           <div class="box-body">
           <?php
             echo $this->Form->input('code');
@@ -30,7 +30,7 @@
             echo $this->Form->input('type', ['options' => $propertyTypes]);
             //echo $this->Form->input('user');
             echo $this->Form->input('address');
-            echo $this->Form->input('images');
+            echo $this->Form->input('images[]' , ['type' => 'file', 'multiple' => true, 'required' => false]);
             echo $this->Form->input('start_time');
             echo $this->Form->input('end_time');
             echo $this->Form->input('sunday_open', ['type' => 'checkbox', 'required' => false]);

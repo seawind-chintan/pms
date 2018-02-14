@@ -85,3 +85,7 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 
 define('SITENAME', 'Club 36');
+
+define("SITE_FOLDER","cakephp/club36");
+if(!defined("DEFAULT_URL")) define("DEFAULT_URL","http://".$_SERVER["HTTP_HOST"]."/".SITE_FOLDER."/");
+if(!defined("PROPERTIES_IMAGES_UPLOAD_DIR")) define("PROPERTIES_IMAGES_UPLOAD_DIR","img/uploads/properties/images");

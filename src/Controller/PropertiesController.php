@@ -74,7 +74,68 @@ class PropertiesController extends AppController
         $property = $this->Properties->newEntity();
         if ($this->request->is('post')) {
             $property = $this->Properties->patchEntity($property, $this->request->data);
+            /*pr($property);exit;
+            $lastRecord = $this->Properties->find('first', array('columns' => array('id'), 'order' => 'id DESC'));
+            $lastId = (int) $lastRecord['Property']['id'];
+            $lastId++;*/
+
+            $image_dir = $this->generateRandomString(25);
+
+            // for properties images
+            $first_fail_imgs = array();
+            $insert_properties_data_array = array();
+            $insert_properties_data_array['images'] = $this->request->data['images'];
+            if(count($insert_properties_data_array['images']) > 0){
+                foreach ($insert_properties_data_array['images'] as $ff_img_num => $ff_img) {
+                    //var_dump($ff_img);
+                    if($ff_img['error'] == "1"){
+                        $first_fail_imgs[] = $ff_img['name'];
+                    }
+                }
+
+                if(count($first_fail_imgs) > 0){
+                    
+                    $insert_properties_data_array['images'] = '';
+                    $customValidate = false;
+                    $customErrors[] = 'Could not upload, Some problems in images :'.implode(',', $first_fail_imgs);
+
+                } else {
+                    $images_result = $this->Properties->processMultipleUpload($insert_properties_data_array, $image_dir);
+                    //pr($images_result);exit;
+                    $fail_imgs = array();
+
+                    if(isset($images_result['failed_images']) && count($images_result['failed_images']) > 0){
+                        foreach ($images_result['failed_images'] as $fail_img_num => $fail_img) {
+                            $fail_imgs[] = $fail_img;
+                        }
+
+                        $insert_properties_data_array['images'] = '';
+                        $customValidate = false;
+                        $customErrors[] = 'These images got failed when upload :'.implode(',', $fail_imgs);
+
+                    } else {
+                        $suc_imgs = array();
+                        if(isset($images_result['succeed_images']) && count($images_result['succeed_images']) > 0){
+                            foreach ($images_result['succeed_images'] as $suc_img_num => $suc_img) {
+                                $suc_imgs[] = $suc_img;
+                            }
+
+                            $insert_properties_data_array['images'] = implode(',', $suc_imgs);
+                        } else {
+                            $insert_properties_data_array['images'] = false;
+                        }
+                    }
+                }
+                
+            } else {
+                $insert_properties_data_array['images'] = false;
+            }
+            // for news images
+
             $property->user = $this->Auth->user('id');
+            $property->images = $insert_properties_data_array['images'];
+            $property->images_dir = $image_dir;
+
             if ($this->Properties->save($property)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Property'));
                 return $this->redirect(['action' => 'index']);
@@ -104,22 +165,91 @@ class PropertiesController extends AppController
         /*$propertyImagesTable = TableRegistry::get('PropertyImages');
         $propertyimages = $propertyImagesTable->findByProperty($id)->all();*/
         //pr($propertyimages);exit;
+        if(!empty($property->images_dir)){
+            $images_dir = $property->images_dir;
+        } else {
+            $images_dir = $this->generateRandomString(25);
+        }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            
-            /*if(isset($propertyimages) && !empty($propertyimages)){
-                $propertyimages = $this->Properties->PropertyImages->patchEntity($propertyimages, $this->request->getData('property_image'));
-            } else {
-                $propertyimages = $this->Properties->PropertyImages->newEntity();
-                $propertyimages = $this->Properties->PropertyImages->patchEntity($propertyimages, $this->request->getData('property_image'));
-            }*/
-
-            //pr($propertyimages);exit;
-            //pr($this->request->data);exit;
             $property = $this->Properties->patchEntity($property, $this->request->data);
-            /*$property->property = $id;
-            $property->image = $propertyimages;*/
+            
+            //pr($this->request->data);exit;
+            // for properties images
+            $first_fail_imgs = array();
+            $insert_properties_data_array = array();
+            $insert_properties_data_array['images'] = $this->request->data['images'];
+            if(count($insert_properties_data_array['images']) > 0){
+                foreach ($insert_properties_data_array['images'] as $ff_img_num => $ff_img) {
+                    //var_dump($ff_img);
+                    if($ff_img['error'] == "1"){
+                        $first_fail_imgs[] = $ff_img['name'];
+                    }
+                }
+
+                if(count($first_fail_imgs) > 0){
+                    
+                    $insert_properties_data_array['images'] = '';
+                    $customValidate = false;
+                    $customErrors[] = 'Could not upload, Some problems in images :'.implode(',', $first_fail_imgs);
+
+                } else {
+                    $images_result = $this->Properties->processMultipleUpload($insert_properties_data_array, $images_dir);
+                    //pr($images_result);exit;
+                    $fail_imgs = array();
+
+                    if(isset($images_result['failed_images']) && count($images_result['failed_images']) > 0){
+                        foreach ($images_result['failed_images'] as $fail_img_num => $fail_img) {
+                            $fail_imgs[] = $fail_img;
+                        }
+
+                        $insert_properties_data_array['images'] = '';
+                        $customValidate = false;
+                        $customErrors[] = 'These images got failed when upload :'.implode(',', $fail_imgs);
+
+                    } else {
+                        $suc_imgs = array();
+                        if(isset($images_result['succeed_images']) && count($images_result['succeed_images']) > 0){
+                            foreach ($images_result['succeed_images'] as $suc_img_num => $suc_img) {
+                                $suc_imgs[] = $suc_img;
+                            }
+
+                            $insert_properties_data_array['images'] = implode(',', $suc_imgs);
+                        } else {
+                            $insert_properties_data_array['images'] = false;
+                        }
+                    }
+                }
+                
+            } else {
+                $insert_properties_data_array['images'] = false;
+            }
+            // for news images
+            //pr($this->request->data);exit;
+            // for edit images only
+            $insert_properties_data_array['add_image'] = $this->request->data['add_image'];
+            if(isset($insert_properties_data_array['add_image'])){
+                if (count($insert_properties_data_array['add_image']) > 0)
+                {   
+                    if(!empty($insert_properties_data_array['images'])){
+                        $insert_properties_data_array['images'] = explode(',', $insert_properties_data_array['images']);
+                        $insert_properties_data_array['images'] = array_merge($insert_properties_data_array['add_image'], $insert_properties_data_array['images']);
+                        $insert_properties_data_array['add_image'] = false;
+                        $insert_properties_data_array['images'] = implode(',', $insert_properties_data_array['images']);
+                    } else {
+                        $insert_properties_data_array['images'] = $insert_properties_data_array['add_image'];
+                        $insert_properties_data_array['add_image'] = false;
+                        $insert_properties_data_array['images'] = implode(',', $insert_news_data_array['images']);
+                    }
+                }
+            }
+            // for edit images only
+            //pr($insert_properties_data_array);exit;
+
+            //pr($insert_properties_data_array['images']);exit;
             $property->user = $this->Auth->user('id');
+            $property->images = $insert_properties_data_array['images'];
+            $property->images_dir = $images_dir;
 
             //pr($property);exit;
             if ($this->Properties->save($property)) {
