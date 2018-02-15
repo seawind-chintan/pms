@@ -39,6 +39,7 @@ class Room extends Entity
         'description' => true,
         'images' => true,
         'images_dir' => true,
+        'rate' => true,
         'extra_adult_rate' => true,
         'extra_child_rate' => true,
         'room_occupancy' => true,

@@ -29,22 +29,24 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('name') ?></th>
-                <th><?= $this->Paginator->sort('slug') ?></th>
+                <th><?= $this->Paginator->sort('property') ?></th>
                 <th><?= $this->Paginator->sort('number') ?></th>
+                <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= $this->Paginator->sort('code') ?></th>
                 <th><?= $this->Paginator->sort('type') ?></th>
+                <th><?= $this->Paginator->sort('rate') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($rooms as $room): ?>
               <tr>
-                <td><?= h($room->name) ?></td>
-                <td><?= h($room->slug) ?></td>
+                <td><?= h($room->property->name) ?></td>
                 <td><?= h($room->number) ?></td>
+                <td><?= h($room->name) ?></td>
                 <td><?= h($room->code) ?></td>
                 <td><?= h($room->room_type->name) ?></td>
+                <td><?= h($room->rate) ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $room->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $room->id], ['class'=>'btn btn-warning btn-xs']) ?>

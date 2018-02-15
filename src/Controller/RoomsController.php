@@ -44,10 +44,11 @@ class RoomsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users', 'RoomTypes']
+            'contain' => ['Users', 'RoomTypes', 'Properties']
         ];
-        $rooms = $this->paginate($this->Rooms, ['conditions' => ['Rooms.user_id' => $this->Auth->user('id')]]);
 
+        $rooms = $this->paginate($this->Rooms, ['conditions' => ['Rooms.user_id' => $this->Auth->user('id')]]);
+        //pr($rooms);exit;
         $this->set(compact('rooms'));
     }
 
@@ -61,7 +62,7 @@ class RoomsController extends AppController
     public function view($id = null)
     {
         $room = $this->Rooms->get($id, [
-            'contain' => ['Users', 'RoomTypes']
+            'contain' => ['Users', 'RoomTypes', 'Properties']
         ]);
         //pr($room);
         $this->set('room', $room);
@@ -144,8 +145,8 @@ class RoomsController extends AppController
             }
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
-        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id')], 'limit' => 200]);
-        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
+        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'status' => '1', 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
         $this->set(compact('room', 'users', 'roomtypes', 'properties'));
@@ -255,8 +256,8 @@ class RoomsController extends AppController
             }
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
-        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id')], 'limit' => 200]);
-        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
+        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['status' => '1', 'user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
         $this->set(compact('room', 'users', 'roomtypes', 'properties'));
