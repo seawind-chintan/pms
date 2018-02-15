@@ -4,6 +4,8 @@
 /config/.env
 /logs/*
 /tmp/*
+/webroot/img/uploads/*
+club36.sql
 
 # OS generated files #
 ######################
