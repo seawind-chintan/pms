@@ -26,9 +26,9 @@
           <div class="box-body">
           <?php
             echo $this->Form->input('name');
-            echo $this->Form->input('slug');
-            echo $this->Form->input('user_id', ['options' => $users]);
-            echo $this->Form->input('status');
+            //echo $this->Form->input('slug');
+            //echo $this->Form->input('user_id', ['options' => $users]);
+            echo $this->Form->input('status', ['options' => $status_options]);
           ?>
           </div>
           <!-- /.box-body -->

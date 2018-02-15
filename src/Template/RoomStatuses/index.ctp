@@ -29,10 +29,7 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
-                <th><?= $this->Paginator->sort('slug') ?></th>
-                <th><?= $this->Paginator->sort('user_id') ?></th>
                 <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
@@ -40,11 +37,8 @@
             <tbody>
             <?php foreach ($roomStatuses as $roomStatus): ?>
               <tr>
-                <td><?= $this->Number->format($roomStatus->id) ?></td>
                 <td><?= h($roomStatus->name) ?></td>
-                <td><?= h($roomStatus->slug) ?></td>
-                <td><?= $roomStatus->has('user') ? $this->Html->link($roomStatus->user->id, ['controller' => 'Users', 'action' => 'view', $roomStatus->user->id]) : '' ?></td>
-                <td><?= $this->Number->format($roomStatus->status) ?></td>
+                <td><?php if($roomStatus->status === 0) { echo 'Draft'; } else { echo 'Published'; } ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $roomStatus->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $roomStatus->id], ['class'=>'btn btn-warning btn-xs']) ?>

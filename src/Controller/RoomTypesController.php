@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Utility\Inflector;
 
 /**
  * RoomTypes Controller
@@ -23,7 +24,7 @@ class RoomTypesController extends AppController
         $this->paginate = [
             'contain' => ['Users']
         ];
-        $roomTypes = $this->paginate($this->RoomTypes);
+        $roomTypes = $this->paginate($this->RoomTypes, ['conditions' => ['user_id' => $this->Auth->user('id')]]);
 
         $this->set(compact('roomTypes'));
     }
@@ -54,6 +55,8 @@ class RoomTypesController extends AppController
         $roomType = $this->RoomTypes->newEntity();
         if ($this->request->is('post')) {
             $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->data);
+            $roomType->user_id = $this->Auth->user('id');
+            $roomType->slug = Inflector::slug($roomType->name);
             if ($this->RoomTypes->save($roomType)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room Type'));
                 return $this->redirect(['action' => 'index']);
@@ -62,6 +65,8 @@ class RoomTypesController extends AppController
             }
         }
         $users = $this->RoomTypes->Users->find('list', ['limit' => 200]);
+        $status_options = $this->status_array();
+        $this->set('status_options', $status_options);
         $this->set(compact('roomType', 'users'));
         $this->set('_serialize', ['roomType']);
     }
@@ -80,6 +85,8 @@ class RoomTypesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $roomType = $this->RoomTypes->patchEntity($roomType, $this->request->data);
+            $roomType->user_id = $this->Auth->user('id');
+            $roomType->slug = Inflector::slug($roomType->name);
             if ($this->RoomTypes->save($roomType)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room Type'));
                 return $this->redirect(['action' => 'index']);
@@ -88,6 +95,8 @@ class RoomTypesController extends AppController
             }
         }
         $users = $this->RoomTypes->Users->find('list', ['limit' => 200]);
+        $status_options = $this->status_array();
+        $this->set('status_options', $status_options);
         $this->set(compact('roomType', 'users'));
         $this->set('_serialize', ['roomType']);
     }

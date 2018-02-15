@@ -27,8 +27,11 @@ class RoomsController extends AppController
             // Prior to 3.4.0 $this->request->params('pass.0')
             $roomId = (int)$this->request->getParam('pass.0');
             $room = $this->Rooms->findById($roomId)->first();
-
-            return $room->user_id === $user['id'];
+            if($room){
+                return $room->user_id === $user['id'];
+            } else {
+                return false;
+            }
         }
 
         return parent::isAuthorized($user);
@@ -41,9 +44,9 @@ class RoomsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users']
+            'contain' => ['Users', 'RoomTypes']
         ];
-        $rooms = $this->paginate($this->Rooms);
+        $rooms = $this->paginate($this->Rooms, ['conditions' => ['Rooms.user_id' => $this->Auth->user('id')]]);
 
         $this->set(compact('rooms'));
     }
@@ -60,7 +63,7 @@ class RoomsController extends AppController
         $room = $this->Rooms->get($id, [
             'contain' => ['Users', 'RoomTypes']
         ]);
-
+        //pr($room);
         $this->set('room', $room);
     }
 
@@ -84,7 +87,9 @@ class RoomsController extends AppController
             }
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
-        $roomtypes = $this->Rooms->RoomTypes->find('list', ['limit' => 200, 'user_id' => $this->Auth->user('id')]);
+        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $status_options = $this->status_array();
+        $this->set('status_options', $status_options);
         $this->set(compact('room', 'users', 'roomtypes'));
         $this->set('_serialize', ['room']);
     }
@@ -114,6 +119,8 @@ class RoomsController extends AppController
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
         $roomtypes = $this->Rooms->RoomTypes->find('list', ['limit' => 200, 'user_id' => $this->Auth->user('id')]);
+        $status_options = $this->status_array();
+        $this->set('status_options', $status_options);
         $this->set(compact('room', 'users', 'roomtypes'));
         $this->set('_serialize', ['room']);
     }

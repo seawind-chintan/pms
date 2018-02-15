@@ -127,4 +127,9 @@ class AppController extends Controller
         }
         return $randomString;
     }
+
+    public function status_array()
+    {
+        return $status_options = array(0=>'Draft',1=>'Published');
+    }
 }
