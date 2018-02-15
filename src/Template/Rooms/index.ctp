@@ -35,20 +35,17 @@
                 <th><?= $this->Paginator->sort('number') ?></th>
                 <th><?= $this->Paginator->sort('code') ?></th>
                 <th><?= $this->Paginator->sort('type') ?></th>
-                <th><?= $this->Paginator->sort('user_id') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($rooms as $room): ?>
               <tr>
-                <td><?= $this->Number->format($room->id) ?></td>
                 <td><?= h($room->name) ?></td>
                 <td><?= h($room->slug) ?></td>
                 <td><?= h($room->number) ?></td>
                 <td><?= h($room->code) ?></td>
-                <td><?= $this->Number->format($room->type) ?></td>
-                <td><?= $room->has('user') ? $this->Html->link($room->user->id, ['controller' => 'Users', 'action' => 'view', $room->user->id]) : '' ?></td>
+                <td><?= h($room->room_type->name) ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $room->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $room->id], ['class'=>'btn btn-warning btn-xs']) ?>

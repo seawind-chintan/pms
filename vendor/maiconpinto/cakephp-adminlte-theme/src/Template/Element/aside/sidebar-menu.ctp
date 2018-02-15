@@ -259,8 +259,8 @@ elseif($current_user_data['role'] == 2){
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href="<?php echo $this->Url->build('/room-types'); ?>"><i class="fa fa-hotel"></i> Room Types</a></li>
-            <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-hotel"></i> Statuses</a></li>
+            <li><a href="<?php echo $this->Url->build('/room-types'); ?>"><i class="fa fa-certificate"></i> Room Types</a></li>
+            <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-check-square"></i> Statuses</a></li>
             <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-hotel"></i> Rooms</a></li>
         </ul>
     </li>

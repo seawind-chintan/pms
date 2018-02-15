@@ -40,6 +40,8 @@ class RoomTypesTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->hasMany('Rooms');
+
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'

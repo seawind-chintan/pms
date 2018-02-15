@@ -21,6 +21,30 @@ class UsersController extends AppController
         $this->Auth->allow('registration', 'logout');
     }
 
+    public function isAuthorized($user)
+    {
+        // All registered users can add articles
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if ($this->request->getParam('action') === 'add') {
+            return true;
+        }
+
+        // The owner of an article can edit and delete it
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'view'])) {
+            // Prior to 3.4.0 $this->request->params('pass.0')
+            $userId = (int)$this->request->getParam('pass.0');
+            $userTable = $this->Users->findById($userId)->first();
+            if($userTable){
+                return $userTable->parent === $user['id'];
+            } else {
+                return false;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
+
     /**
      * Index method
      *
