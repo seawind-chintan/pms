@@ -119,4 +119,12 @@ class RoomTypesController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    public function getpricebytype($id){
+
+        $roomType = $this->RoomTypes->get($id);
+        //pr($roomType);exit;
+        echo $roomType->price;exit;
+        $this->set(compact('roomTypes'));
+    }
 }

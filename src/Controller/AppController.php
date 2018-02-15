@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Utility\Inflector;
 
 /**
  * Application Controller
@@ -131,5 +132,64 @@ class AppController extends Controller
     public function status_array()
     {
         return $status_options = array(0=>'Draft',1=>'Published');
+    }
+
+    /**
+     * Process the Upload
+     * @param array $check
+     * @return boolean
+     */
+    public function processMultipleUpload($check=array(), $path = '') {
+        //echo '<pre>';print_r($check);exit;
+        
+        $failed_images = array();
+        $succeed_images = array();
+        
+        foreach ($check['images'] as $img_num => $image) {
+
+            // deal with uploaded file
+            if (!empty($image['tmp_name'])) {
+
+                // check file is uploaded
+                if (!is_uploaded_file($image['tmp_name'])) {
+                    $failed_images[] = $image['name'];
+                }
+
+                if($path){
+                    $images_move_dir = WWW_ROOT . $path . DS;
+                } else {
+                    $images_move_dir = WWW_ROOT . DEFAULT_IMAGES_DIR . DS;
+                }
+
+                if (!is_dir($images_move_dir)) {
+                    $oldmask = umask(0);
+                    mkdir($images_move_dir, 0777, true);
+                    chmod($images_move_dir, 0755);
+                    umask($oldmask);
+                }
+
+                // build full images
+                $images = $images_move_dir . Inflector::slug(pathinfo($image['name'], PATHINFO_FILENAME)).'.'.pathinfo($image['name'], PATHINFO_EXTENSION);
+
+                // @todo check for duplicate images
+
+                // try moving file
+                if (!move_uploaded_file($image['tmp_name'], $images)) {
+                    return FALSE;
+
+                // file successfully uploaded
+                } else {
+                    // save the file path relative from WWW_ROOT e.g. uploads/example_images.jpg
+                    //$this->data[$this->alias]['filepath'] = str_replace(DS, "/", str_replace(WWW_ROOT, "", $images) );
+
+                    //$succeed_images[] = DEFAULT_URL.str_replace(DS, "/", str_replace(WWW_ROOT, "", $images));
+                    $succeed_images[] = str_replace(DS, "/", str_replace(WWW_ROOT, "", str_replace($images_move_dir, "", $images)));
+                }
+            }
+        }
+
+        $total_images = array('succeed_images' => $succeed_images, 'failed_images' => $failed_images);
+
+        return $total_images;
     }
 }
