@@ -29,7 +29,6 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= $this->Paginator->sort('slug') ?></th>
                 <th><?= $this->Paginator->sort('number') ?></th>

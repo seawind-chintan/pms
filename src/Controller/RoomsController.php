@@ -77,8 +77,65 @@ class RoomsController extends AppController
         $room = $this->Rooms->newEntity();
         if ($this->request->is('post')) {
             $room = $this->Rooms->patchEntity($room, $this->request->data);
+            
             $room->user_id = $this->Auth->user('id');
             $room->slug = Inflector::slug($room->name);
+            $image_dir = $this->generateRandomString(25);
+            //pr($this->request->data);exit;
+            // for properties images
+            $first_fail_imgs = array();
+            $insert_rooms_data_array = array();
+            $insert_rooms_data_array['images'] = $this->request->data['images'];
+            if(count($insert_rooms_data_array['images']) > 0){
+                foreach ($insert_rooms_data_array['images'] as $ff_img_num => $ff_img) {
+                    //var_dump($ff_img);
+                    if($ff_img['error'] == "1"){
+                        $first_fail_imgs[] = $ff_img['name'];
+                    }
+                }
+
+                if(count($first_fail_imgs) > 0){
+                    
+                    $insert_rooms_data_array['images'] = '';
+                    $customValidate = false;
+                    $customErrors[] = 'Could not upload, Some problems in images :'.implode(',', $first_fail_imgs);
+
+                } else {
+                    $images_result = $this->processMultipleUpload($insert_rooms_data_array, ROOMS_IMAGES_UPLOAD_DIR.'/'.$image_dir);
+                    //pr($images_result);exit;
+                    $fail_imgs = array();
+
+                    if(isset($images_result['failed_images']) && count($images_result['failed_images']) > 0){
+                        foreach ($images_result['failed_images'] as $fail_img_num => $fail_img) {
+                            $fail_imgs[] = $fail_img;
+                        }
+
+                        $insert_rooms_data_array['images'] = '';
+                        $customValidate = false;
+                        $customErrors[] = 'These images got failed when upload :'.implode(',', $fail_imgs);
+
+                    } else {
+                        $suc_imgs = array();
+                        if(isset($images_result['succeed_images']) && count($images_result['succeed_images']) > 0){
+                            foreach ($images_result['succeed_images'] as $suc_img_num => $suc_img) {
+                                $suc_imgs[] = $suc_img;
+                            }
+
+                            $insert_rooms_data_array['images'] = implode(',', $suc_imgs);
+                        } else {
+                            $insert_rooms_data_array['images'] = false;
+                        }
+                    }
+                }
+                
+            } else {
+                $insert_rooms_data_array['images'] = false;
+            }
+            // for news images
+
+            $room->images = $insert_rooms_data_array['images'];
+            $room->images_dir = $image_dir;
+            
             if ($this->Rooms->save($room)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room'));
                 return $this->redirect(['action' => 'index']);
@@ -88,9 +145,10 @@ class RoomsController extends AppController
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
         $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
-        $this->set(compact('room', 'users', 'roomtypes'));
+        $this->set(compact('room', 'users', 'roomtypes', 'properties'));
         $this->set('_serialize', ['room']);
     }
 
@@ -106,10 +164,89 @@ class RoomsController extends AppController
         $room = $this->Rooms->get($id, [
             'contain' => []
         ]);
+
+        if(!empty($room->images_dir)){
+            $image_dir = $room->images_dir;
+        } else {
+            $image_dir = $this->generateRandomString(25);
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $room = $this->Rooms->patchEntity($room, $this->request->data);
             $room->user_id = $this->Auth->user('id');
             $room->slug = Inflector::slug($room->name);
+            //pr($this->request->data);exit;
+            // for properties images
+            $first_fail_imgs = array();
+            $insert_rooms_data_array = array();
+            $insert_rooms_data_array['images'] = $this->request->data['images'];
+            if(count($insert_rooms_data_array['images']) > 0){
+                foreach ($insert_rooms_data_array['images'] as $ff_img_num => $ff_img) {
+                    //var_dump($ff_img);
+                    if($ff_img['error'] == "1"){
+                        $first_fail_imgs[] = $ff_img['name'];
+                    }
+                }
+
+                if(count($first_fail_imgs) > 0){
+                    
+                    $insert_rooms_data_array['images'] = '';
+                    $customValidate = false;
+                    $customErrors[] = 'Could not upload, Some problems in images :'.implode(',', $first_fail_imgs);
+
+                } else {
+                    $images_result = $this->processMultipleUpload($insert_rooms_data_array, ROOMS_IMAGES_UPLOAD_DIR.'/'.$image_dir);
+                    //pr($images_result);exit;
+                    $fail_imgs = array();
+
+                    if(isset($images_result['failed_images']) && count($images_result['failed_images']) > 0){
+                        foreach ($images_result['failed_images'] as $fail_img_num => $fail_img) {
+                            $fail_imgs[] = $fail_img;
+                        }
+
+                        $insert_rooms_data_array['images'] = '';
+                        $customValidate = false;
+                        $customErrors[] = 'These images got failed when upload :'.implode(',', $fail_imgs);
+
+                    } else {
+                        $suc_imgs = array();
+                        if(isset($images_result['succeed_images']) && count($images_result['succeed_images']) > 0){
+                            foreach ($images_result['succeed_images'] as $suc_img_num => $suc_img) {
+                                $suc_imgs[] = $suc_img;
+                            }
+
+                            $insert_rooms_data_array['images'] = implode(',', $suc_imgs);
+                        } else {
+                            $insert_rooms_data_array['images'] = false;
+                        }
+                    }
+                }
+                
+            } else {
+                $insert_rooms_data_array['images'] = false;
+            }
+            // for news images
+            // for edit images only
+            if(isset($this->request->data['add_image'])){
+                $insert_rooms_data_array['add_image'] = $this->request->data['add_image'];
+                if (count($insert_rooms_data_array['add_image']) > 0)
+                {   
+                    if(!empty($insert_rooms_data_array['images'])){
+                        $insert_rooms_data_array['images'] = explode(',', $insert_rooms_data_array['images']);
+                        $insert_rooms_data_array['images'] = array_merge($insert_rooms_data_array['add_image'], $insert_rooms_data_array['images']);
+                        $insert_rooms_data_array['add_image'] = false;
+                        $insert_rooms_data_array['images'] = implode(',', $insert_rooms_data_array['images']);
+                    } else {
+                        $insert_rooms_data_array['images'] = $insert_rooms_data_array['add_image'];
+                        $insert_rooms_data_array['add_image'] = false;
+                        $insert_rooms_data_array['images'] = implode(',', $insert_rooms_data_array['images']);
+                    }
+                }
+            }
+            // for edit images only
+
+            $room->images = $insert_rooms_data_array['images'];
+            $room->images_dir = $image_dir;
             if ($this->Rooms->save($room)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room'));
                 return $this->redirect(['action' => 'index']);
@@ -118,10 +255,11 @@ class RoomsController extends AppController
             }
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
-        $roomtypes = $this->Rooms->RoomTypes->find('list', ['limit' => 200, 'user_id' => $this->Auth->user('id')]);
+        $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
-        $this->set(compact('room', 'users', 'roomtypes'));
+        $this->set(compact('room', 'users', 'roomtypes', 'properties'));
         $this->set('_serialize', ['room']);
     }
 

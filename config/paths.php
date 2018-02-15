@@ -88,4 +88,6 @@ define('SITENAME', 'Club 36');
 
 define("SITE_FOLDER","cakephp/club36");
 if(!defined("DEFAULT_URL")) define("DEFAULT_URL","http://".$_SERVER["HTTP_HOST"]."/".SITE_FOLDER."/");
+if(!defined("DEFAULT_IMAGES_DIR")) define("DEFAULT_IMAGES_DIR","img/uploads");
 if(!defined("PROPERTIES_IMAGES_UPLOAD_DIR")) define("PROPERTIES_IMAGES_UPLOAD_DIR","img/uploads/properties/images");
+if(!defined("ROOMS_IMAGES_UPLOAD_DIR")) define("ROOMS_IMAGES_UPLOAD_DIR","img/uploads/rooms/images");
