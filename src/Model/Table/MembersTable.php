@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\PackagesTable|\Cake\ORM\Association\BelongsTo $Packages
  * @property \App\Model\Table\MemberGroupsTable|\Cake\ORM\Association\BelongsTo $MemberGroups
+ * @property |\Cake\ORM\Association\HasMany $Reservations
  *
  * @method \App\Model\Entity\Member get($primaryKey, $options = [])
  * @method \App\Model\Entity\Member newEntity($data = null, array $options = [])
@@ -49,6 +50,9 @@ class MembersTable extends Table
             'foreignKey' => 'member_group_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Reservations', [
+            'foreignKey' => 'member_id'
+        ]);
 
         // Add the behaviour and configure any options you want
         $this->addBehavior('Proffer.Proffer', [
@@ -84,6 +88,11 @@ class MembersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->scalar('member_type')
+            ->requirePresence('member_type', 'create')
+            ->notEmpty('member_type');
+
+        $validator
             ->scalar('code')
             ->maxLength('code', 255)
             ->requirePresence('code', 'create')
@@ -104,7 +113,6 @@ class MembersTable extends Table
         $validator
             ->scalar('nick_name')
             ->maxLength('nick_name', 255)
-            ->requirePresence('nick_name', 'create')
             ->allowEmpty('nick_name');
 
         $validator
@@ -116,52 +124,44 @@ class MembersTable extends Table
         $validator
             ->scalar('occupation')
             ->maxLength('occupation', 255)
-            ->requirePresence('occupation', 'create')
             ->allowEmpty('occupation');
 
         $validator
             ->scalar('organization')
             ->maxLength('organization', 255)
-            ->requirePresence('organization', 'create')
             ->allowEmpty('organization');
 
         $validator
             ->scalar('designation')
             ->maxLength('designation', 255)
-            ->requirePresence('designation', 'create')
             ->allowEmpty('designation');
 
         $validator
             ->date('birth_date')
-            ->requirePresence('birth_date', 'create')
             ->allowEmpty('birth_date');
 
         $validator
             ->date('anniversary_date')
-            ->requirePresence('anniversary_date', 'create')
             ->allowEmpty('anniversary_date');
 
         $validator
             ->scalar('blood_group')
             ->maxLength('blood_group', 25)
-            ->requirePresence('blood_group', 'create')
             ->allowEmpty('blood_group');
 
         $validator
             ->scalar('pancard')
             ->maxLength('pancard', 25)
             ->requirePresence('pancard', 'create')
-            ->allowEmpty('pancard');
+            ->notEmpty('pancard');
 
         $validator
             ->scalar('aadharcard')
             ->maxLength('aadharcard', 25)
-            ->requirePresence('aadharcard', 'create')
             ->allowEmpty('aadharcard');
 
         $validator
             ->scalar('remark')
-            ->requirePresence('remark', 'create')
             ->allowEmpty('remark');
 
         $validator
@@ -173,7 +173,6 @@ class MembersTable extends Table
         $validator
             ->scalar('marrital_status')
             ->maxLength('marrital_status', 10)
-            ->requirePresence('marrital_status', 'create')
             ->allowEmpty('marrital_status');
 
         $validator
@@ -207,42 +206,36 @@ class MembersTable extends Table
 
         $validator
             ->scalar('res_address')
-            ->requirePresence('res_address', 'create')
             ->allowEmpty('res_address');
 
         $validator
             ->scalar('res_city')
             ->maxLength('res_city', 100)
-            ->requirePresence('res_city', 'create')
             ->allowEmpty('res_city');
 
         $validator
             ->scalar('res_state')
             ->maxLength('res_state', 100)
-            ->requirePresence('res_state', 'create')
             ->allowEmpty('res_state');
 
         $validator
             ->scalar('res_country')
             ->maxLength('res_country', 100)
-            ->requirePresence('res_country', 'create')
             ->allowEmpty('res_country');
 
         $validator
             ->scalar('res_pincode')
             ->maxLength('res_pincode', 10)
-            ->requirePresence('res_pincode', 'create')
             ->allowEmpty('res_pincode');
 
         $validator
             ->email('email')
-            ->requirePresence('email', 'create')
+            ->requirePresence('email', 'email')
             ->notEmpty('email');
 
         $validator
             ->scalar('phone')
             ->maxLength('phone', 20)
-            ->requirePresence('phone', 'create')
             ->allowEmpty('phone');
 
         $validator
@@ -263,14 +256,17 @@ class MembersTable extends Table
         ])->allowEmpty('images');
 
         $validator
+            ->scalar('images_dir')
+            ->maxLength('images_dir', 255)
+            ->allowEmpty('images_dir');
+
+        $validator
             ->scalar('services')
             ->maxLength('services', 255)
-            ->requirePresence('services', 'create')
             ->allowEmpty('services');
 
         $validator
             ->integer('discount')
-            ->requirePresence('discount', 'create')
             ->allowEmpty('discount');
 
         $validator

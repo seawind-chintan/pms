@@ -28,7 +28,7 @@ if($current_user_data['role'] == 1){
         <ul class="treeview-menu">
             <li><a href="<?php echo $this->Url->build('/users'); ?>"><i class="fa fa-list"></i> Manage Users</a></li>
             <li><a href="<?php echo $this->Url->build('/user-roles'); ?>"><i class="fa fa-list"></i> Manage Roles</a></li>
-            <li><a href="<?php echo $this->Url->build('/pages/home2'); ?>"><i class="fa fa-circle-o"></i> Assign Services</a></li>
+            <li><a href="<?php echo $this->Url->build('/user-services/assignServices'); ?>"><i class="fa fa-circle-o"></i> Assign Services</a></li>
         </ul>
     </li>
     <li class="treeview">
@@ -43,6 +43,7 @@ if($current_user_data['role'] == 1){
             <li><a href="<?php echo $this->Url->build('/states'); ?>"><i class="fa fa-list"></i> Manage States</a></li>
             <li><a href="<?php echo $this->Url->build('/cities'); ?>"><i class="fa fa-list"></i> Manage Cities</a></li>
             <li><a href="<?php echo $this->Url->build('/property-types'); ?>"><i class="fa fa-list"></i> Manage Property Types</a></li>
+            <li><a href="<?php echo $this->Url->build('/services'); ?>"><i class="fa fa-list"></i> Manage Services</a></li>
         </ul>
     </li>
     <!--<li class="treeview">
@@ -238,6 +239,18 @@ elseif($current_user_data['role'] == 2){
         </a>
         <ul class="treeview-menu">
             <li><a href="<?php echo $this->Url->build('/users'); ?>"><i class="fa fa-list"></i> Manage Employees/Managers</a></li>
+            <li><a href="<?php echo $this->Url->build('/user-services/assignServices'); ?>"><i class="fa fa-circle-o"></i> Assign Services</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-user-plus"></i> <span>Members</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/members'); ?>"><i class="fa fa-list"></i> Manage Members</a></li>
         </ul>
     </li>
     <li class="treeview">
@@ -261,7 +274,18 @@ elseif($current_user_data['role'] == 2){
         <ul class="treeview-menu">
             <li><a href="<?php echo $this->Url->build('/room-types'); ?>"><i class="fa fa-certificate"></i> Room Types</a></li>
             <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-check-square"></i> Statuses</a></li>
-            <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-hotel"></i> Rooms</a></li>
+            <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-list"></i> Rooms</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-book"></i> <span>Reservations</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/reservations'); ?>"><i class="fa fa-list"></i> Reservations</a></li>
         </ul>
     </li>
 </ul>

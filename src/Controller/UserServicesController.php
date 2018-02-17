@@ -42,11 +42,10 @@ class UserServicesController extends AppController {
 
         $users = $this->UserServices->Users->find('list', [ 'keyField' => 'id',
             'valueField' => 'username',
-            'conditions' => array('status' => 1),
+            'conditions' => array('status' => 1, 'parent' => $this->Auth->user('id')),
             'order' => 'id desc'
         ]);
-//        pr($users->toArray());
-//        exit;
+        //pr($users->toArray());exit;
 
         $this->set(compact('userService', 'users'));
 //        $this->set(compact('users'));
@@ -58,24 +57,16 @@ class UserServicesController extends AppController {
 //        echo 'id '.$id;
 //        exit;
 
-        //if($this->request->is('ajax'))
+        if($this->request->is('ajax'))
         {
 
             $this->viewBuilder()->setLayout('ajax');
 
             $userServicesTable = TableRegistry::get('UserServices');
-            $userService = $userServicesTable->findById($id)->first();
-
-//            $userService = $this->UserServices->get($id, [
-//                'contain' => []
-//            ]);
-
-//            if(!empty($userService))
-//            {
-//
-//            }
-
-
+            $userService_data = $userServicesTable->find('all', array(
+                'conditions' => array('user_id' => $id)
+            ));
+            $userService = $userService_data->first();
 
             $servicesTable = TableRegistry::get('Services');
             $services = $servicesTable->find('all', array(

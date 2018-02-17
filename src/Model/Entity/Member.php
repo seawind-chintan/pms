@@ -8,6 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $package_id
+ * @property string $member_type
  * @property string $code
  * @property string $first_name
  * @property string $last_name
@@ -38,7 +39,8 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property string $phone
  * @property string $mobile
- * @property string $images
+ * @property $images
+ * @property string $images_dir
  * @property string $services
  * @property int $discount
  * @property int $status
@@ -62,6 +64,7 @@ class Member extends Entity
      */
     protected $_accessible = [
         'package_id' => true,
+        'member_type' => true,
         'code' => true,
         'first_name' => true,
         'last_name' => true,
@@ -93,6 +96,7 @@ class Member extends Entity
         'phone' => true,
         'mobile' => true,
         'images' => true,
+        'images_dir' => true,
         'services' => true,
         'discount' => true,
         'status' => true,

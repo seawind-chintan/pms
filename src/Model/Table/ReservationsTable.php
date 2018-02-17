@@ -122,7 +122,9 @@ class ReservationsTable extends Table
 
         $validator
             ->email('email')
-            ->allowEmpty('email');
+            ->requirePresence('email', 'email')
+            ->notEmpty('email');
+
 
         $validator
             ->scalar('reservation_type')
@@ -274,7 +276,9 @@ class ReservationsTable extends Table
 
         $validator
             ->email('email')
-            ->allowEmpty('email');
+            ->requirePresence('email', 'email')
+            ->notEmpty('email');
+
 
         return $validator;
     }

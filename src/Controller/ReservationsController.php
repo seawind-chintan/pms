@@ -167,22 +167,53 @@ class ReservationsController extends AppController
         extract($wizardData);
         //pr($wizardData);exit;
         $postData = array_merge($wizardData['step1'], $wizardData['step2'], $wizardData['step3'], $wizardData['step4']);
-        pr($wizardData['step3']);
-        pr($postData);exit;
+        $memberData = $wizardData['step3'];
+        $memberData['code'] = 'NA';
+        $memberData['application_no'] = 'NA';
+        $memberData['pancard'] = 'NA';
+        $memberData['gender'] = 'NA';
+        if(empty($memberData['email'])) { $memberData['email'] = 'test@mail.com'; }
+        $memberData['cor_address'] = $memberData['address'];unset($memberData['address']);
+        $memberData['cor_city'] = $memberData['city_id'];unset($memberData['city_id']);
+        $memberData['cor_state'] = $memberData['state_id'];unset($memberData['state_id']);
+        $memberData['cor_country'] = $memberData['country_id'];unset($memberData['country_id']);
+        $memberData['cor_pincode'] = $memberData['pincode'];unset($memberData['pincode']);
+        $memberData['status'] = 1;
+        //pr($memberData);
+        //pr($postData);exit;
 
-        $reservation = $this->Reservations->newEntity();
-        $reservation = $this->Reservations->patchEntity($reservation, $postData);
-        if ($this->Reservations->save($reservation)) {
-            $this->Flash->success(__('The {0} has been saved.', 'Reservation'));
-            return $this->redirect(['action' => 'index']);
+        /*$membersTable = TableRegistry::get('Members');
+        $members = $membersTable->newEntity();
+        $members = $membersTable->patchEntity($members, $memberData);
+        $result = $membersTable->save($members);
+        pr($result);exit;*/
+
+        $membersTable = TableRegistry::get('Members');
+        $member = $membersTable->newEntity();
+
+        $member = $membersTable->patchEntity($member, $memberData);
+        
+        if ($membersTable->save($member)) { //$membersTable->save($member)
+            //$this->Flash->success(__('The {0} has been saved.', 'Reservation'));
+            //return $this->redirect(['action' => 'index']);
+            //pr($member_save_result);exit;
+            $member_id = $member->id;
+            $postData['member_id'] = $member_id ;
+            $reservation = $this->Reservations->newEntity();
+            $reservation = $this->Reservations->patchEntity($reservation, $postData);
+            //$reservation->members = $members;
+            //pr($reservation);exit;
+            //$result = $this->Reservations->save($reservation);pr($result);
+            //exit;
+            if ($this->Reservations->save($reservation)) {
+                $this->Flash->success(__('The {0} has been saved.', 'Reservation'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Reservation'));
+            }
         } else {
             $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Reservation'));
         }
-
-        /*$this->Client->save($account['Client'], false, array('first_name', 'last_name', 'phone'));
-        $this->User->save($account['User'], false, array('email', 'password'));*/
-        
-        //... etc ...
     }
 
 
@@ -222,7 +253,7 @@ class ReservationsController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add_X()
     {
         $reservation = $this->Reservations->newEntity();
         if ($this->request->is('post')) {
@@ -259,7 +290,7 @@ class ReservationsController extends AppController
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit_X($id = null)
     {
         $reservation = $this->Reservations->get($id, [
             'contain' => []
@@ -288,7 +319,7 @@ class ReservationsController extends AppController
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete_X($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $reservation = $this->Reservations->get($id);

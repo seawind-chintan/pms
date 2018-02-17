@@ -75,7 +75,7 @@ class AppController extends Controller
         if (isset($user['role']) && $user['role'] === 2) {
 
             $controller_array = array('Users','Properties','Rooms','RoomTypes','RoomStatuses',
-                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms');
+                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices');
             $method_array = array();
 
             if(!empty($controller_array) && in_array($this->request->getParam('controller'),$controller_array) ||
