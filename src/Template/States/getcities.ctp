@@ -6,4 +6,9 @@ foreach ($cities as $citykey => $city) {
   $citiesoptions[$city->id] = $city->name;
 }
 $selected = array();
-echo $this->Form->input('userdetail.city', array('label'=>'Select City','class' => 'form-control', 'options' => $citiesoptions, 'selected' => $selected));
+if(isset($table_field) && $table_field!='')
+    $pass_field = $table_field;
+else
+    $pass_field = 'userdetail.city';
+
+echo $this->Form->input($pass_field, array('label'=>'Select City','class' => 'form-control', 'options' => $citiesoptions, 'selected' => $selected));

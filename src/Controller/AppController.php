@@ -76,6 +76,7 @@ class AppController extends Controller
 
             $controller_array = array('Users','Properties','Rooms','RoomTypes','RoomStatuses',
                                         'Countries','States','Cities','Channels','Reservations', 'ReservationRooms');
+
             $method_array = array();
 
             if(!empty($controller_array) && in_array($this->request->getParam('controller'),$controller_array) ||
@@ -120,10 +121,10 @@ class AppController extends Controller
      */
     public function processMultipleUpload($check=array(), $path = '') {
         //echo '<pre>';print_r($check);exit;
-        
+
         $failed_images = array();
         $succeed_images = array();
-        
+
         foreach ($check['images'] as $img_num => $image) {
 
             // deal with uploaded file
@@ -186,4 +187,10 @@ class AppController extends Controller
     function getReservationTypes(){
         return ['inquiry' => 'Inquiry', 'booking' => 'Booking'];
     }
+
+    public function skin_array()
+    {
+        return ['blue'=>'Blue','red'=>'Red','red-light'=>'Red Light'];
+    }
 }
+

@@ -44,7 +44,7 @@ class StatesController extends AppController
         $this->set('state', $state);
     }
 
-    public function getcities($id = null)
+    public function getcities($id = null,$table_field = null)
     {
         if($this->request->is('ajax')) {
             //$this->layout = 'ajax';
@@ -55,6 +55,7 @@ class StatesController extends AppController
             ]);
 
             $this->set('state', $state);
+            $this->set('table_field', $table_field);
         }
     }
 
