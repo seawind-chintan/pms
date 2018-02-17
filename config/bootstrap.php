@@ -231,7 +231,7 @@ Configure::write('Theme', [
         'show_social' => false
     ],
     'folder' => ROOT,
-    'skin' => 'blue' // default is 'blue'
+    'skin' => 'blue' // default is 'blue' ['white', 'blue', 'blue-light', 'yellow', 'yellow-light', 'green', 'green-light', 'purple', 'purple-light', 'red', 'red-light', 'black', 'black-light']
 ]);
 Plugin::load('Josegonzalez/Upload');
 Plugin::load('Proffer');

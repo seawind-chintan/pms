@@ -1,7 +1,7 @@
 <section class="content-header">
   <h1>
-    Room Status
-    <small><?= __('Edit') ?></small>
+    Reservation Room
+    <small><?= __('Add') ?></small>
   </h1>
   <ol class="breadcrumb">
     <li>
@@ -22,13 +22,11 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <?= $this->Form->create($roomStatus, array('role' => 'form')) ?>
+        <?= $this->Form->create($reservationRoom, array('role' => 'form')) ?>
           <div class="box-body">
           <?php
-            echo $this->Form->input('name');
-            //echo $this->Form->input('slug');
-            //echo $this->Form->input('user_id', ['options' => $users]);
-            echo $this->Form->input('status', ['options' => $status_options]);
+            echo $this->Form->input('reservation_id', ['options' => $reservations]);
+            echo $this->Form->input('room_id', ['options' => $rooms]);
           ?>
           </div>
           <!-- /.box-body -->

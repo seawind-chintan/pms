@@ -42,7 +42,7 @@
                 <td><?= h($roomType->name) ?></td>
                 <td><?= $this->Number->format($roomType->price) ?></td>
                 <td><?= $this->Number->format($roomType->total_rooms) ?></td>
-                <td><?= $this->Number->format($roomType->status) ?></td>
+                <td><?php if($roomType->status === 0) { echo 'Draft'; } else { echo 'Published'; } ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $roomType->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $roomType->id], ['class'=>'btn btn-warning btn-xs']) ?>
