@@ -73,34 +73,13 @@ class AppController extends Controller
         }
 
         if (isset($user['role']) && $user['role'] === 2) {
-            if($this->request->getParam('controller') == "Users"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Properties"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Rooms"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "RoomTypes"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "RoomStatuses"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Countries"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "States"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Cities"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Packages"){
-                return true;
-            }
-            elseif($this->request->getParam('controller') == "Channels"){
+
+            $controller_array = array('Users','Properties','Rooms','RoomTypes','RoomStatuses',
+                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms');
+            $method_array = array();
+
+            if(!empty($controller_array) && in_array($this->request->getParam('controller'),$controller_array) ||
+                !empty($method_array) && in_array($this->request->getParam('action'),$method_array)){
                 return true;
             }
         }
@@ -191,5 +170,20 @@ class AppController extends Controller
         $total_images = array('succeed_images' => $succeed_images, 'failed_images' => $failed_images);
 
         return $total_images;
+    }
+
+	//Function for set date format
+    function setdateformat($date, $format='d-m-Y') {
+
+        $return_date = date($format, strtotime($date));
+        return $return_date;
+    }
+
+    function getMemberTypes(){
+        return ['guest' => 'Guest', 'member' => 'Member'];
+    }
+
+    function getReservationTypes(){
+        return ['inquiry' => 'Inquiry', 'booking' => 'Booking'];
     }
 }
