@@ -14,13 +14,6 @@ use Cake\ORM\TableRegistry;
  */
 class UserServicesController extends AppController {
 
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    //public function assign_service() {
     public function assignServices() {
 
         $userService = $this->UserServices->newEntity();
