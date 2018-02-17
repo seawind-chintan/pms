@@ -36,7 +36,7 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
+                <!-- <th><?= $this->Paginator->sort('id') ?></th> -->
                 <th><?= $this->Paginator->sort('parent_id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= $this->Paginator->sort('status') ?></th>
@@ -48,7 +48,7 @@
             
             foreach ($services as $service): ?>
               <tr>
-                <td><?= $this->Number->format($service->id) ?></td>
+                <!-- <td><?= $this->Number->format($service->id) ?></td> -->
                 <td><?= $service->has('parent_service') ? $this->Html->link($service->parent_service->name, ['controller' => 'Services', 'action' => 'view', $service->parent_service->id]) : '' ?></td>
                 <td><?= h($service->name) ?></td>
 

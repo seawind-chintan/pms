@@ -39,12 +39,12 @@ class MembersController extends AppController
 
         $this->paginate = [
             'contain' => ['Packages', 'MemberGroups'],
-            'conditions' => $pass_cond,
-            'order' => array('Members.id desc'),
-            'limit' => 2
+            'conditions' => ['parent' => $this->Auth->user('id')],
+            'order' => array('Members.id desc')
         ];
 
         $members = $this->paginate($this->Members);
+        //pr($members);exit;
 
         $this->set(compact('members'));
     }
@@ -216,8 +216,10 @@ class MembersController extends AppController
 //            exit;
 
             $member = $this->Members->patchEntity($member, $this->request->data);
-//            pr($member);
-//            exit;
+            $member->parent = $this->Auth->user('id');
+            if(empty($member->member_type)) $member->member_type = 'member';
+            //pr($member);
+            //exit;
 
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Member'));
@@ -325,6 +327,7 @@ class MembersController extends AppController
 //            exit;
 
             $member = $this->Members->patchEntity($member, $this->request->data);
+            $member->parent = $this->Auth->user('id');
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Member'));
                 return $this->redirect(['action' => 'index']);

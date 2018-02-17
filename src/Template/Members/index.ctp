@@ -29,7 +29,7 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
+                <!-- <th><?= $this->Paginator->sort('id') ?></th> -->
                 <th><?= $this->Paginator->sort('package_id') ?></th>
                 <th><?= $this->Paginator->sort('code') ?></th>
                 <th><?= $this->Paginator->sort('first_name') ?></th>
@@ -42,7 +42,7 @@
             <tbody>
             <?php foreach ($members as $member): ?>
               <tr>
-                <td><?= $this->Number->format($member->id) ?></td>
+                <!-- <td><?= $this->Number->format($member->id) ?></td> -->
                 <td><?= $member->has('package') ? $this->Html->link($member->package->name, ['controller' => 'Packages', 'action' => 'view', $member->package->id]) : '' ?></td>
                 <td><?= h($member->code) ?></td>
                 <td><?= h($member->first_name) ?></td>

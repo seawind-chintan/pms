@@ -46,6 +46,10 @@ class MembersTable extends Table
             'foreignKey' => 'package_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Members', [
+            'foreignKey' => 'parent',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('MemberGroups', [
             'foreignKey' => 'member_group_id',
             'joinType' => 'INNER'
@@ -288,6 +292,7 @@ class MembersTable extends Table
     {
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['package_id'], 'Packages'));
+        //$rules->add($rules->existsIn(['parent'], 'Users'));
         $rules->add($rules->existsIn(['member_group_id'], 'MemberGroups'));
 
         return $rules;
