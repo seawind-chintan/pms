@@ -44,7 +44,7 @@ class RoomsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users', 'RoomTypes', 'Properties']
+            'contain' => ['Users', 'RoomTypes', 'RoomOccupancies', 'Properties']
         ];
 
         $rooms = $this->paginate($this->Rooms, ['conditions' => ['Rooms.user_id' => $this->Auth->user('id')]]);
@@ -146,10 +146,11 @@ class RoomsController extends AppController
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
         $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $roomoccupancies = $this->Rooms->RoomOccupancies->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
         $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'status' => '1', 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
-        $this->set(compact('room', 'users', 'roomtypes', 'properties'));
+        $this->set(compact('room', 'users', 'roomtypes', 'properties', 'roomoccupancies'));
         $this->set('_serialize', ['room']);
     }
 
@@ -257,10 +258,11 @@ class RoomsController extends AppController
         }
         $users = $this->Rooms->Users->find('list', ['limit' => 200]);
         $roomtypes = $this->Rooms->RoomTypes->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
+        $roomoccupancies = $this->Rooms->RoomOccupancies->find('list', ['conditions' => ['status' => '1', 'user_id' => $this->Auth->user('id')], 'limit' => 200]);
         $properties = $this->Rooms->Properties->find('list', ['conditions' => ['status' => '1', 'user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
         $status_options = $this->status_array();
         $this->set('status_options', $status_options);
-        $this->set(compact('room', 'users', 'roomtypes', 'properties'));
+        $this->set(compact('room', 'users', 'roomtypes', 'properties', 'roomoccupancies'));
         $this->set('_serialize', ['room']);
     }
 

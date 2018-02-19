@@ -30,7 +30,7 @@
             echo $this->Form->input('code');
             echo $this->Form->input('type', ['options' => $roomtypes]);
             echo $this->Form->input('images[]', ['label' => 'Room Images', 'type' => 'file', 'multiple' => 'true']);
-            echo $this->Form->input('room_occupancy');
+            echo $this->Form->input('room_occupancy', ['options' => $roomoccupancies]);
             echo $this->Form->input('description');
             echo $this->Form->input('status', ['options' => $status_options]);
           ?>

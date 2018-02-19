@@ -9,7 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Rooms Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\PropertiesTable|\Cake\ORM\Association\BelongsTo $Properties
+ * @property |\Cake\ORM\Association\HasMany $ReservationRooms
  *
  * @method \App\Model\Entity\Room get($primaryKey, $options = [])
  * @method \App\Model\Entity\Room newEntity($data = null, array $options = [])
@@ -45,14 +47,22 @@ class RoomsTable extends Table
             'joinType' => 'INNER'
         ]);
 
+        $this->belongsTo('RoomOccupancies', [
+            'foreignKey' => 'room_occupancy',
+            'joinType' => 'INNER',
+            'propertyName' => 'room_occupancy'
+        ]);
+
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-
         $this->belongsTo('Properties', [
             'foreignKey' => 'property_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('ReservationRooms', [
+            'foreignKey' => 'room_id'
         ]);
     }
 
@@ -90,6 +100,11 @@ class RoomsTable extends Table
             ->allowEmpty('description');
 
         $validator
+            ->integer('room_occupancy')
+            ->requirePresence('room_occupancy', 'create')
+            ->notEmpty('room_occupancy');
+
+        $validator
             ->integer('status')
             ->requirePresence('status', 'create')
             ->notEmpty('status');
@@ -107,7 +122,6 @@ class RoomsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
 
         return $rules;

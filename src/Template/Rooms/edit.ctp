@@ -56,7 +56,7 @@
                 echo '</div>';                                        
             }
 
-            echo $this->Form->input('room_occupancy');
+            echo $this->Form->input('room_occupancy', ['options' => $roomoccupancies]);
             echo $this->Form->input('description');
             //echo $this->Form->input('user_id', ['options' => $users]);
             echo $this->Form->input('status', ['options' => $status_options]);

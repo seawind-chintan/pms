@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\RoomsTable;
+use App\Model\Table\RoomOccupanciesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\RoomsTable Test Case
+ * App\Model\Table\RoomOccupanciesTable Test Case
  */
-class RoomsTableTest extends TestCase
+class RoomOccupanciesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\RoomsTable
+     * @var \App\Model\Table\RoomOccupanciesTable
      */
-    public $Rooms;
+    public $RoomOccupancies;
 
     /**
      * Fixtures
@@ -24,13 +24,10 @@ class RoomsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.rooms',
-        'app.room_types',
+        'app.room_occupancies',
         'app.users',
         'app.user_roles',
-        'app.user_details',
-        'app.properties',
-        'app.property_types'
+        'app.user_details'
     ];
 
     /**
@@ -41,8 +38,8 @@ class RoomsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Rooms') ? [] : ['className' => RoomsTable::class];
-        $this->Rooms = TableRegistry::get('Rooms', $config);
+        $config = TableRegistry::exists('RoomOccupancies') ? [] : ['className' => RoomOccupanciesTable::class];
+        $this->RoomOccupancies = TableRegistry::get('RoomOccupancies', $config);
     }
 
     /**
@@ -52,7 +49,7 @@ class RoomsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Rooms);
+        unset($this->RoomOccupancies);
 
         parent::tearDown();
     }
