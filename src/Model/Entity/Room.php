@@ -31,17 +31,12 @@ class Room extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'slug' => true,
         'number' => true,
         'code' => true,
         'type' => true,
         'description' => true,
         'images' => true,
         'images_dir' => true,
-        'rate' => true,
-        'extra_adult_rate' => true,
-        'extra_child_rate' => true,
         'room_occupancy' => true,
         'user_id' => true,
         'property_id' => true,

@@ -80,7 +80,7 @@ class RoomsController extends AppController
             $room = $this->Rooms->patchEntity($room, $this->request->data);
             
             $room->user_id = $this->Auth->user('id');
-            $room->slug = Inflector::slug($room->name);
+            //$room->slug = Inflector::slug($room->name);
             $image_dir = $this->generateRandomString(25);
             //pr($this->request->data);exit;
             // for properties images
@@ -175,7 +175,7 @@ class RoomsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $room = $this->Rooms->patchEntity($room, $this->request->data);
             $room->user_id = $this->Auth->user('id');
-            $room->slug = Inflector::slug($room->name);
+            //$room->slug = Inflector::slug($room->name);
             //pr($this->request->data);exit;
             // for properties images
             $first_fail_imgs = array();

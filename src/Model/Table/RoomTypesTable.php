@@ -73,11 +73,6 @@ class RoomTypesTable extends Table
             ->notEmpty('slug');
 
         $validator
-            ->numeric('price')
-            ->requirePresence('price', 'create')
-            ->notEmpty('price');
-
-        $validator
             ->integer('total_rooms')
             ->requirePresence('total_rooms', 'create')
             ->notEmpty('total_rooms');

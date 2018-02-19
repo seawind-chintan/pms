@@ -35,7 +35,7 @@ class RoomsTable extends Table
         parent::initialize($config);
 
         $this->setTable('rooms');
-        $this->setDisplayField('name');
+        $this->setDisplayField('code');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -67,18 +67,6 @@ class RoomsTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
-
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 255)
-            ->requirePresence('name', 'create')
-            ->notEmpty('name');
-
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 255)
-            ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
 
         $validator
             ->scalar('number')

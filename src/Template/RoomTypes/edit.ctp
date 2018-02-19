@@ -27,7 +27,6 @@
           <?php
             echo $this->Form->input('name');
             //echo $this->Form->input('slug');
-            echo $this->Form->input('price');
             echo $this->Form->input('total_rooms');
             echo $this->Form->input('status', ['options' => $status_options]);
             //echo $this->Form->input('user_id', ['options' => $users]);

@@ -30,7 +30,6 @@
             <thead>
               <tr>
                 <th><?= $this->Paginator->sort('name') ?></th>
-                <th><?= $this->Paginator->sort('price') ?></th>
                 <th><?= $this->Paginator->sort('total_rooms') ?></th>
                 <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= __('Actions') ?></th>
@@ -40,7 +39,6 @@
             <?php foreach ($roomTypes as $roomType): ?>
               <tr>
                 <td><?= h($roomType->name) ?></td>
-                <td><?= $this->Number->format($roomType->price) ?></td>
                 <td><?= $this->Number->format($roomType->total_rooms) ?></td>
                 <td><?php if($roomType->status === 0) { echo 'Draft'; } else { echo 'Published'; } ?></td>
                 <td class="actions" style="white-space:nowrap">

@@ -31,7 +31,6 @@ class RoomType extends Entity
     protected $_accessible = [
         'name' => true,
         'slug' => true,
-        'price' => true,
         'total_rooms' => true,
         'status' => true,
         'user_id' => true,
