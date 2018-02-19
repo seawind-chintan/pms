@@ -277,6 +277,7 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/room-occupancies'); ?>"><i class="fa fa-hand-peace-o"></i> Room Occupancy</a></li>
             <li><a href="<?php echo $this->Url->build('/room-plans'); ?>"><i class="fa fa-list-alt"></i> Room Plans</a></li>
             <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-list"></i> Rooms</a></li>
+            <li><a href="<?php echo $this->Url->build('/room-rates'); ?>"><i class="fa fa-money"></i> Room Rates</a></li>
         </ul>
     </li>
     <li class="treeview">
