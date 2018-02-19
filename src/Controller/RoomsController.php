@@ -77,8 +77,10 @@ class RoomsController extends AppController
     {
         $room = $this->Rooms->newEntity();
         if ($this->request->is('post')) {
+            //pr($this->request->data);exit;
             $room = $this->Rooms->patchEntity($room, $this->request->data);
-            
+            $room->room_occupancy = $this->request->data['room_occupancy'];
+            //pr($room);exit;
             $room->user_id = $this->Auth->user('id');
             //$room->slug = Inflector::slug($room->name);
             $image_dir = $this->generateRandomString(25);
@@ -136,7 +138,7 @@ class RoomsController extends AppController
 
             $room->images = $insert_rooms_data_array['images'];
             $room->images_dir = $image_dir;
-            
+            //pr($room);exit;
             if ($this->Rooms->save($room)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room'));
                 return $this->redirect(['action' => 'index']);
@@ -175,6 +177,7 @@ class RoomsController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $room = $this->Rooms->patchEntity($room, $this->request->data);
+            $room->room_occupancy = $this->request->data['room_occupancy'];
             $room->user_id = $this->Auth->user('id');
             //$room->slug = Inflector::slug($room->name);
             //pr($this->request->data);exit;
