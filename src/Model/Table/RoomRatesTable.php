@@ -145,6 +145,13 @@ class RoomRatesTable extends Table
             ->requirePresence('status', 'create')
             ->notEmpty('status');
 
+        /*$validator->add('email', [
+            'unique' => [
+                'rule' => ['validateUnique', ['scope' => 'site_id']],
+                'provider' => 'table'
+            ]
+        ]);*/
+
         return $validator;
     }
 
@@ -162,6 +169,11 @@ class RoomRatesTable extends Table
         $rules->add($rules->existsIn(['room_plan_id'], 'RoomPlans'));
         $rules->add($rules->existsIn(['room_type_id'], 'RoomTypes'));
         $rules->add($rules->existsIn(['room_occupancy_id'], 'RoomOccupancies'));
+        //$rules->add($rules->isUnique(['property_id', 'room_plan_id', 'room_type_id', 'room_occupancy_id']));
+        $rules->add($rules->isUnique(
+            ['property_id', 'room_plan_id', 'room_type_id', 'room_occupancy_id'],
+            'This property, plan, room type & occupancy combination has already been used.'
+        ));
 
         return $rules;
     }

@@ -33,12 +33,12 @@
             echo $this->Form->input('rate');
             echo $this->Form->input('extra_charge');
             echo $this->Form->input('for_specific_dates', ['type' => 'checkbox']);
-            echo $this->Form->input('from_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
-            echo $this->Form->input('to_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
+            echo $this->Form->input('from_date', ['empty' => true, 'default' => '', 'class' => 'from-date datepicker form-control', 'type' => 'text']);
+            echo $this->Form->input('to_date', ['empty' => true, 'default' => '', 'class' => 'to-date datepicker form-control', 'type' => 'text']);
             echo $this->Form->input('min_adult');
             echo $this->Form->input('max_adult');
             echo $this->Form->input('max_child');
-            echo $this->Form->input('status');
+            echo $this->Form->input('status', ['options' => [0 => 'Draft', 1 => 'Published']]);
           ?>
           </div>
           <!-- /.box-body -->
@@ -69,11 +69,30 @@ $this->Html->script([
 <script>
   $(function () {
     //Datemask mm/dd/yyyy
-    $(".datepicker")
+    $(".from-date")
         .inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"})
         .datepicker({
             language:'en',
-            format: 'yyyy-mm-dd'
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+        }).on('changeDate', function (selected) {
+            var startDate = new Date(selected.date.valueOf());
+            $('.to-date').datepicker('setStartDate', startDate);
+        }).on('clearDate', function (selected) {
+            $('.to-date').datepicker('setStartDate', null);
+        });
+
+    $(".to-date")
+        .inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"})
+        .datepicker({
+            language:'en',
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        }).on('changeDate', function (selected) {
+           var endDate = new Date(selected.date.valueOf());
+           $('.from-date').datepicker('setEndDate', endDate);
+        }).on('clearDate', function (selected) {
+           $('.from-date').datepicker('setEndDate', null);
         });
   });
 </script>

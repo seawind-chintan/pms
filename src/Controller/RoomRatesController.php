@@ -12,6 +12,29 @@ use App\Controller\AppController;
  */
 class RoomRatesController extends AppController
 {
+    public function isAuthorized($user)
+    {
+        // All registered users can add articles
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if ($this->request->getParam('action') === 'add') {
+            return true;
+        }
+
+        // The owner of an article can edit and delete it
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if (in_array($this->request->getParam('action'), ['view', 'edit', 'delete'])) {
+            // Prior to 3.4.0 $this->request->params('pass.0')
+            $roomRateId = (int)$this->request->getParam('pass.0');
+            $roomRate = $this->RoomRates->findById($roomRateId)->first();
+            if($roomRate){
+                return $roomRate->user_id === $user['id'];
+            } else {
+                return false;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
 
     /**
      * Index method
@@ -23,7 +46,7 @@ class RoomRatesController extends AppController
         $this->paginate = [
             'contain' => ['Users', 'Properties', 'RoomPlans', 'RoomTypes', 'RoomOccupancies']
         ];
-        $roomRates = $this->paginate($this->RoomRates);
+        $roomRates = $this->paginate($this->RoomRates, ['conditions' => ['RoomRates.user_id' => $this->Auth->user('id')]]);
 
         $this->set(compact('roomRates'));
     }
