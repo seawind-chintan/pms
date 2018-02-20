@@ -25,18 +25,31 @@ class ReservationsController extends AppController
         $reservation = $this->Reservations->newEntity();
         $reservationtypes = $this->getReservationTypes();
         $properties = $this->Reservations->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'type' => 1], 'limit' => 200]);
+        $roomplans = $this->Reservations->RoomPlans->find('list', ['conditions' => ['user_id' => $this->Auth->user('id'), 'status' => 1], 'limit' => 200]);
+        $roomtypes = $this->Reservations->RoomTypes->find('list', ['conditions' => ['user_id' => $this->Auth->user('id'), 'status' => 1], 'limit' => 200]);
+        $roomoccupancies = $this->Reservations->RoomOccupancies->find('list', ['conditions' => ['user_id' => $this->Auth->user('id'), 'status' => 1], 'limit' => 200]);
 
         $members = $this->Reservations->Members->find('list', ['limit' => 200]);
         $membertypes = $this->getMemberTypes();
         $cities = $this->Reservations->Cities->find('list', ['limit' => 200]);
         $states = $this->Reservations->States->find('list', ['limit' => 200]);
-        $roomsTable = TableRegistry::get('Rooms');
-        $rooms = $roomsTable->find('all', [
-            'conditions' => ['Rooms.status' => 1]
-        ]);
-        $totalRooms = count($rooms->toArray());
+        
         $countries = $this->Reservations->Countries->find('list', ['limit' => 200]);
-        $this->set(compact('reservation', 'members', 'membertypes', 'reservationtypes', 'cities', 'states', 'countries', 'totalRooms', 'properties'));
+        
+        $wizardData = $this->Wizard->read();
+        //extract($wizardData);
+
+        if(!empty($wizardData['step1']['property_id'])){
+            $roomsTable = TableRegistry::get('Rooms');
+            $rooms = $roomsTable->find('all', [
+                'contain' => ['RoomTypes', 'RoomOccupancies'],
+                'conditions' => ['Rooms.status' => 1, 'property_id' => $wizardData['step1']['property_id']]
+            ]);
+            $totalRooms = count($rooms->toArray());
+            $this->set(compact('rooms','totalRooms'));
+        }
+
+        $this->set(compact('reservation', 'members', 'membertypes', 'reservationtypes', 'cities', 'states', 'countries', 'properties', 'roomplans', 'roomtypes', 'roomoccupancies', 'wizardData'));
 
         //$this->set(compact('reservation','reservationtypes', 'properties'));
         $this->Wizard->steps = array('step1', 'step2', 'step3', 'step4');
@@ -225,9 +238,9 @@ class ReservationsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Members', 'Cities', 'States', 'Countries']
+            'contain' => ['Members', 'Cities', 'States', 'Countries', 'Properties']
         ];
-        $reservations = $this->paginate($this->Reservations);
+        $reservations = $this->paginate($this->Reservations, ['conditions' => ['Properties.user' => $this->Auth->user('id')]]);
 
         $this->set(compact('reservations'));
     }

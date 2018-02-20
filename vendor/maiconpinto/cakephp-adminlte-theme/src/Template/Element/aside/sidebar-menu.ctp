@@ -266,7 +266,7 @@ elseif($current_user_data['role'] == 2){
     </li>
     <li class="treeview">
         <a href="#">
-            <i class="fa fa-hotel"></i> <span>Rooms</span>
+            <i class="fa fa-home"></i> <span>Front Office</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -276,19 +276,9 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-check-square"></i> Statuses</a></li>
             <li><a href="<?php echo $this->Url->build('/room-occupancies'); ?>"><i class="fa fa-hand-peace-o"></i> Room Occupancy</a></li>
             <li><a href="<?php echo $this->Url->build('/room-plans'); ?>"><i class="fa fa-list-alt"></i> Room Plans</a></li>
-            <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-list"></i> Rooms</a></li>
+            <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-bed"></i> Rooms</a></li>
             <li><a href="<?php echo $this->Url->build('/room-rates'); ?>"><i class="fa fa-money"></i> Room Rates</a></li>
-        </ul>
-    </li>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-book"></i> <span>Reservations</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li><a href="<?php echo $this->Url->build('/reservations'); ?>"><i class="fa fa-list"></i> Reservations</a></li>
+            <li><a href="<?php echo $this->Url->build('/reservations'); ?>"><i class="fa fa-book"></i> Reservations</a></li>
         </ul>
     </li>
 </ul>

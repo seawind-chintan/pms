@@ -29,8 +29,37 @@
               <?php
                 echo $this->Form->input('reservation_type', ['options' => $reservationtypes]);
                 echo $this->Form->input('property_id', ['options' => $properties]);
+                //echo $this->Form->input('room_plan_id', ['options' => $roomplans]);
+                //echo $this->Form->input('room_type_id', ['options' => $roomtypes]);
+                //echo $this->Form->input('room_occupancy_id', ['options' => $roomoccupancies]);
               ?>
             </div>
+            <div class="col-md-6">
+              <?php
+                echo $this->Form->input('start_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
+              ?>
+            </div>
+            <div class="col-md-6">
+              <?php
+              echo $this->Form->input('end_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
+              ?>
+            </div>
+            <div class="col-md-6">
+              <?php
+              echo $this->Form->input('no_of_adult');
+              ?>
+            </div>
+            <div class="col-md-6">
+              <?php
+              echo $this->Form->input('no_of_child');
+              ?>
+            </div>
+            <div class="col-md-6">
+              <?php
+              //echo $this->Form->input('no_of_rooms', ['min' => 1, 'max'=>$totalRooms]);
+              ?>
+            </div>
+          </div>
             <div class="col-md-6">
               <?php
               
@@ -70,6 +99,7 @@ $this->Html->script([
         .datepicker({
             language:'en',
             format: 'yyyy-mm-dd',
+            autoclose: true,
             startDate: '+0d'
         });
   });

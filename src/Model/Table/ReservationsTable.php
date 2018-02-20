@@ -48,6 +48,23 @@ class ReservationsTable extends Table
             'foreignKey' => 'member_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Properties', [
+            'foreignKey' => 'property_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('RoomPlans', [
+            'foreignKey' => 'room_plan_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('RoomTypes', [
+            'foreignKey' => 'room_type_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('RoomOccupancies', [
+            'foreignKey' => 'room_occupancy_id',
+            'joinType' => 'INNER',
+            'propertyName' => 'room_occupancy_id'
+        ]);
         $this->belongsTo('Cities', [
             'foreignKey' => 'city_id',
             'joinType' => 'INNER'
@@ -190,6 +207,31 @@ class ReservationsTable extends Table
                 'message' => 'Please enter a valid reservation type'
             ]);
 
+        $validator
+            ->add('start_date', '', [
+                'rule' => ['date'],
+                'message' => 'Please enter a valid start date'
+            ])
+            ->add('end_date', '', [
+                'rule' => ['date'],
+                'message' => 'Please enter a valid end date'
+            ]);
+
+        $validator
+            ->integer('no_of_adult')
+            ->requirePresence('no_of_adult', 'create')
+            ->notEmpty('no_of_adult');
+
+        $validator
+            ->integer('no_of_child')
+            ->requirePresence('no_of_child', 'create')
+            ->notEmpty('no_of_child');
+
+        /*$validator
+            ->integer('no_of_rooms')
+            ->requirePresence('no_of_rooms', 'create')
+            ->notEmpty('no_of_rooms');*/
+
         /*$validator
             ->date('start_date')
             ->requirePresence('start_date', 'create', ['message' => '22222222222222222222'])
@@ -205,7 +247,7 @@ class ReservationsTable extends Table
 
     public function validationStep2(Validator $validator)
     {
-        $validator
+        /*$validator
             ->add('start_date', '', [
                 'rule' => ['date'],
                 'message' => 'Please enter a valid start date'
@@ -228,7 +270,7 @@ class ReservationsTable extends Table
         $validator
             ->integer('no_of_rooms')
             ->requirePresence('no_of_rooms', 'create')
-            ->notEmpty('no_of_rooms');
+            ->notEmpty('no_of_rooms');*/
 
         return $validator;
     }

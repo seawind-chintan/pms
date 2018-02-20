@@ -51,6 +51,27 @@ class RoomRatesController extends AppController
         $this->set(compact('roomRates'));
     }
 
+    public function getspecificrates()
+    {
+        if($this->request->is('ajax')) {
+            //$this->layout = 'ajax';
+            $this->viewBuilder()->setLayout('ajax');
+
+            $property_id = $this->request->data()['myData']['property_id'];
+            $room_type_id = $this->request->data()['myData']['room_type_id'];
+            $room_occupancy_id = $this->request->data()['myData']['room_occupancy_id'];
+
+            $this->paginate = [
+                'contain' => ['Users', 'Properties', 'RoomPlans', 'RoomTypes', 'RoomOccupancies']
+            ];
+            $roomRates = $this->paginate($this->RoomRates, ['conditions' => ['RoomRates.user_id' => $this->Auth->user('id')]]);
+
+            
+
+            $this->set('roomRates', $roomRates);
+        }
+    }
+
     /**
      * View method
      *
