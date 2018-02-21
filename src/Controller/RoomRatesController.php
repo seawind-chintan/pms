@@ -64,10 +64,9 @@ class RoomRatesController extends AppController
             $this->paginate = [
                 'contain' => ['Users', 'Properties', 'RoomPlans', 'RoomTypes', 'RoomOccupancies']
             ];
-            $roomRates = $this->paginate($this->RoomRates, ['conditions' => ['RoomRates.user_id' => $this->Auth->user('id')]]);
+            $roomRates = $this->paginate($this->RoomRates, ['conditions' => ['RoomRates.user_id' => $this->Auth->user('id'), 'property_id' => $property_id, 'room_type_id' => $room_type_id, 'room_occupancy_id' => $room_occupancy_id ]]);
 
-            
-
+            //pr($roomRates);exit;
             $this->set('roomRates', $roomRates);
         }
     }

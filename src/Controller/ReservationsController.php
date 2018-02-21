@@ -39,11 +39,13 @@ class ReservationsController extends AppController
         $wizardData = $this->Wizard->read();
         //extract($wizardData);
 
+        //pr($wizardData);
+
         if(!empty($wizardData['step1']['property_id'])){
-            $roomsTable = TableRegistry::get('Rooms');
+            $roomsTable = TableRegistry::get('RoomRates');
             $rooms = $roomsTable->find('all', [
-                'contain' => ['RoomTypes', 'RoomOccupancies'],
-                'conditions' => ['Rooms.status' => 1, 'property_id' => $wizardData['step1']['property_id']]
+                'contain' => ['RoomTypes', 'RoomOccupancies', 'RoomPlans'],
+                'conditions' => ['RoomRates.status' => 1, 'RoomRates.property_id' => $wizardData['step1']['property_id']]
             ]);
             $totalRooms = count($rooms->toArray());
             $this->set(compact('rooms','totalRooms'));
@@ -178,7 +180,8 @@ class ReservationsController extends AppController
         //echo "after completed....";exit;
         $wizardData = $this->Wizard->read();
         extract($wizardData);
-        //pr($wizardData);exit;
+        //pr($wizardData);
+        //exit;
         $postData = array_merge($wizardData['step1'], $wizardData['step2'], $wizardData['step3'], $wizardData['step4']);
         $memberData = $wizardData['step3'];
         $memberData['code'] = 'NA';
@@ -203,9 +206,9 @@ class ReservationsController extends AppController
 
         $membersTable = TableRegistry::get('Members');
         $member = $membersTable->newEntity();
-
+        $member->parent = $this->Auth->user('id');
         $member = $membersTable->patchEntity($member, $memberData);
-        
+        //pr($member);exit;
         if ($membersTable->save($member)) { //$membersTable->save($member)
             //$this->Flash->success(__('The {0} has been saved.', 'Reservation'));
             //return $this->redirect(['action' => 'index']);
@@ -214,12 +217,46 @@ class ReservationsController extends AppController
             $postData['member_id'] = $member_id ;
             $reservation = $this->Reservations->newEntity();
             $reservation = $this->Reservations->patchEntity($reservation, $postData);
-            //$reservation->members = $members;
+            $room_number_arr = $wizardData['step2']['select_room_number'];
+            $no_of_rooms = 0;
+            foreach ($room_number_arr as $room_number_data) {
+                $no_of_rooms += (int) $room_number_data;
+            }
+            $reservation->no_of_rooms = $no_of_rooms;
             //pr($reservation);exit;
             //$result = $this->Reservations->save($reservation);pr($result);
             //exit;
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Reservation'));
+
+                $reservation_id = $reservation->id;
+                
+                foreach ($room_number_arr as $room_number_key => $room_number_value) {
+                    $reservationRatesData[$room_number_key]['no_of_rooms'] = $room_number_value;
+                    $reservationRatesData[$room_number_key]['reservation_id'] = $reservation_id;
+                }
+
+                $room_rates_arr = $wizardData['step2']['room_rates'];
+                foreach ($room_rates_arr as $room_rates_key => $room_rates_value) {
+                    $reservationRatesData[$room_rates_key]['room_rate_id'] = $room_rates_value;
+                }
+
+                $room_adult_arr = $wizardData['step2']['select_room_adult'];
+                foreach ($room_adult_arr as $room_adult_key => $room_adult_value) {
+                    $reservationRatesData[$room_number_key]['no_of_adults'] = $room_adult_value;
+                }
+
+                $room_child_arr = $wizardData['step2']['select_room_child'];
+                foreach ($room_child_arr as $room_child_key => $room_child_value) {
+                    $reservationRatesData[$room_child_key]['no_of_childs'] = $room_child_value;
+                }
+
+                $reservationRatesData['reservation_id'] = $reservation_id;
+                $ReservationRatesTable = TableRegistry::get('ReservationRates');
+                $reservation_rates = $ReservationRatesTable->newEntity();
+                $reservation_rates = $ReservationRatesTable->patchEntity($reservation_rates, $reservationRatesData);
+                $ReservationRatesTable->save($reservation_rates);
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Reservation'));
