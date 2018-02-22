@@ -23,7 +23,7 @@
         <!-- /.box-header -->
         <!-- form start -->
         <?= $this->Form->create($reservation, array('role' => 'form')) ?>
-          <?php pr($wizardData);?> 
+          <?php //pr($wizardData);?> 
           <div class="box-body">
             <legend class="col-form-label col-md-12 pt-0">Guest/Member Details<span class="pull-right"><?php
             

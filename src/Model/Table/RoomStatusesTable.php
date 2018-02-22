@@ -9,8 +9,6 @@ use Cake\Validation\Validator;
 /**
  * RoomStatuses Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Users
- *
  * @method \App\Model\Entity\RoomStatus get($primaryKey, $options = [])
  * @method \App\Model\Entity\RoomStatus newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\RoomStatus[] newEntities(array $data, array $options = [])
@@ -39,11 +37,6 @@ class RoomStatusesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
-        ]);
     }
 
     /**
@@ -65,30 +58,10 @@ class RoomStatusesTable extends Table
             ->notEmpty('name');
 
         $validator
-            ->scalar('slug')
-            ->maxLength('slug', 255)
-            ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
-
-        $validator
             ->integer('status')
             ->requirePresence('status', 'create')
             ->notEmpty('status');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
-
-        return $rules;
     }
 }

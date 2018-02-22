@@ -74,7 +74,7 @@ class AppController extends Controller
 
         if (isset($user['role']) && $user['role'] === 2) {
 
-            $controller_array = array('Users','Properties','Rooms','RoomTypes','RoomStatuses',
+            $controller_array = array('Users','Properties','Rooms','RoomTypes',
                                         'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates');
             $method_array = array();
 

@@ -8,8 +8,6 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $name
- * @property string $slug
- * @property int $user_id
  * @property int $status
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -28,8 +26,6 @@ class RoomStatus extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'slug' => true,
-        'user_id' => true,
         'status' => true,
         'created' => true,
         'modified' => true

@@ -16,10 +16,7 @@ class RoomStatusesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.room_statuses',
-        'app.users',
-        'app.user_roles',
-        'app.user_details'
+        'app.room_statuses'
     ];
 
     /**

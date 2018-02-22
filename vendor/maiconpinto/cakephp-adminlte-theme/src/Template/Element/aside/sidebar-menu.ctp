@@ -44,6 +44,7 @@ if($current_user_data['role'] == 1){
             <li><a href="<?php echo $this->Url->build('/cities'); ?>"><i class="fa fa-list"></i> Manage Cities</a></li>
             <li><a href="<?php echo $this->Url->build('/property-types'); ?>"><i class="fa fa-list"></i> Manage Property Types</a></li>
             <li><a href="<?php echo $this->Url->build('/services'); ?>"><i class="fa fa-list"></i> Manage Services</a></li>
+            <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-check-square"></i>Manage Room Statuses</a></li>
         </ul>
     </li>
     <!--<li class="treeview">
@@ -273,7 +274,6 @@ elseif($current_user_data['role'] == 2){
         </a>
         <ul class="treeview-menu">
             <li><a href="<?php echo $this->Url->build('/room-types'); ?>"><i class="fa fa-certificate"></i> Room Types</a></li>
-            <li><a href="<?php echo $this->Url->build('/room-statuses'); ?>"><i class="fa fa-check-square"></i> Statuses</a></li>
             <li><a href="<?php echo $this->Url->build('/room-occupancies'); ?>"><i class="fa fa-hand-peace-o"></i> Room Occupancy</a></li>
             <li><a href="<?php echo $this->Url->build('/room-plans'); ?>"><i class="fa fa-list-alt"></i> Room Plans</a></li>
             <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-bed"></i> Rooms</a></li>

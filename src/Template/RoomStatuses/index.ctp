@@ -29,6 +29,7 @@
           <table class="table table-hover">
             <thead>
               <tr>
+                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= __('Actions') ?></th>
@@ -37,8 +38,16 @@
             <tbody>
             <?php foreach ($roomStatuses as $roomStatus): ?>
               <tr>
+                <td><?= $this->Number->format($roomStatus->id) ?></td>
                 <td><?= h($roomStatus->name) ?></td>
-                <td><?php if($roomStatus->status === 0) { echo 'Draft'; } else { echo 'Published'; } ?></td>
+                <?php
+                if($roomStatus->status) {
+                  $status_icon = '<span class="fa fa-check"></span>';
+                } else {
+                  $status_icon = '<span class="fa fa-clock-o"></span>';                  
+                }
+                ?>
+                <td><?=$status_icon?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $roomStatus->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $roomStatus->id], ['class'=>'btn btn-warning btn-xs']) ?>

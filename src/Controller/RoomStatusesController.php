@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Utility\Inflector;
 
 /**
  * RoomStatuses Controller
@@ -21,10 +20,7 @@ class RoomStatusesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users']
-        ];
-        $roomStatuses = $this->paginate($this->RoomStatuses, ['conditions' => ['user_id' => $this->Auth->user('id')]]);
+        $roomStatuses = $this->paginate($this->RoomStatuses);
 
         $this->set(compact('roomStatuses'));
     }
@@ -39,11 +35,9 @@ class RoomStatusesController extends AppController
     public function view($id = null)
     {
         $roomStatus = $this->RoomStatuses->get($id, [
-            'contain' => ['Users']
+            'contain' => []
         ]);
 
-        $status_options = $this->status_array();
-        $this->set('status_options', $status_options);
         $this->set('roomStatus', $roomStatus);
     }
 
@@ -57,8 +51,6 @@ class RoomStatusesController extends AppController
         $roomStatus = $this->RoomStatuses->newEntity();
         if ($this->request->is('post')) {
             $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->data);
-            $roomStatus->user_id = $this->Auth->user('id');
-            $roomStatus->slug = Inflector::slug($roomStatus->name);
             if ($this->RoomStatuses->save($roomStatus)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room Status'));
                 return $this->redirect(['action' => 'index']);
@@ -66,10 +58,7 @@ class RoomStatusesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Status'));
             }
         }
-        $users = $this->RoomStatuses->Users->find('list', ['limit' => 200]);
-        $status_options = $this->status_array();
-        $this->set('status_options', $status_options);
-        $this->set(compact('roomStatus', 'users'));
+        $this->set(compact('roomStatus'));
         $this->set('_serialize', ['roomStatus']);
     }
 
@@ -87,8 +76,6 @@ class RoomStatusesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $roomStatus = $this->RoomStatuses->patchEntity($roomStatus, $this->request->data);
-            $roomStatus->user_id = $this->Auth->user('id');
-            $roomStatus->slug = Inflector::slug($roomStatus->name);
             if ($this->RoomStatuses->save($roomStatus)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Room Status'));
                 return $this->redirect(['action' => 'index']);
@@ -96,10 +83,7 @@ class RoomStatusesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Room Status'));
             }
         }
-        $users = $this->RoomStatuses->Users->find('list', ['limit' => 200]);
-        $status_options = $this->status_array();
-        $this->set('status_options', $status_options);
-        $this->set(compact('roomStatus', 'users'));
+        $this->set(compact('roomStatus'));
         $this->set('_serialize', ['roomStatus']);
     }
 

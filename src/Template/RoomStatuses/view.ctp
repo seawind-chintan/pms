@@ -25,15 +25,7 @@
                                         <dd>
                                             <?= h($roomStatus->name) ?>
                                         </dd>
-                                                                                                                                                            <dt><?= __('Slug') ?></dt>
-                                        <dd>
-                                            <?= h($roomStatus->slug) ?>
-                                        </dd>
-                                                                                                                                                    <dt><?= __('User') ?></dt>
-                                <dd>
-                                    <?= $roomStatus->has('user') ? $roomStatus->user->id : '' ?>
-                                </dd>
-                                                                                                
+                                                                                                                                    
                                             
                                                                                                                                                             <dt><?= __('Status') ?></dt>
                                 <dd>
