@@ -287,4 +287,27 @@ class RoomsController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    public function showroomrack(){
+        $properties = $this->Rooms->Properties->find('list', ['conditions' => ['user' => $this->Auth->user('id'), 'status' => '1', 'type' => 1], 'limit' => 200]);
+        $this->set(compact('properties'));
+    }
+
+    public function getroomrackbyproperty(){
+        
+        if ($this->request->is('post'))
+        {
+            $postData = $this->request->data('myData');
+            $property_id = $postData['property_id'];
+
+            if(!empty($property_id))
+            {
+                $rooms_for_rack = $this->Rooms->find('all', ['contain' => ['RoomTypes', 'RoomOccupancies'], 'conditions' => ['property_id' => $property_id, 'status' => '1'], 'limit' => 200]);
+                pr($rooms_for_rack->toArray());exit;
+                $this->set(compact('rooms_for_rack'));
+            } else {
+                return false;
+            }
+        }
+    }
 }
