@@ -243,19 +243,25 @@ class ReservationsController extends AppController
 
                 $room_adult_arr = $wizardData['step2']['select_room_adult'];
                 foreach ($room_adult_arr as $room_adult_key => $room_adult_value) {
-                    $reservationRatesData[$room_number_key]['no_of_adults'] = $room_adult_value;
+                    $reservationRatesData[$room_adult_key]['no_of_adult'] = $room_adult_value;
                 }
 
                 $room_child_arr = $wizardData['step2']['select_room_child'];
                 foreach ($room_child_arr as $room_child_key => $room_child_value) {
-                    $reservationRatesData[$room_child_key]['no_of_childs'] = $room_child_value;
+                    $reservationRatesData[$room_child_key]['no_of_child'] = $room_child_value;
                 }
 
-                $reservationRatesData['reservation_id'] = $reservation_id;
+                //pr($reservationRatesData);
+                //exit;
+                //$reservationRatesData['reservation_id'] = $reservation_id;
                 $ReservationRatesTable = TableRegistry::get('ReservationRates');
-                $reservation_rates = $ReservationRatesTable->newEntity();
-                $reservation_rates = $ReservationRatesTable->patchEntity($reservation_rates, $reservationRatesData);
-                $ReservationRatesTable->save($reservation_rates);
+                $reservations_entities = $ReservationRatesTable->newEntities($reservationRatesData);
+                //pr($reservations_entities);exit;
+                $result = $ReservationRatesTable->saveMany($reservations_entities);
+                //$reservation_rates = $ReservationRatesTable->newEntity();
+                //$reservation_rates = $ReservationRatesTable->patchEntity($reservation_rates, $reservationRatesData);
+                
+                //$ReservationRatesTable->save($reservation_rates);
 
                 return $this->redirect(['action' => 'index']);
             } else {
