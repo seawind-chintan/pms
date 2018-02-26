@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ReservationRatesTable;
+use App\Model\Table\CheckinRoomsRatesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ReservationRatesTable Test Case
+ * App\Model\Table\CheckinRoomsRatesTable Test Case
  */
-class ReservationRatesTableTest extends TestCase
+class CheckinRoomsRatesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ReservationRatesTable
+     * @var \App\Model\Table\CheckinRoomsRatesTable
      */
-    public $ReservationRates;
+    public $CheckinRoomsRates;
 
     /**
      * Fixtures
@@ -24,14 +24,15 @@ class ReservationRatesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.reservation_rates',
-        'app.reservations',
+        'app.checkin_rooms_rates',
+        'app.checkins',
         'app.members',
         'app.packages',
         'app.users',
         'app.user_roles',
         'app.user_details',
         'app.member_groups',
+        'app.reservations',
         'app.properties',
         'app.property_types',
         'app.room_plans',
@@ -53,8 +54,8 @@ class ReservationRatesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('ReservationRates') ? [] : ['className' => ReservationRatesTable::class];
-        $this->ReservationRates = TableRegistry::get('ReservationRates', $config);
+        $config = TableRegistry::exists('CheckinRoomsRates') ? [] : ['className' => CheckinRoomsRatesTable::class];
+        $this->CheckinRoomsRates = TableRegistry::get('CheckinRoomsRates', $config);
     }
 
     /**
@@ -64,7 +65,7 @@ class ReservationRatesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->ReservationRates);
+        unset($this->CheckinRoomsRates);
 
         parent::tearDown();
     }

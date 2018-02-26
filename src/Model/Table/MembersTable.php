@@ -58,6 +58,24 @@ class MembersTable extends Table
             'foreignKey' => 'member_id'
         ]);
 
+        $this->belongsTo('Cities', [
+            'foreignKey' => 'core_city',
+            'joinType' => 'INNER',
+            'propertyName' => 'core_city'
+        ]);
+
+        $this->belongsTo('States', [
+            'foreignKey' => 'core_state',
+            'joinType' => 'INNER',
+            'propertyName' => 'core_state'
+        ]);
+
+        $this->belongsTo('Countries', [
+            'foreignKey' => 'core_country',
+            'joinType' => 'INNER',
+            'propertyName' => 'core_country'
+        ]);
+
         // Add the behaviour and configure any options you want
         $this->addBehavior('Proffer.Proffer', [
             'images' => [    // The name of your upload field

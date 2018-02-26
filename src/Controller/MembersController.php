@@ -359,4 +359,34 @@ class MembersController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    public function getmemberbymobile(){
+
+        if ($this->request->is('ajax')) {
+            
+            $this->viewBuilder()->setLayout('ajax');
+
+            $postData = $this->request->data('myData');
+            $mobile = $postData['mobile'];
+            $member = $this->Members->find('all', ['conditions' => ['mobile' => $mobile]]);
+            $member = $member->first();
+            $this->set(compact('member'));
+        }
+
+    }
+
+    public function getmemberbyemail(){
+
+        if ($this->request->is('ajax')) {
+            
+            $this->viewBuilder()->setLayout('ajax');
+
+            $postData = $this->request->data('myData');
+            $email = $postData['email'];
+            $member = $this->Members->find('all', ['conditions' => ['email' => $email]]);
+            $member = $member->first();
+            $this->set(compact('member'));
+        }
+
+    }
 }

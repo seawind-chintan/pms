@@ -4,19 +4,20 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ReservationRate Entity
+ * CheckinRoomsRate Entity
  *
  * @property int $id
- * @property int $reservation_id
+ * @property int $checkin_id
+ * @property int $room_id
  * @property int $room_rate_id
  * @property int $no_of_adult
  * @property int $no_of_child
- * @property int $no_of_rooms
  *
- * @property \App\Model\Entity\Reservation $reservation
+ * @property \App\Model\Entity\Checkin $checkin
+ * @property \App\Model\Entity\Room $room
  * @property \App\Model\Entity\RoomRate $room_rate
  */
-class ReservationRate extends Entity
+class CheckinRoomsRate extends Entity
 {
 
     /**
@@ -29,12 +30,13 @@ class ReservationRate extends Entity
      * @var array
      */
     protected $_accessible = [
-        'reservation_id' => true,
+        'checkin_id' => true,
+        'room_id' => true,
         'room_rate_id' => true,
         'no_of_adult' => true,
         'no_of_child' => true,
-        'no_of_rooms' => true,
-        'reservation' => true,
+        'checkin' => true,
+        'room' => true,
         'room_rate' => true
     ];
 }

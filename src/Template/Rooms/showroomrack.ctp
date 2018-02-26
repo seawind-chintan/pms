@@ -24,7 +24,9 @@
               <?php
                 echo $this->Form->input('properties', ['label' => 'Select Property','options' => $properties, 'empty' => 'Select' ]);
               ?>
-              </div>
+              <section class="content" id="roomrack_display">
+                  
+              </section>
               <!-- /.box-body -->
               <div class="box-footer">
                 <?= $this->Form->button(__('Save')) ?>
@@ -62,7 +64,7 @@ $this->Html->script([
         success: function(data)
          {
           //alert(data);
-          jQuery('#room_price_'+dataRoom).html(data);
+          jQuery('#roomrack_display').html(data);
          },
     });
   });
