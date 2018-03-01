@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Utility\Inflector;
+use Cake\ORM\TableRegistry;
 
 /**
  * Rooms Controller
@@ -307,6 +308,90 @@ class RoomsController extends AppController
                 $this->set(compact('rooms_for_rack'));
             } else {
                 return false;
+            }
+        }
+    }
+
+    public function getroomsbyproperty(){
+        
+        if ($this->request->is('post'))
+        {
+            $postData = $this->request->data('myData');
+            $property_id = $postData['property_id'];
+
+            if(!empty($property_id))
+            {
+                $rooms_for_rack = $this->Rooms->find('all', ['contain' => ['RoomTypes', 'RoomOccupancies'], 'conditions' => ['property_id' => $property_id, 'Rooms.status' => '1'], 'limit' => 200]);
+                //pr($rooms_for_rack->toArray());exit;
+                $this->set(compact('rooms_for_rack'));
+            } else {
+                return false;
+            }
+        }
+    }
+
+     public function getroomratebyroom(){
+        
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $room_id = $postData['room_id'];
+            
+            $room = $this->Rooms->get($room_id);
+
+            $roomratesTable = TableRegistry::get('RoomRates');
+            $roomrate = $roomratesTable->find('all', [
+                'contain' => ['RoomTypes', 'RoomOccupancies', 'RoomPlans'],
+                'conditions' => ['RoomRates.status' => 1, 'RoomRates.property_id' => $room->property_id, 'RoomRates.room_type_id' => $room->type, 'RoomRates.room_occupancy_id' => $room->room_occupancy ]
+            ]);
+            if(count($roomrate->toArray()) > 0){
+                $this->set(compact('roomrate', 'room'));
+            } else {
+                echo 'false';exit;
+            }
+        }
+    }
+
+    public function getadultbyroomrate(){
+        
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $room_rate_id = $postData['roomrate_id'];
+            //var_dump($room_rate_id);exit;
+            
+            $roomratesTable = TableRegistry::get('RoomRates');
+            $roomrate = $roomratesTable->find('all', [
+                'contain' => ['RoomTypes', 'RoomOccupancies', 'RoomPlans'],
+                'conditions' => ['RoomRates.id' => $room_rate_id]
+            ]);
+            //pr($roomrate->toArray());exit;
+            if(count($roomrate->toArray()) > 0){
+                $this->set(compact('roomrate'));
+            } else {
+                echo 'false';exit;
+            }
+        }
+    }
+
+    public function getachildbyroomrate(){
+        
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $room_id = $postData['room_id'];
+            
+            $room = $this->Rooms->get($room_id);
+
+            $roomratesTable = TableRegistry::get('RoomRates');
+            $roomrate = $roomratesTable->find('all', [
+                'contain' => ['RoomTypes', 'RoomOccupancies', 'RoomPlans'],
+                'conditions' => ['RoomRates.status' => 1, 'RoomRates.property_id' => $room->property_id, 'RoomRates.room_type_id' => $room->type, 'RoomRates.room_occupancy_id' => $room->room_occupancy ]
+            ]);
+            if(count($roomrate->toArray()) > 0){
+                $this->set(compact('roomrate'));
+            } else {
+                echo 'false';exit;
             }
         }
     }

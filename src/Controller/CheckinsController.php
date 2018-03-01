@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Checkins Controller
@@ -49,14 +50,31 @@ class CheckinsController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($roomId = false)
     {
         $checkin = $this->Checkins->newEntity();
         if ($this->request->is('post')) {
+            pr($this->request->data);
             $checkin = $this->Checkins->patchEntity($checkin, $this->request->data);
             $checkin->member->parent = $this->Auth->user('id');
-            //pr($checkin);exit;
-            if ($this->Checkins->save($checkin)) {
+            if(!empty($this->request->data['member']['id'])) $checkin->member->id = $this->request->data['member']['id'];
+            pr($checkin);exit;
+            if ($checkinID = $this->Checkins->save($checkin)) {
+
+                $checkinRoomsRatesTable = TableRegistry::get('CheckinRoomsRates');
+                $rooms_to_save = $this->request->data['rooms'];
+                foreach ($rooms_to_save as $room_to_save_key => $room_to_save) {
+                    $checkinroomrate = $checkinRoomsRatesTable->newEntity();
+                    $checkinroomrate->checkin_id = $checkinID->id;
+                    $checkinroomrate->room_id = $room_to_save;
+                    $checkinroomrate->room_rate_id = $this->request->data['roomratebyplan'][$room_to_save_key];
+                    $checkinroomrate->no_of_adult = (!empty($this->request->data['adultbyroomrate'][$room_to_save_key]) ? $this->request->data['adultbyroomrate'][$room_to_save_key] : 1 );
+                    $checkinroomrate->no_of_child = (!empty($this->request->data['childbyroomrate'][$room_to_save_key]) ? $this->request->data['childbyroomrate'][$room_to_save_key] : 0 );;
+                    //pr($checkinroomrate);exit;
+                    $checkinRoomsRatesTable->save($checkinroomrate); 
+                }
+
+
                 $this->Flash->success(__('The {0} has been saved.', 'Checkin'));
                 return $this->redirect(['action' => 'index']);
             } else {
@@ -67,7 +85,8 @@ class CheckinsController extends AppController
         $cities = $this->Checkins->Members->Cities->find('list', ['limit' => 200]);
         $states = $this->Checkins->Members->States->find('list', ['limit' => 200]);
         $countries = $this->Checkins->Members->Countries->find('list', ['limit' => 200]);
-        $properties = $this->Checkins->Properties->find('list', ['limit' => 200]);
+        $properties = $this->Checkins->Properties->find('list', ['conditions' => ['type' => 1, 'status' => 1, 'user' => $this->Auth->user('id')], 'limit' => 200]);
+
         $this->set(compact('checkin', 'members', 'cities', 'states', 'countries', 'properties'));
         $this->set('_serialize', ['checkin']);
     }

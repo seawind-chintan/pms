@@ -27,12 +27,12 @@
           <div class="col-md-6">
           <?php
             echo $this->Form->input('custom_member_type', ['label' => 'Member Type', 'options' => [0 => 'New Guest/Member', 1 => 'Existing Guest/Member']]);
-            echo $this->Form->input('member.member_type', ['type' => 'hidden', 'options' => ['guest' => 'Guest', 'member' => 'Member']]);
+            echo $this->Form->input('member.member_type', ['type' => 'hidden', 'value' => 'guest']);
             echo '<div class="col-md-4">'.$this->Form->input('member.code').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.mobile').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.email').'</div>';
             echo $this->Form->input('member.application_no');
-            echo $this->Form->input('member_id', ['type' => 'hidden', 'disabled' => 'disabled']);
+            echo $this->Form->input('member.id', ['type' => 'hidden', 'disabled' => 'disabled']);
             echo '<div class="col-md-4">'.$this->Form->input('member.first_name').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.last_name').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.nickname').'</div>';
@@ -60,6 +60,7 @@
             echo $this->Form->input('travel_agent');
             echo $this->Form->input('remarks');
             echo $this->Form->input('property_id', ['options' => $properties]);
+            echo '<div id="rooms_checkboxes"></div>';
             echo $this->Form->input('dept_date_time', ['class' => 'datepicker']);
             echo $this->Form->input('status', ['type' => 'hidden', 'value' => 1]);
           ?>
@@ -100,6 +101,96 @@ $this->Html->script([
             format: 'mm/dd/yyyy'
         });
 
+
+    var propertyId = jQuery('#property-id').val();
+    var postData = {
+        "property_id":propertyId
+    };
+
+    $.ajax({
+        url: "<?=DEFAULT_URL?>rooms/getroomsbyproperty/",
+        type: "POST",
+        data: {myData:postData},
+        success: function(data)
+         {
+          //alert(data);
+          jQuery('#rooms_checkboxes').html(data);
+         },
+    });
+
+    jQuery(document).on('change', '.room-checkbox', function() {
+        if(jQuery(this).is(":checked")) {
+            
+            var room_id = jQuery(this).val();
+            var postData = {
+                "room_id":room_id
+            };
+            $.ajax({
+                url: "<?=DEFAULT_URL?>rooms/getroomratebyroom/",
+                type: "POST",
+                data: {myData:postData},
+                success: function(data)
+                 {
+                  console.log(data);
+                  if(data === 'false'){
+
+                    //resetFields('mobile');
+                    //alert(room_id);
+                    //var returnVal = confirm("Are you sure?");
+                    alert('No rates available for this room');
+                    jQuery('#room_checkbox_'+room_id).attr("checked", false);
+                    jQuery('#select_plan_'+room_id).html('');
+
+                  } else {
+
+                    jQuery('#select_plan_'+room_id).html(data);
+                    
+                  }
+                  //jQuery('#roomrack_display').html(data);
+                 },
+            });
+        } else {
+          var room_id = jQuery(this).val();
+          alert(jQuery(this).is(":checked"));
+          jQuery('#select_plan_'+room_id).html('');
+          jQuery('#select_adult_child_'+room_id).html('');
+        }
+    });
+
+    jQuery(document).on('change', '.roomratebyplan', function() {
+        alert(jQuery(this).val());
+        var roomrate_id = jQuery(this).val();
+        var room_id = jQuery(this).attr('id');
+        room_id = room_id.substring(15);
+        console.log(room_id);
+        var postData = {
+            "roomrate_id":roomrate_id
+        };
+        $.ajax({
+            url: "<?=DEFAULT_URL?>rooms/getadultbyroomrate/",
+            type: "POST",
+            data: {myData:postData},
+            success: function(data)
+             {
+              console.log(data);
+              if(data === 'false'){
+
+                //resetFields('mobile');
+                //alert(room_id);
+                //var returnVal = confirm("Are you sure?");
+                alert('No rates available for this room');
+                jQuery('#select_adult_child_'+room_id).html('');
+
+              } else {
+
+                jQuery('#select_adult_child_'+room_id).html(data);
+                
+              }
+              //jQuery('#roomrack_display').html(data);
+             },
+        });
+    });
+
     function resetFields(fetchfrom="mobile")
       {
           jQuery('#member-id').attr('disabled', true);
@@ -119,17 +210,17 @@ $this->Html->script([
           if(fetchfrom == 'email'){
             jQuery('#member-email').attr('readonly', false);
           } else {
-            jQuery('#member-email').val('').attr('readonly', false);
+            //jQuery('#member-email').val('').attr('readonly', false);
           }
           if(fetchfrom == 'mobile'){
             jQuery('#member-mobile').attr('readonly', false);
           } else {
-            jQuery('#member-mobile').val('').attr('readonly', false);
+            //jQuery('#member-mobile').val('').attr('readonly', false);
           }
           if(fetchfrom == 'code'){
             jQuery('#member-code').attr('readonly', false);
           } else {
-            jQuery('#member-code').val('').attr('readonly', false);
+            //jQuery('#member-code').val('').attr('readonly', false);
           }
           jQuery('#custom-member-type').val(0);
       }
@@ -237,6 +328,27 @@ $this->Html->script([
            },
       });
     });
+
+
+    jQuery('#property-id').change(function(){
+      var propertyId = jQuery(this).val();
+
+      var postData = {
+          "property_id":propertyId
+      };
+
+      $.ajax({
+          url: "<?=DEFAULT_URL?>rooms/getroomsbyproperty/",
+          type: "POST",
+          data: {myData:postData},
+          success: function(data)
+           {
+            //alert(data);
+            jQuery('#rooms_checkboxes').html(data);
+           },
+      });
+    });
+
   });
 </script>
 <?php $this->end(); ?>
