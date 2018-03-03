@@ -336,6 +336,7 @@ class RoomsController extends AppController
         {
             $postData = $this->request->data('myData');
             $room_id = $postData['room_id'];
+            $row_id = $postData['row_id'];
             
             $room = $this->Rooms->get($room_id);
 
@@ -345,7 +346,7 @@ class RoomsController extends AppController
                 'conditions' => ['RoomRates.status' => 1, 'RoomRates.property_id' => $room->property_id, 'RoomRates.room_type_id' => $room->type, 'RoomRates.room_occupancy_id' => $room->room_occupancy ]
             ]);
             if(count($roomrate->toArray()) > 0){
-                $this->set(compact('roomrate', 'room'));
+                $this->set(compact('roomrate', 'room', 'row_id'));
             } else {
                 echo 'false';exit;
             }
@@ -358,7 +359,8 @@ class RoomsController extends AppController
         {
             $postData = $this->request->data('myData');
             $room_rate_id = $postData['roomrate_id'];
-            //var_dump($room_rate_id);exit;
+            $row_id = $postData['row_id'];
+            //var_dump($row_id);exit;
             
             $roomratesTable = TableRegistry::get('RoomRates');
             $roomrate = $roomratesTable->find('all', [
@@ -367,7 +369,7 @@ class RoomsController extends AppController
             ]);
             //pr($roomrate->toArray());exit;
             if(count($roomrate->toArray()) > 0){
-                $this->set(compact('roomrate'));
+                $this->set(compact('roomrate', 'row_id'));
             } else {
                 echo 'false';exit;
             }

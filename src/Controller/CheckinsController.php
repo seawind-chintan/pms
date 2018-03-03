@@ -54,14 +54,14 @@ class CheckinsController extends AppController
     {
         $checkin = $this->Checkins->newEntity();
         if ($this->request->is('post')) {
-            pr($this->request->data);
+            //pr($this->request->data);exit;
             $checkin = $this->Checkins->patchEntity($checkin, $this->request->data);
             $checkin->member->parent = $this->Auth->user('id');
             if(!empty($this->request->data['member']['id'])) $checkin->member->id = $this->request->data['member']['id'];
-            pr($checkin);exit;
+            //pr($checkin);exit;
             if ($checkinID = $this->Checkins->save($checkin)) {
 
-                $checkinRoomsRatesTable = TableRegistry::get('CheckinRoomsRates');
+                /*$checkinRoomsRatesTable = TableRegistry::get('CheckinRoomsRates');
                 $rooms_to_save = $this->request->data['rooms'];
                 foreach ($rooms_to_save as $room_to_save_key => $room_to_save) {
                     $checkinroomrate = $checkinRoomsRatesTable->newEntity();
@@ -69,10 +69,10 @@ class CheckinsController extends AppController
                     $checkinroomrate->room_id = $room_to_save;
                     $checkinroomrate->room_rate_id = $this->request->data['roomratebyplan'][$room_to_save_key];
                     $checkinroomrate->no_of_adult = (!empty($this->request->data['adultbyroomrate'][$room_to_save_key]) ? $this->request->data['adultbyroomrate'][$room_to_save_key] : 1 );
-                    $checkinroomrate->no_of_child = (!empty($this->request->data['childbyroomrate'][$room_to_save_key]) ? $this->request->data['childbyroomrate'][$room_to_save_key] : 0 );;
+                    $checkinroomrate->no_of_child = (!empty($this->request->data['childbyroomrate'][$room_to_save_key]) ? $this->request->data['childbyroomrate'][$room_to_save_key] : 0 );
                     //pr($checkinroomrate);exit;
-                    $checkinRoomsRatesTable->save($checkinroomrate); 
-                }
+                    $checkinRoomsRatesTable->save($checkinroomrate);
+                }*/
 
 
                 $this->Flash->success(__('The {0} has been saved.', 'Checkin'));

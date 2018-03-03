@@ -26,13 +26,18 @@
           <div class="box-body">
           <div class="col-md-6">
           <?php
+          //pr($_POST);
             echo $this->Form->input('custom_member_type', ['label' => 'Member Type', 'options' => [0 => 'New Guest/Member', 1 => 'Existing Guest/Member']]);
             echo $this->Form->input('member.member_type', ['type' => 'hidden', 'value' => 'guest']);
             echo '<div class="col-md-4">'.$this->Form->input('member.code').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.mobile').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.email').'</div>';
             echo $this->Form->input('member.application_no');
-            echo $this->Form->input('member.id', ['type' => 'hidden', 'disabled' => 'disabled']);
+            if(!empty($_POST['member']['id'])){
+              echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $_POST['member']['id']]);
+            } else {
+              echo $this->Form->input('member.id', ['type' => 'hidden', 'disabled' => 'disabled']);
+            }
             echo '<div class="col-md-4">'.$this->Form->input('member.first_name').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.last_name').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.nickname').'</div>';
@@ -122,8 +127,10 @@ $this->Html->script([
         if(jQuery(this).is(":checked")) {
             
             var room_id = jQuery(this).val();
+            var row_id = jQuery('#select_plan_'+room_id).attr('data-row');
             var postData = {
-                "room_id":room_id
+                "room_id":room_id,
+                "row_id":row_id
             };
             $.ajax({
                 url: "<?=DEFAULT_URL?>rooms/getroomratebyroom/",
@@ -163,8 +170,10 @@ $this->Html->script([
         var room_id = jQuery(this).attr('id');
         room_id = room_id.substring(15);
         console.log(room_id);
+        var row_id = jQuery('#select_adult_child_'+room_id).attr('data-row');
         var postData = {
-            "roomrate_id":roomrate_id
+            "roomrate_id":roomrate_id,
+            "row_id":row_id
         };
         $.ajax({
             url: "<?=DEFAULT_URL?>rooms/getadultbyroomrate/",
