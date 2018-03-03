@@ -56,7 +56,8 @@
           </div>
           <div class="col-md-6">
           <?php
-            echo $this->Form->input('arrival_date_time', ['value' => date('Y-m-d H:i:s'), 'readonly' => 'true']);
+            echo $this->Form->input('room_rack_room_id', ['type' => 'hidden', 'value' => $_GET['room_id']]);
+            echo $this->Form->input('arrival_date_time', ['type'=>'hidden', 'value' => date('Y-m-d H:i:s'), 'readonly' => 'true']);
             echo $this->Form->input('no_of_adult');
             echo $this->Form->input('no_of_child');
             echo $this->Form->input('arrival_from');
@@ -64,7 +65,13 @@
             echo $this->Form->input('purpose_of_visit');
             echo $this->Form->input('travel_agent');
             echo $this->Form->input('remarks');
-            echo $this->Form->input('property_id', ['options' => $properties]);
+            
+            if(!empty($_GET['property_id'])){
+              echo $this->Form->input('property_id', ['options' => $properties, 'default' => $_GET['property_id']]);
+            } else {
+              echo $this->Form->input('property_id', ['options' => $properties]);
+            }
+            
             echo '<div id="rooms_checkboxes"></div>';
             echo $this->Form->input('dept_date_time', ['class' => 'datepicker']);
             echo $this->Form->input('status', ['type' => 'hidden', 'value' => 1]);
@@ -98,6 +105,11 @@ $this->Html->script([
 <?php $this->start('scriptBottom'); ?>
 <script>
   $(function () {
+
+    /*jQuery('input[name^="arrival_date_time"]').each(function() {
+        alert('dsfsdfgdfg');
+    });*/
+
     //Datemask mm/dd/yyyy
     $(".datepicker")
         .inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"})
@@ -121,6 +133,15 @@ $this->Html->script([
           //alert(data);
           jQuery('#rooms_checkboxes').html(data);
          },
+    });
+
+    var roomID = jQuery('#room-rack-room-id').val();
+    //alert(roomID);
+    jQuery('#room_checkbox_'+roomID).attr('checked', true);
+
+    jQuery(document).find(".room-checkbox").bind('change', function(){        
+            val = this.checked;
+            alert("changed");
     });
 
     jQuery(document).on('change', '.room-checkbox', function() {
@@ -158,14 +179,14 @@ $this->Html->script([
             });
         } else {
           var room_id = jQuery(this).val();
-          alert(jQuery(this).is(":checked"));
+          //alert(jQuery(this).is(":checked"));
           jQuery('#select_plan_'+room_id).html('');
           jQuery('#select_adult_child_'+room_id).html('');
         }
     });
 
     jQuery(document).on('change', '.roomratebyplan', function() {
-        alert(jQuery(this).val());
+        //alert(jQuery(this).val());
         var roomrate_id = jQuery(this).val();
         var room_id = jQuery(this).attr('id');
         room_id = room_id.substring(15);

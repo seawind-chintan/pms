@@ -273,6 +273,7 @@ elseif($current_user_data['role'] == 2){
             </span>
         </a>
         <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/rooms/showroomrack'); ?>"><i class="fa fa-table"></i> Room Rack</a></li>
             <li><a href="<?php echo $this->Url->build('/reservations'); ?>"><i class="fa fa-book"></i> Reservations</a></li>
             <li><a href="<?php echo $this->Url->build('/checkins'); ?>"><i class="fa fa-sign-in"></i> Check-Ins</a></li>
         </ul>

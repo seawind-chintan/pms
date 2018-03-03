@@ -43,10 +43,12 @@
 </section>
 
 <?php
+/*
 $this->Html->script([
   'AdminLTE./plugins/jQuery/jquery-2.2.3.min',
 ],
 ['block' => 'script']);
+*/
 ?>
 <?php $this->start('scriptBottom'); ?>
 <script type="text/javascript">
