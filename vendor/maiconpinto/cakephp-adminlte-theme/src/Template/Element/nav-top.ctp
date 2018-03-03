@@ -268,7 +268,7 @@ $current_user_details = $users->get($id, [
         </ul>
       </li>
       <!-- Control Sidebar Toggle Button -->
-      <li style="display: none;">
+      <li>
         <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
       </li>
     </ul>

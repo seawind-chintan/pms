@@ -231,7 +231,7 @@ elseif($current_user_data['role'] == 2){
 ?>
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
-    <li class="treeview">
+    <!-- <li class="treeview">
         <a href="#">
             <i class="fa fa-users"></i> <span>Employees/Managers</span>
             <span class="pull-right-container">
@@ -242,7 +242,7 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/users'); ?>"><i class="fa fa-list"></i> Manage Employees/Managers</a></li>
             <li><a href="<?php echo $this->Url->build('/user-services/assignServices'); ?>"><i class="fa fa-circle-o"></i> Assign Services</a></li>
         </ul>
-    </li>
+    </li> -->
     <li class="treeview">
         <a href="#">
             <i class="fa fa-user-plus"></i> <span>Members</span>
@@ -254,7 +254,7 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/members'); ?>"><i class="fa fa-list"></i> Manage Members</a></li>
         </ul>
     </li>
-    <li class="treeview">
+    <!-- <li class="treeview">
         <a href="#">
             <i class="fa fa-building"></i> <span>Properties</span>
             <span class="pull-right-container">
@@ -264,7 +264,7 @@ elseif($current_user_data['role'] == 2){
         <ul class="treeview-menu">
             <li><a href="<?php echo $this->Url->build('/properties'); ?>"><i class="fa fa-building"></i> Manage Properties</a></li>
         </ul>
-    </li>
+    </li> -->
     <li class="treeview">
         <a href="#">
             <i class="fa fa-home"></i> <span>Front Office</span>
@@ -273,11 +273,6 @@ elseif($current_user_data['role'] == 2){
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href="<?php echo $this->Url->build('/room-types'); ?>"><i class="fa fa-certificate"></i> Room Types</a></li>
-            <li><a href="<?php echo $this->Url->build('/room-occupancies'); ?>"><i class="fa fa-hand-peace-o"></i> Room Occupancy</a></li>
-            <li><a href="<?php echo $this->Url->build('/room-plans'); ?>"><i class="fa fa-list-alt"></i> Room Plans</a></li>
-            <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-bed"></i> Rooms</a></li>
-            <li><a href="<?php echo $this->Url->build('/room-rates'); ?>"><i class="fa fa-money"></i> Room Rates</a></li>
             <li><a href="<?php echo $this->Url->build('/reservations'); ?>"><i class="fa fa-book"></i> Reservations</a></li>
             <li><a href="<?php echo $this->Url->build('/checkins'); ?>"><i class="fa fa-sign-in"></i> Check-Ins</a></li>
         </ul>
