@@ -74,6 +74,12 @@ class CheckinsController extends AppController
                     $checkinRoomsRatesTable->save($checkinroomrate);
                 }*/
 
+                $RoomsTable = TableRegistry::get('Rooms');
+                foreach ($checkin['checkin_rooms_rates'] as $checkin_room_key => $checkin_room) {
+                    $room = $RoomsTable->get($checkin_room->room_id);
+                    $room->room_status_id = 5;
+                    $RoomsTable->save($room);
+                }
 
                 $this->Flash->success(__('The {0} has been saved.', 'Checkin'));
                 return $this->redirect(['action' => 'index']);

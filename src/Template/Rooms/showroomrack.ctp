@@ -29,7 +29,8 @@
               </section>
               <!-- /.box-body -->
               <div class="box-footer">
-                <?= $this->Form->button(__('Save')) ?>
+                <?php // $this->Form->button(__('Save')) ?>
+                <a href="#"><i class="fa fa-square text-aqua"></i> <span>Vacant</span></a> | <a href="#"><i class="fa fa-square text-orange"></i> <span>Reserved</span></a> | <a href="#"><i class="fa fa-square text-yellow"></i> <span>Dirty</span></a> | <a href="#"><i class="fa fa-square text-red"></i> <span>Blocked for Maintainance</span></a> | <a href="#"><i class="fa fa-square text-green"></i> <span>Occupied</span></a>
               </div>
             <?= $this->Form->end() ?>
         </div>

@@ -321,7 +321,7 @@ class RoomsController extends AppController
 
             if(!empty($property_id))
             {
-                $rooms_for_rack = $this->Rooms->find('all', ['contain' => ['RoomTypes', 'RoomOccupancies'], 'conditions' => ['property_id' => $property_id, 'Rooms.status' => '1'], 'limit' => 200]);
+                $rooms_for_rack = $this->Rooms->find('all', ['contain' => ['RoomTypes', 'RoomOccupancies'], 'conditions' => ['property_id' => $property_id, 'Rooms.status' => '1', 'Rooms.room_status_id' => '1'], 'limit' => 200]);
                 //pr($rooms_for_rack->toArray());exit;
                 $this->set(compact('rooms_for_rack'));
             } else {
