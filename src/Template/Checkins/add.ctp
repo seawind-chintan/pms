@@ -132,16 +132,40 @@ $this->Html->script([
          {
           //alert(data);
           jQuery('#rooms_checkboxes').html(data);
+          var roomID = jQuery('#room-rack-room-id').val();
+          //alert(roomID);
+          jQuery('#room_checkbox_'+roomID).attr('checked', true);
+
+          var row_id = jQuery('#select_plan_'+roomID).attr('data-row');
+            var postData = {
+                "room_id":roomID,
+                "row_id":row_id
+            };
+            $.ajax({
+                url: "<?=DEFAULT_URL?>rooms/getroomratebyroom/",
+                type: "POST",
+                data: {myData:postData},
+                success: function(data)
+                 {
+                  console.log(data);
+                  if(data === 'false'){
+
+                    //resetFields('mobile');
+                    //alert(room_id);
+                    //var returnVal = confirm("Are you sure?");
+                    alert('No rates available for this room');
+                    jQuery('#room_checkbox_'+roomID).attr("checked", false);
+                    jQuery('#select_plan_'+roomID).html('');
+
+                  } else {
+
+                    jQuery('#select_plan_'+roomID).html(data);
+                    
+                  }
+                  //jQuery('#roomrack_display').html(data);
+                 },
+            });
          },
-    });
-
-    var roomID = jQuery('#room-rack-room-id').val();
-    //alert(roomID);
-    jQuery('#room_checkbox_'+roomID).attr('checked', true);
-
-    jQuery(document).find(".room-checkbox").bind('change', function(){        
-            val = this.checked;
-            alert("changed");
     });
 
     jQuery(document).on('change', '.room-checkbox', function() {
