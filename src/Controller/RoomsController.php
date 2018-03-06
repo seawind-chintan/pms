@@ -397,4 +397,8 @@ class RoomsController extends AppController
             }
         }
     }
+
+    public function roomavailability(){
+        
+    }
 }
