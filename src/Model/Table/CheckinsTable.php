@@ -53,6 +53,10 @@ class CheckinsTable extends Table
         $this->hasMany('CheckinRoomsRates', [
             'foreignKey' => 'checkin_id'
         ]);
+        $this->belongsTo('CheckinStatuses', [
+            'foreignKey' => 'checkin_status_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

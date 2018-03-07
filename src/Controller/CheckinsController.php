@@ -22,7 +22,7 @@ class CheckinsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Members', 'Properties']
+            'contain' => ['Members','CheckinStatuses','Properties']
         ];
         $checkins = $this->paginate($this->Checkins);
 
@@ -143,6 +143,27 @@ class CheckinsController extends AppController
         } else {
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Checkin'));
         }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    public function checkout($id = null){
+        $checkin = $this->Checkins->get($id, [
+            'contain' => ['Members', 'Properties', 'CheckinRoomsRates']
+        ]);
+
+        $checkin->checkin_status_id = 2;
+        $room_rates = $checkin->checkin_rooms_rates;
+
+        $RoomsTable = TableRegistry::get('Rooms');
+
+        foreach ($room_rates as $checkin_room_key => $checkin_room) {
+            $room = $RoomsTable->get($checkin_room->room_id);
+            $room->room_status_id = 3;
+            $RoomsTable->save($room);
+        }
+
+        $this->Checkins->save($checkin);
+        
         return $this->redirect(['action' => 'index']);
     }
 }

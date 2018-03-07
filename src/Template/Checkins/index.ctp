@@ -35,11 +35,13 @@
                 <th><?= $this->Paginator->sort('no_of_child') ?></th>
                 <th><?= $this->Paginator->sort('arrival_from') ?></th>
                 <th><?= $this->Paginator->sort('destination') ?></th>
+                <th><?= $this->Paginator->sort('checkin_status_id') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($checkins as $checkin): ?>
+              <?php //pr($checkin) ?>
               <tr>
                 <td><?= $checkin->has('member') ? $this->Html->link($checkin->member->first_name, ['controller' => 'Members', 'action' => 'view', $checkin->member->id]) : '' ?></td>
                 <td><?= h($checkin->arrival_date_time) ?></td>
@@ -47,7 +49,9 @@
                 <td><?= $this->Number->format($checkin->no_of_child) ?></td>
                 <td><?= h($checkin->arrival_from) ?></td>
                 <td><?= h($checkin->destination) ?></td>
+                <td><?= $checkin->has('checkin_status') ? $checkin->checkin_status->name : '' ?></td>
                 <td class="actions" style="white-space:nowrap">
+                  <?= $this->Html->link(__('Check Out'), ['action' => 'checkout', $checkin->id], ['class'=>'btn btn-default btn-xs']) ?>
                   <?= $this->Html->link(__('View'), ['action' => 'view', $checkin->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $checkin->id], ['class'=>'btn btn-warning btn-xs']) ?>
                   <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $checkin->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
