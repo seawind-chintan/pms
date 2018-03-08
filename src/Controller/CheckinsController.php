@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use \Datetime;
 
 /**
  * Checkins Controller
@@ -22,7 +23,7 @@ class CheckinsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Members','CheckinStatuses','Properties']
+            'contain' => ['Members','CheckinStatuses','Properties','CheckinBillings']
         ];
         $checkins = $this->paginate($this->Checkins);
 
@@ -150,20 +151,56 @@ class CheckinsController extends AppController
         $checkin = $this->Checkins->get($id, [
             'contain' => ['Members', 'Properties', 'CheckinRoomsRates']
         ]);
-
+        //pr($checkin);exit;
         $checkin->checkin_status_id = 2;
+        $checkin->dept_date_time = date('Y-m-d H:i:s');
+
+        $arrv_date = new DateTime($checkin->arrival_date_time);
+        $dept_date = new DateTime($checkin->dept_date_time);
+        // this calculates the diff between two dates, which is the number of nights
+        $numberOfNights= $dept_date->diff($arrv_date)->format("%a");
+        //pr($numberOfNights);
+        
         $room_rates = $checkin->checkin_rooms_rates;
+        //pr($room_rates);
 
         $RoomsTable = TableRegistry::get('Rooms');
-
+        $RoomRatesTable = TableRegistry::get('RoomRates');
+        $amounts_to_pay = array();
         foreach ($room_rates as $checkin_room_key => $checkin_room) {
+            $room_rate_data = $RoomRatesTable->get($checkin_room->room_rate_id);
+            $fix_rate = $room_rate_data->rate;
+            $amounts_to_pay[] = $fix_rate * $numberOfNights;
             $room = $RoomsTable->get($checkin_room->room_id);
             $room->room_status_id = 3;
             $RoomsTable->save($room);
         }
+        /*pr($amounts_to_pay);
+        exit;*/
+
+        $net_amount = (float) 0;
+        foreach ($amounts_to_pay as $amount) {
+            $net_amount += $amount;
+        }
+
+        // Bill Generate on checkout time
+        $CheckinBillingsTable = TableRegistry::get('CheckinBillings');
+        $checkinbilling = $CheckinBillingsTable->newEntity();
+        $checkinbilling->checkin_id = $id;
+        $checkinbilling->bill_number = $checkin->property->code.'CHBILL'.$id;
+        $checkinbilling->net_amount = $net_amount;
+        $checkinbilling->tax_amount = 0;
+        $checkinbilling->total_amount = $net_amount + $checkinbilling->tax_amount;
+        $checkinbilling->bill_status = 0;
+        $CheckinBillingsTable->save($checkinbilling);
+        //
 
         $this->Checkins->save($checkin);
         
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function bill($id = null){
+
     }
 }

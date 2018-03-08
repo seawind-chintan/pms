@@ -1,13 +1,13 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\CheckinStatusesController;
+use App\Controller\CheckinBillingsController;
 use Cake\TestSuite\IntegrationTestCase;
 
 /**
- * App\Controller\CheckinStatusesController Test Case
+ * App\Controller\CheckinBillingsController Test Case
  */
-class CheckinStatusesControllerTest extends IntegrationTestCase
+class CheckinBillingsControllerTest extends IntegrationTestCase
 {
 
     /**
@@ -16,6 +16,27 @@ class CheckinStatusesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
+        'app.checkin_billings',
+        'app.checkins',
+        'app.members',
+        'app.packages',
+        'app.users',
+        'app.user_roles',
+        'app.user_details',
+        'app.member_groups',
+        'app.reservations',
+        'app.properties',
+        'app.property_types',
+        'app.room_plans',
+        'app.room_types',
+        'app.rooms',
+        'app.room_occupancies',
+        'app.reservation_rooms',
+        'app.cities',
+        'app.states',
+        'app.countries',
+        'app.checkin_rooms_rates',
+        'app.room_rates',
         'app.checkin_statuses'
     ];
 

@@ -1,7 +1,7 @@
 <section class="content-header">
   <h1>
-    Checkin Status
-    <small><?= __('Add') ?></small>
+    Checkin Billing
+    <small><?= __('Edit') ?></small>
   </h1>
   <ol class="breadcrumb">
     <li>
@@ -22,10 +22,18 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <?= $this->Form->create($checkinStatus, array('role' => 'form')) ?>
+        <?= $this->Form->create($checkinBilling, array('role' => 'form')) ?>
           <div class="box-body">
           <?php
-            echo $this->Form->input('name');
+            echo $this->Form->input('checkin_id', ['options' => $checkins]);
+            echo $this->Form->input('bill_number');
+            echo $this->Form->input('net_amount');
+            echo $this->Form->input('tax_amount');
+            echo $this->Form->input('total_amount');
+            echo $this->Form->input('bill_status');
+            echo $this->Form->input('pay_mode');
+            echo $this->Form->input('card_number');
+            echo $this->Form->input('card_holder');
           ?>
           </div>
           <!-- /.box-body -->

@@ -51,7 +51,17 @@
                 <td><?= h($checkin->destination) ?></td>
                 <td><?= $checkin->has('checkin_status') ? $checkin->checkin_status->name : '' ?></td>
                 <td class="actions" style="white-space:nowrap">
-                  <?= $this->Html->link(__('Check Out'), ['action' => 'checkout', $checkin->id], ['class'=>'btn btn-default btn-xs']) ?>
+                  <?php
+                  if($checkin->checkin_status->id == 1){
+                  ?>
+                    <?= $this->Html->link(__('Check Out'), ['action' => 'checkout', $checkin->id], ['class'=>'btn btn-default btn-xs']) ?>
+                  <?php
+                  } elseif ($checkin->checkin_status->id == 2){
+                    ?>
+                    <?= $this->Html->link(__('Show Bill'), ['controller' => 'checkin-billings', 'action' => 'view', $checkin->checkin_billing->id], ['class'=>'btn btn-default btn-xs']) ?>
+                    <?php
+                  }
+                  ?>
                   <?= $this->Html->link(__('View'), ['action' => 'view', $checkin->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $checkin->id], ['class'=>'btn btn-warning btn-xs']) ?>
                   <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $checkin->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
