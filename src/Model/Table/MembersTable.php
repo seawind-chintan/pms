@@ -59,21 +59,21 @@ class MembersTable extends Table
         ]);
 
         $this->belongsTo('Cities', [
-            'foreignKey' => 'core_city',
+            'foreignKey' => 'cor_city',
             'joinType' => 'INNER',
-            'propertyName' => 'core_city'
+            'propertyName' => 'cor_city'
         ]);
 
         $this->belongsTo('States', [
-            'foreignKey' => 'core_state',
+            'foreignKey' => 'cor_state',
             'joinType' => 'INNER',
-            'propertyName' => 'core_state'
+            'propertyName' => 'cor_state'
         ]);
 
         $this->belongsTo('Countries', [
-            'foreignKey' => 'core_country',
+            'foreignKey' => 'cor_country',
             'joinType' => 'INNER',
-            'propertyName' => 'core_country'
+            'propertyName' => 'cor_country'
         ]);
 
         // Add the behaviour and configure any options you want

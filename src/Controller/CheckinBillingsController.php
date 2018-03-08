@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * CheckinBillings Controller
@@ -21,7 +22,7 @@ class CheckinBillingsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Checkins']
+            'contain' => ['Checkins' => ['CheckinRoomsRates' => ['Rooms','RoomRates'], 'Properties', 'Members' => ['Cities','States','Countries']]]
         ];
         $checkinBillings = $this->paginate($this->CheckinBillings);
 
@@ -38,7 +39,16 @@ class CheckinBillingsController extends AppController
     public function view($id = null)
     {
         $checkinBilling = $this->CheckinBillings->get($id, [
-            'contain' => ['Checkins']
+            'contain' => ['Checkins' => ['CheckinRoomsRates' => ['Rooms','RoomRates'], 'Properties', 'Members' => ['Cities','States','Countries']]]
+        ]);
+
+        $this->set('checkinBilling', $checkinBilling);
+    }
+
+    public function printbill($id = null)
+    {
+        $checkinBilling = $this->CheckinBillings->get($id, [
+            'contain' => ['Checkins' => ['CheckinRoomsRates' => ['Rooms','RoomRates'], 'Properties', 'Members' => ['Cities','States','Countries']]]
         ]);
 
         $this->set('checkinBilling', $checkinBilling);
@@ -81,6 +91,40 @@ class CheckinBillingsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $checkinBilling = $this->CheckinBillings->patchEntity($checkinBilling, $this->request->data);
             if ($this->CheckinBillings->save($checkinBilling)) {
+                $this->Flash->success(__('The {0} has been saved.', 'Checkin Billing'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Checkin Billing'));
+            }
+        }
+        $checkins = $this->CheckinBillings->Checkins->find('list', ['limit' => 200]);
+        $this->set(compact('checkinBilling', 'checkins'));
+        $this->set('_serialize', ['checkinBilling']);
+    }
+
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Checkin Billing id.
+     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function settlebill($id = null)
+    {
+        $checkinBilling = $this->CheckinBillings->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $checkinBilling = $this->CheckinBillings->patchEntity($checkinBilling, $this->request->data);
+            if ($this->CheckinBillings->save($checkinBilling)) {
+                
+                $checkin_id = $checkinBilling->checkin_id;
+                $CheckinsTable = TableRegistry::get('Checkins');
+                $checkin = $CheckinsTable->get($checkin_id);
+                $checkin->checkin_status_id = 3;
+                $CheckinsTable->save($checkin);
+
                 $this->Flash->success(__('The {0} has been saved.', 'Checkin Billing'));
                 return $this->redirect(['action' => 'index']);
             } else {
