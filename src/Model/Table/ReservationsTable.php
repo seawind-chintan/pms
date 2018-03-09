@@ -84,6 +84,9 @@ class ReservationsTable extends Table
         $this->hasMany('ReservationRooms', [
             'foreignKey' => 'reservation_id'
         ]);
+        $this->hasMany('ReservationRates', [
+            'foreignKey' => 'reservation_id'
+        ]);
     }
 
     /**

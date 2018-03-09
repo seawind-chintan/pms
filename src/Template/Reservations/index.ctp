@@ -30,26 +30,41 @@
             <thead>
               <tr>
                 <!-- <th><?= $this->Paginator->sort('id') ?></th> -->
-                <th><?= $this->Paginator->sort('member_type') ?></th>
-                <!-- <th><?= $this->Paginator->sort('member_id') ?></th> -->
-                <th><?= $this->Paginator->sort('first_name') ?></th>
-                <th><?= $this->Paginator->sort('last_name') ?></th>
-                <th><?= $this->Paginator->sort('city_id') ?></th>
-                <th><?= $this->Paginator->sort('state_id') ?></th>
+                <th><?= $this->Paginator->sort('first_name', ['label' => 'Guest/Member']) ?></th>
+                <th><?= $this->Paginator->sort('mobile', ['label' => 'Guest Contact']) ?></th>
+                <th><?= $this->Paginator->sort('start_date', ['label' => 'Booked For Date']) ?></th>
+                <th><?= $this->Paginator->sort('property.name', ['label' => 'Booked For Property']) ?></th>
+                <th>Packages Selected</th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($reservations as $reservation): ?>
               <tr>
-                <!-- <td><?= $this->Number->format($reservation->id) ?></td> -->
-                <td><?php if($reservation->member_type == 'guest') { echo 'Guest'; } else { echo 'Member'; } ?></td>
                 <!-- <td><?= $reservation->has('member') ? $this->Html->link($reservation->member->id, ['controller' => 'Members', 'action' => 'view', $reservation->member->id]) : '' ?></td> -->
-                <td><?= h($reservation->first_name) ?></td>
-                <td><?= h($reservation->last_name) ?></td>
-                <td><?= $reservation->has('city') ? $this->Html->link($reservation->city->name, ['controller' => 'Cities', 'action' => 'view', $reservation->city->id]) : '' ?></td>
-                <td><?= $reservation->has('state') ? $this->Html->link($reservation->state->name, ['controller' => 'States', 'action' => 'view', $reservation->state->id]) : '' ?></td>
+                <td><?php //pr($reservation); ?><?= h($reservation->first_name) ?> <?= h($reservation->last_name) ?> (<?php if($reservation->member_type == 'guest') { echo 'Guest'; } else { echo 'Member'; } ?>)</td>
+                <td><?= h($reservation->mobile) ?></td>
+                <td><?= h($reservation->start_date) ?> to <?= h($reservation->end_date) ?></td>
+                <td><?= h($reservation->property->name) ?></td>
+                <td>
+                  <?php
+                  $pkgs_arr = array();
+                  foreach ($reservation->reservation_rates as $rates_key => $rates_value) {
+                    //pr($rates_value);
+                    $pkgs_arr[] = $rates_value->room_rate->room_occupancy->name.'-'.$rates_value->room_rate->room_type->name.'-'.$rates_value->room_rate->room_plan->name;
+                  }
+                  echo implode('<br>', $pkgs_arr);
+                  ?>  
+                </td>
                 <td class="actions" style="white-space:nowrap">
+                  <?php
+                  //var_dump(strtotime($reservation->start_date));
+                  //var_dump(strtotime(date('Y-m-d')));
+                  //var_dump(strtotime($reservation->end_date));
+                  ?>
+                  <?php if(strtotime(date('Y-m-d')) >= strtotime($reservation->start_date) && strtotime(date('Y-m-d')) <= strtotime($reservation->end_date)) { ?>
+                  <?= $this->Html->link(__('Check In Guest'), ['controller' => 'checkins','action' => 'add', 'reservation_id' => $reservation->id], ['class'=>'btn btn-info btn-xs']) ?>
+                  <?php } ?>
                   <?php //$this->Html->link(__('View'), ['action' => 'view', $reservation->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?php // $this->Html->link(__('Edit'), ['action' => 'wizard', $reservation->id], ['class'=>'btn btn-warning btn-xs']) ?>
                   <?php //$this->Form->postLink(__('Delete'), ['action' => 'delete', $reservation->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>

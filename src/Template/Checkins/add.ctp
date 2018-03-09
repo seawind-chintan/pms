@@ -33,8 +33,13 @@
             echo '<div class="col-md-4">'.$this->Form->input('member.mobile').'</div>';
             echo '<div class="col-md-4">'.$this->Form->input('member.email').'</div>';
             echo $this->Form->input('member.application_no');
-            if(!empty($_POST['member']['id'])){
-              echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $_POST['member']['id']]);
+            if(!empty($_POST['member']['id']) || $reservation_id){
+              if(!empty($reservation_id)){
+                //echo '<pre>';print_r($reservations);exit;
+                echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $reservations->member_id]);
+              } elseif(!empty($_POST['member']['id'])) {
+                echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $_POST['member']['id']]);
+              }
             } else {
               echo $this->Form->input('member.id', ['type' => 'hidden', 'disabled' => 'disabled']);
             }

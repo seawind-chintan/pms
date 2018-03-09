@@ -53,6 +53,17 @@ class CheckinsController extends AppController
      */
     public function add($roomId = false)
     {
+        if(!empty($this->request->getQuery('reservation_id'))){
+            $reservation_id = $this->request->getQuery('reservation_id');
+
+            $ReservationsTable = TableRegistry::get('Reservations');
+            $reservations = $ReservationsTable->get($reservation_id, [
+                'contain' => ['Members']
+            ]);
+            $this->set('reservation_id', $reservation_id);
+            $this->set('reservations', $reservations);
+        }
+
         $checkin = $this->Checkins->newEntity();
         if ($this->request->is('post')) {
             //pr($this->request->data);exit;

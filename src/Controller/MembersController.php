@@ -389,4 +389,15 @@ class MembersController extends AppController
         }
 
     }
+
+    public function get($id = null)
+    {
+        //For get status array
+        $member = $this->Members->get($id, [
+            'contain' => ['Packages', 'MemberGroups']
+        ]);
+
+        return $member;
+
+    }
 }

@@ -281,7 +281,7 @@ class ReservationsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Members', 'Cities', 'States', 'Countries', 'Properties']
+            'contain' => ['Members', 'Cities', 'States', 'Countries', 'Properties', 'ReservationRates' => ['RoomRates' => ['RoomPlans', 'RoomTypes', 'RoomOccupancies']]]
         ];
         $reservations = $this->paginate($this->Reservations, ['conditions' => ['Properties.user' => $this->Auth->user('id')]]);
 
@@ -298,7 +298,7 @@ class ReservationsController extends AppController
     public function view($id = null)
     {
         $reservation = $this->Reservations->get($id, [
-            'contain' => ['Members', 'Cities', 'States', 'Countries', 'ReservationRooms']
+            'contain' => ['Members', 'Cities', 'States', 'Countries', 'Properties', 'ReservationRates' => ['RoomRates' => ['RoomPlans', 'RoomTypes', 'RoomOccupancies']]]
         ]);
 
         $this->set('reservation', $reservation);
