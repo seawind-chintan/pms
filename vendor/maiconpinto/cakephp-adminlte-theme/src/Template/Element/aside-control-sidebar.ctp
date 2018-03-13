@@ -30,6 +30,10 @@ if (file_exists($file)) {
                 <li><a href="<?php echo $this->Url->build('/rooms'); ?>"><i class="fa fa-bed"></i> Rooms</a></li>
                 <li><a href="<?php echo $this->Url->build('/room-rates'); ?>"><i class="fa fa-money"></i> Room Rates</a></li>
             </ul>
+            <h3 class="control-sidebar-heading">Waterpark</h3>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build('/users'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
+            </ul>
             <!-- /.control-sidebar-menu -->
 
             <h3 class="control-sidebar-heading">Tasks Progress</h3>
