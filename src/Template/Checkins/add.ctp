@@ -27,44 +27,58 @@
           <div class="col-md-6">
           <?php
           //pr($_POST);
-            echo $this->Form->input('custom_member_type', ['label' => 'Member Type', 'options' => [0 => 'New Guest/Member', 1 => 'Existing Guest/Member']]);
+            echo $this->Form->input('custom_member_type', ['label' => 'Member Type', 'options' => [0 => 'New Guest/Member', 1 => 'Existing Guest/Member'], 'default' => (!empty($reservations->member_id) ? 1 : 0 ) ]);
             echo $this->Form->input('member.member_type', ['type' => 'hidden', 'value' => 'guest']);
             echo '<div class="col-md-4">'.$this->Form->input('member.code').'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.mobile').'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.email').'</div>';
+            echo '<div class="col-md-4">'.$this->Form->input('member.mobile', ['value' => (!empty($reservations->mobile) ? $reservations->mobile : '' ), 'disabled' => 'disabled']).'</div>';
+            echo '<div class="col-md-4">'.$this->Form->input('member.email', ['value' => (!empty($reservations->email) ? $reservations->email : '' ), 'disabled' => 'disabled']).'</div>';
             echo $this->Form->input('member.application_no');
             if(!empty($_POST['member']['id']) || $reservation_id){
               if(!empty($reservation_id)){
-                //echo '<pre>';print_r($reservations);exit;
+                //echo '<pre>';print_r($reservations);echo '</pre>';
                 echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $reservations->member_id]);
+
+                echo '<div class="col-md-4">'.$this->Form->input('member.first_name', ['value' => $reservations->first_name, 'disabled'=>'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.last_name', ['value' => $reservations->last_name, 'disabled'=>'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.nickname', ['value' => $reservations->nick_name, 'disabled'=>'disabled']).'</div>';
+                echo $this->Form->input('member.cor_address', ['label' => 'Address', 'value' => $reservations->cor_address, 'disabled'=>'disabled']);
+                echo '<div class="col-md-4">'.$this->Form->input('member.cor_city', ['label' => 'City', 'options' => $cities, 'default' => $reservations->city_id, 'disabled' => 'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.cor_state', ['label' => 'State', 'options' => $states, 'default' => $reservations->state_id, 'disabled' => 'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.cor_country', ['label' => 'Country', 'options' => $countries, 'default' => $reservations->country_id, 'disabled' => 'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.cor_pincode', ['label' => 'Pincode', 'value' => $reservations->pincode, 'disabled' => 'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.phone', ['value' => $reservations->phone, 'disabled' => 'disabled']).'</div>';
+                echo '<div class="col-md-4">'.$this->Form->input('member.pancard', ['value' => $reservations->mobile, 'disabled' => 'disabled']).'</div>';
+                echo $this->Form->input('member.gender');
+                echo $this->Form->input('member.birth_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
+                echo $this->Form->input('member.status', ['type' => 'hidden', 'value' => 1]);
               } elseif(!empty($_POST['member']['id'])) {
                 echo $this->Form->input('member.id', ['type' => 'hidden', 'value' => $_POST['member']['id']]);
               }
             } else {
               echo $this->Form->input('member.id', ['type' => 'hidden', 'disabled' => 'disabled']);
+              echo '<div class="col-md-4">'.$this->Form->input('member.first_name').'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.last_name').'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.nickname').'</div>';
+              echo $this->Form->input('member.cor_address', ['label' => 'Address']);
+              echo '<div class="col-md-4">'.$this->Form->input('member.cor_city', ['label' => 'City', 'options' => $cities]).'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.cor_state', ['label' => 'State', 'options' => $states]).'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.cor_country', ['label' => 'Country', 'options' => $countries]).'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.cor_pincode', ['label' => 'Pincode']).'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.phone').'</div>';
+              echo '<div class="col-md-4">'.$this->Form->input('member.pancard').'</div>';
+              echo $this->Form->input('member.gender');
+              echo $this->Form->input('member.birth_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
+              echo $this->Form->input('member.status', ['type' => 'hidden', 'value' => 1]);
+              //echo $this->Form->input('member.parent', ['type' => 'hidden', 'value' => $this->Auth->user('id')]);
             }
-            echo '<div class="col-md-4">'.$this->Form->input('member.first_name').'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.last_name').'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.nickname').'</div>';
-            echo $this->Form->input('member.cor_address', ['label' => 'Address']);
-            echo '<div class="col-md-4">'.$this->Form->input('member.cor_city', ['label' => 'City', 'options' => $cities]).'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.cor_state', ['label' => 'State', 'options' => $states]).'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.cor_country', ['label' => 'Country', 'options' => $countries]).'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.cor_pincode', ['label' => 'Pincode']).'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.phone').'</div>';
-            echo '<div class="col-md-4">'.$this->Form->input('member.pancard').'</div>';
-            echo $this->Form->input('member.gender');
-            echo $this->Form->input('member.birth_date', ['empty' => true, 'default' => '', 'class' => 'datepicker form-control', 'type' => 'text']);
-            echo $this->Form->input('member.status', ['type' => 'hidden', 'value' => 1]);
-            //echo $this->Form->input('member.parent', ['type' => 'hidden', 'value' => $this->Auth->user('id')]);
             ?>
           </div>
           <div class="col-md-6">
           <?php
             echo $this->Form->input('room_rack_room_id', ['type' => 'hidden', 'value' => $_GET['room_id']]);
             echo $this->Form->input('arrival_date_time', ['type'=>'hidden', 'value' => date('Y-m-d H:i:s'), 'readonly' => 'true']);
-            echo $this->Form->input('no_of_adult');
-            echo $this->Form->input('no_of_child');
+            echo $this->Form->input('no_of_adult', ['value' => (!empty($reservations->no_of_adult) ? $reservations->no_of_adult : ''), 'disabled' => (!empty($reservations->no_of_adult) ? 'disabled' : false) ]);
+            echo $this->Form->input('no_of_child', ['value' => (!empty($reservations->no_of_child) ? $reservations->no_of_child : ''), 'disabled' => (!empty($reservations->no_of_child) ? 'disabled' : false) ]);
             echo $this->Form->input('arrival_from');
             echo $this->Form->input('destination');
             echo $this->Form->input('purpose_of_visit');
