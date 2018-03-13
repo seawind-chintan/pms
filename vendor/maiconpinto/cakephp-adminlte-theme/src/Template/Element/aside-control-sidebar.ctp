@@ -32,11 +32,11 @@ if (file_exists($file)) {
             </ul>
             <h3 class="control-sidebar-heading">Waterpark</h3>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build('/users'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
+                <li><a href="<?php echo $this->Url->build('/waterpark-prices'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
             </ul>
             <!-- /.control-sidebar-menu -->
 
-            <h3 class="control-sidebar-heading">Tasks Progress</h3>
+            <!-- <h3 class="control-sidebar-heading">Tasks Progress</h3>
             <ul class="control-sidebar-menu">
                 <li>
                     <a href="javascript:void(0)">
@@ -86,7 +86,7 @@ if (file_exists($file)) {
                         </div>
                     </a>
                 </li>
-            </ul>
+            </ul> -->
             <!-- /.control-sidebar-menu -->
 
         </div>
