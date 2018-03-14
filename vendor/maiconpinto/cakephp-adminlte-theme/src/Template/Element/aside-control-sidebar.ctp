@@ -33,6 +33,7 @@ if (file_exists($file)) {
             <h3 class="control-sidebar-heading">Waterpark</h3>
             <ul class="treeview-menu">
                 <li><a href="<?php echo $this->Url->build('/waterpark-prices'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
+                <li><a href="<?php echo $this->Url->build('/waterpark-specific-prices'); ?>"><i class="fa fa-list"></i> Specific Prices</a></li>
             </ul>
             <!-- /.control-sidebar-menu -->
 
