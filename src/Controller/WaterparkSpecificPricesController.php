@@ -61,7 +61,7 @@ class WaterparkSpecificPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Specific Price'));
             }
         }
-        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['limit' => 200]);
+        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
         $this->set(compact('waterparkSpecificPrice', 'properties'));
         $this->set('_serialize', ['waterparkSpecificPrice']);
     }
@@ -87,7 +87,7 @@ class WaterparkSpecificPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Specific Price'));
             }
         }
-        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['limit' => 200]);
+        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
         $this->set(compact('waterparkSpecificPrice', 'properties'));
         $this->set('_serialize', ['waterparkSpecificPrice']);
     }

@@ -104,6 +104,31 @@ class WaterparkSpecificPricesTable extends Table
     {
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
 
+        $rules->add($rules->isUnique(['single_date', 'property_id', 'type'], 'Price for this date already exist !'));
+
+        $rules->add($rules->isUnique(['from_date', 'to_date', 'property_id', 'type'], 'Price for this date range already exist !'));
+        $rules->add($rules->isUnique(['to_date', 'from_date', 'property_id', 'type'], 'Price for this date range already exist !'));
+
+        $singledatecheck = function($order) {
+            if(empty($order->single_date) && empty($order->type)){
+                return false;
+            } else {
+                return true;
+            }
+        };
+        $rules->add($singledatecheck, [
+            'errorField' => 'single_date',
+            'message' => 'Single Date Should Not Empty !'
+        ]);
+
+        $ticketpricecheck = function($order) {
+            return $order->ticket_price < $order->total_price;
+        };
+        $rules->add($ticketpricecheck, [
+            'errorField' => 'ticket_price',
+            'message' => 'Ticket Price should be lesser than Total Price !'
+        ]);
+
         return $rules;
     }
 }

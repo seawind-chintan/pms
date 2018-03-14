@@ -32,9 +32,7 @@
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('property_id') ?></th>
                 <th><?= $this->Paginator->sort('type') ?></th>
-                <th><?= $this->Paginator->sort('single_date') ?></th>
-                <th><?= $this->Paginator->sort('from_date') ?></th>
-                <th><?= $this->Paginator->sort('to_date') ?></th>
+                <th><?= $this->Paginator->sort('single_date', ['label' => 'For Date']) ?></th>
                 <th><?= $this->Paginator->sort('total_price') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
@@ -44,10 +42,8 @@
               <tr>
                 <td><?= $this->Number->format($waterparkSpecificPrice->id) ?></td>
                 <td><?= $waterparkSpecificPrice->has('property') ? $this->Html->link($waterparkSpecificPrice->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkSpecificPrice->property->id]) : '' ?></td>
-                <td><?= $this->Number->format($waterparkSpecificPrice->type) ?></td>
-                <td><?= h($waterparkSpecificPrice->single_date) ?></td>
-                <td><?= h($waterparkSpecificPrice->from_date) ?></td>
-                <td><?= h($waterparkSpecificPrice->to_date) ?></td>
+                <td><?php if(empty($waterparkSpecificPrice->type)) { echo "Single Date"; } else { echo "Date Range"; } ?></td>
+                <td><?php if(empty($waterparkSpecificPrice->type)) { ?><?= h($waterparkSpecificPrice->single_date) ?><?php } else { ?><?= h($waterparkSpecificPrice->from_date) ?> - <?= h($waterparkSpecificPrice->to_date) ?><?php } ?></td>
                 <td><?= $this->Number->format($waterparkSpecificPrice->total_price) ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkSpecificPrice->id], ['class'=>'btn btn-info btn-xs']) ?>
