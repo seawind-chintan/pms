@@ -297,6 +297,7 @@ elseif($current_user_data['role'] == 2){
                     <li><a href="<?php echo $this->Url->build('/waterpark-prices'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
                     <li><a href="<?php echo $this->Url->build('/waterpark-specific-prices'); ?>"><i class="fa fa-list"></i> Specific Prices</a></li>
                     <li><a href="<?php echo $this->Url->build('/waterpark-costumelockers'); ?>"><i class="fa fa-list"></i> Costume & Locker Prices</a></li>
+                    <li><a href="<?php echo $this->Url->build('/waterpark-recharges'); ?>"><i class="fa fa-list"></i> Recharges </a></li>
                 </ul>
             </li>
         </ul>

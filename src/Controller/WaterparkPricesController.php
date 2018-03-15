@@ -73,6 +73,7 @@ class WaterparkPricesController extends AppController
         $waterparkPrice = $this->WaterparkPrices->newEntity();
         if ($this->request->is('post')) {
             $waterparkPrice = $this->WaterparkPrices->patchEntity($waterparkPrice, $this->request->data);
+            $waterparkPrice->user_id = $this->Auth->user('id');
             if ($this->WaterparkPrices->save($waterparkPrice)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Price'));
                 return $this->redirect(['action' => 'index']);
@@ -99,6 +100,7 @@ class WaterparkPricesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $waterparkPrice = $this->WaterparkPrices->patchEntity($waterparkPrice, $this->request->data);
+            $waterparkPrice->user_id = $this->Auth->user('id');
             if ($this->WaterparkPrices->save($waterparkPrice)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Price'));
                 return $this->redirect(['action' => 'index']);

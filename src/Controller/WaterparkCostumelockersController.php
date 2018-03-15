@@ -73,6 +73,7 @@ class WaterparkCostumelockersController extends AppController
         $waterparkCostumelocker = $this->WaterparkCostumelockers->newEntity();
         if ($this->request->is('post')) {
             $waterparkCostumelocker = $this->WaterparkCostumelockers->patchEntity($waterparkCostumelocker, $this->request->data);
+            $waterparkCostumelocker->user_id = $this->Auth->user('id');
             if ($this->WaterparkCostumelockers->save($waterparkCostumelocker)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Costumelocker'));
                 return $this->redirect(['action' => 'index']);
@@ -99,6 +100,7 @@ class WaterparkCostumelockersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $waterparkCostumelocker = $this->WaterparkCostumelockers->patchEntity($waterparkCostumelocker, $this->request->data);
+            $waterparkCostumelocker->user_id = $this->Auth->user('id');
             if ($this->WaterparkCostumelockers->save($waterparkCostumelocker)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Costumelocker'));
                 return $this->redirect(['action' => 'index']);

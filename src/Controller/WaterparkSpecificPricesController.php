@@ -32,7 +32,7 @@ class WaterparkSpecificPricesController extends AppController
 
         return parent::isAuthorized($user);
     }
-    
+
     /**
      * Index method
      *
@@ -74,6 +74,7 @@ class WaterparkSpecificPricesController extends AppController
         $waterparkSpecificPrice = $this->WaterparkSpecificPrices->newEntity();
         if ($this->request->is('post')) {
             $waterparkSpecificPrice = $this->WaterparkSpecificPrices->patchEntity($waterparkSpecificPrice, $this->request->data);
+            $waterparkSpecificPrice->user_id = $this->Auth->user('id');
             if ($this->WaterparkSpecificPrices->save($waterparkSpecificPrice)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Specific Price'));
                 return $this->redirect(['action' => 'index']);
@@ -100,6 +101,7 @@ class WaterparkSpecificPricesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $waterparkSpecificPrice = $this->WaterparkSpecificPrices->patchEntity($waterparkSpecificPrice, $this->request->data);
+            $waterparkSpecificPrice->user_id = $this->Auth->user('id');
             if ($this->WaterparkSpecificPrices->save($waterparkSpecificPrice)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Specific Price'));
                 return $this->redirect(['action' => 'index']);
