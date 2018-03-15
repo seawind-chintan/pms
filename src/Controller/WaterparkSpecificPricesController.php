@@ -12,7 +12,27 @@ use App\Controller\AppController;
  */
 class WaterparkSpecificPricesController extends AppController
 {
+    public function isAuthorized($user)
+    {
+        // All registered users can add articles
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if ($this->request->getParam('action') === 'add') {
+            return true;
+        }
 
+        // The owner of an article can edit and delete it
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'view'])) {
+            // Prior to 3.4.0 $this->request->params('pass.0')
+            $priceId = (int)$this->request->getParam('pass.0');
+            $waterparkSpecificPrice = $this->WaterparkSpecificPrices->findById($priceId)->first();
+            
+            return $waterparkSpecificPrice->user_id === $user['id'];
+        }
+
+        return parent::isAuthorized($user);
+    }
+    
     /**
      * Index method
      *
@@ -23,7 +43,7 @@ class WaterparkSpecificPricesController extends AppController
         $this->paginate = [
             'contain' => ['Properties']
         ];
-        $waterparkSpecificPrices = $this->paginate($this->WaterparkSpecificPrices);
+        $waterparkSpecificPrices = $this->paginate($this->WaterparkSpecificPrices, ['conditions' => ['user_id' => $this->Auth->user('id')]]);
 
         $this->set(compact('waterparkSpecificPrices'));
     }
@@ -61,7 +81,7 @@ class WaterparkSpecificPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Specific Price'));
             }
         }
-        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
+        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
         $this->set(compact('waterparkSpecificPrice', 'properties'));
         $this->set('_serialize', ['waterparkSpecificPrice']);
     }
@@ -87,7 +107,7 @@ class WaterparkSpecificPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Specific Price'));
             }
         }
-        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
+        $properties = $this->WaterparkSpecificPrices->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
         $this->set(compact('waterparkSpecificPrice', 'properties'));
         $this->set('_serialize', ['waterparkSpecificPrice']);
     }

@@ -12,7 +12,26 @@ use App\Controller\AppController;
  */
 class WaterparkPricesController extends AppController
 {
+    public function isAuthorized($user)
+    {
+        // All registered users can add articles
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if ($this->request->getParam('action') === 'add') {
+            return true;
+        }
 
+        // The owner of an article can edit and delete it
+        // Prior to 3.4.0 $this->request->param('action') was used.
+        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'view'])) {
+            // Prior to 3.4.0 $this->request->params('pass.0')
+            $priceId = (int)$this->request->getParam('pass.0');
+            $waterparkPrice = $this->WaterparkPrices->findById($priceId)->first();
+            
+            return $waterparkPrice->user_id === $user['id'];
+        }
+
+        return parent::isAuthorized($user);
+    }
     /**
      * Index method
      *
@@ -23,7 +42,7 @@ class WaterparkPricesController extends AppController
         $this->paginate = [
             'contain' => ['Properties']
         ];
-        $waterparkPrices = $this->paginate($this->WaterparkPrices);
+        $waterparkPrices = $this->paginate($this->WaterparkPrices, ['conditions' => ['user_id' => $this->Auth->user('id')]]);
 
         $this->set(compact('waterparkPrices'));
     }
@@ -61,7 +80,7 @@ class WaterparkPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Price'));
             }
         }
-        $properties = $this->WaterparkPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
+        $properties = $this->WaterparkPrices->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
         $this->set(compact('waterparkPrice', 'properties'));
         $this->set('_serialize', ['waterparkPrice']);
     }
@@ -87,7 +106,7 @@ class WaterparkPricesController extends AppController
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Price'));
             }
         }
-        $properties = $this->WaterparkPrices->Properties->find('list', ['conditions' => ['type' => 5], 'limit' => 200]);
+        $properties = $this->WaterparkPrices->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
         $this->set(compact('waterparkPrice', 'properties'));
         $this->set('_serialize', ['waterparkPrice']);
     }

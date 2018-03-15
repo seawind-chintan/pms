@@ -18,6 +18,7 @@ class WaterparkPricesFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'property_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'monday_total_price' => ['type' => 'decimal', 'length' => 11, 'precision' => 2, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
         'monday_ticket_price' => ['type' => 'decimal', 'length' => 11, 'precision' => 2, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
@@ -37,9 +38,11 @@ class WaterparkPricesFixture extends TestFixture
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_indexes' => [
             'property_id' => ['type' => 'index', 'columns' => ['property_id'], 'length' => []],
+            'user_id' => ['type' => 'index', 'columns' => ['user_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+            'waterpark_prices_ibfk_2' => ['type' => 'foreign', 'columns' => ['user_id'], 'references' => ['users', 'id'], 'update' => 'cascade', 'delete' => 'cascade', 'length' => []],
             'waterpark_prices_ibfk_1' => ['type' => 'foreign', 'columns' => ['property_id'], 'references' => ['properties', 'id'], 'update' => 'cascade', 'delete' => 'cascade', 'length' => []],
         ],
         '_options' => [
@@ -57,6 +60,7 @@ class WaterparkPricesFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
+            'user_id' => 1,
             'property_id' => 1,
             'monday_total_price' => 1.5,
             'monday_ticket_price' => 1.5,
@@ -72,8 +76,8 @@ class WaterparkPricesFixture extends TestFixture
             'saturday_ticket_price' => 1.5,
             'sunday_total_price' => 1.5,
             'sunday_ticket_price' => 1.5,
-            'created' => '2018-03-13 05:41:40',
-            'modified' => '2018-03-13 05:41:40'
+            'created' => '2018-03-15 05:58:29',
+            'modified' => '2018-03-15 05:58:29'
         ],
     ];
 }

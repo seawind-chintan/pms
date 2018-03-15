@@ -34,6 +34,7 @@ if (file_exists($file)) {
             <ul class="treeview-menu">
                 <li><a href="<?php echo $this->Url->build('/waterpark-prices'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
                 <li><a href="<?php echo $this->Url->build('/waterpark-specific-prices'); ?>"><i class="fa fa-list"></i> Specific Prices</a></li>
+                <li><a href="<?php echo $this->Url->build('/waterpark-costumelockers'); ?>"><i class="fa fa-list"></i> Costume & Locker Prices</a></li>
             </ul>
             <!-- /.control-sidebar-menu -->
 

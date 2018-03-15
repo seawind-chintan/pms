@@ -278,6 +278,29 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/checkins'); ?>"><i class="fa fa-sign-in"></i> Check-Ins</a></li>
         </ul>
     </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-ship"></i> <span>Water Park</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-list"></i> <span>Masters</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="<?php echo $this->Url->build('/waterpark-prices'); ?>"><i class="fa fa-list"></i> Base Prices</a></li>
+                    <li><a href="<?php echo $this->Url->build('/waterpark-specific-prices'); ?>"><i class="fa fa-list"></i> Specific Prices</a></li>
+                    <li><a href="<?php echo $this->Url->build('/waterpark-costumelockers'); ?>"><i class="fa fa-list"></i> Costume & Locker Prices</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
 </ul>
 <?php
 }

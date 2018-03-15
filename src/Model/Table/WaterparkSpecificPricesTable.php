@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * WaterparkSpecificPrices Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\PropertiesTable|\Cake\ORM\Association\BelongsTo $Properties
  *
  * @method \App\Model\Entity\WaterparkSpecificPrice get($primaryKey, $options = [])
@@ -40,6 +41,10 @@ class WaterparkSpecificPricesTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Properties', [
             'foreignKey' => 'property_id',
             'joinType' => 'INNER'
@@ -57,6 +62,10 @@ class WaterparkSpecificPricesTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
+
+        $validator
+            ->integer('property_id')
+            ->requirePresence('property_id', 'create');
 
         $validator
             ->integer('type')
@@ -102,9 +111,10 @@ class WaterparkSpecificPricesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
 
-        $rules->add($rules->isUnique(['single_date', 'property_id', 'type'], 'Price for this date already exist !'));
+         $rules->add($rules->isUnique(['single_date', 'property_id', 'type'], 'Price for this date already exist !'));
 
         $rules->add($rules->isUnique(['from_date', 'to_date', 'property_id', 'type'], 'Price for this date range already exist !'));
         $rules->add($rules->isUnique(['to_date', 'from_date', 'property_id', 'type'], 'Price for this date range already exist !'));

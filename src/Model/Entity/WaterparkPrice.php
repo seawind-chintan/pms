@@ -7,6 +7,7 @@ use Cake\ORM\Entity;
  * WaterparkPrice Entity
  *
  * @property int $id
+ * @property int $user_id
  * @property int $property_id
  * @property float $monday_total_price
  * @property float $monday_ticket_price
@@ -40,6 +41,7 @@ class WaterparkPrice extends Entity
      * @var array
      */
     protected $_accessible = [
+        'user_id' => true,
         'property_id' => true,
         'monday_total_price' => true,
         'monday_ticket_price' => true,

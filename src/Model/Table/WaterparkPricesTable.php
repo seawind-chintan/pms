@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * WaterparkPrices Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\PropertiesTable|\Cake\ORM\Association\BelongsTo $Properties
  *
  * @method \App\Model\Entity\WaterparkPrice get($primaryKey, $options = [])
@@ -40,6 +41,10 @@ class WaterparkPricesTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Properties', [
             'foreignKey' => 'property_id',
             'joinType' => 'INNER'
@@ -57,6 +62,10 @@ class WaterparkPricesTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
+
+        $validator
+            ->integer('property_id')
+            ->requirePresence('property_id', 'create');
 
         $validator
             ->decimal('monday_total_price')
@@ -140,7 +149,9 @@ class WaterparkPricesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
+
         $rules->add($rules->isUnique(['property_id'], 'Prices for this property already added. If you want to change some, just edit it!'));
 
         $mondayticketpricecheck = function($order) {
