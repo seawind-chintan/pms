@@ -89,6 +89,8 @@ class WaterparkBeltsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
 
+        $rules->add($rules->isUnique(['code'], 'Belt code already exists!'));
+
         return $rules;
     }
 }
