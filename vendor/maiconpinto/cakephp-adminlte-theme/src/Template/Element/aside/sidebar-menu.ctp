@@ -244,6 +244,11 @@ elseif($current_user_data['role'] == 2){
         </ul>
     </li> -->
     <li class="treeview">
+        <a href="<?php echo $this->Url->build('/dashboard'); ?>">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="treeview">
         <a href="#">
             <i class="fa fa-user-plus"></i> <span>Members</span>
             <span class="pull-right-container">
@@ -302,7 +307,7 @@ elseif($current_user_data['role'] == 2){
                     <li><a href="<?php echo $this->Url->build('/waterpark-settings'); ?>"><i class="fa fa-gear"></i> Settings </a></li>
                 </ul>
             </li>
-            <li><a href="<?php echo $this->Url->build('#'); ?>"><i class="fa fa-ticket"></i> Tickets </a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-tickets'); ?>"><i class="fa fa-ticket"></i> Tickets </a></li>
         </ul>
     </li>
 </ul>

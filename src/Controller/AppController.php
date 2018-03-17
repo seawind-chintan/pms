@@ -47,7 +47,7 @@ class AppController extends Controller
         $this->loadComponent('Auth', [
             'authorize' => ['Controller'], // Added this line
             'loginRedirect' => [
-                'controller' => 'Users',
+                'controller' => 'Dashboard',
                 'action' => 'index'
             ],
             'logoutRedirect' => [
@@ -75,7 +75,7 @@ class AppController extends Controller
         if (isset($user['role']) && $user['role'] === 2) {
 
             $controller_array = array('Users','Properties','Rooms','RoomTypes',
-                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates', 'Checkins', 'CheckinBillings', 'WaterparkPrices', 'WaterparkSpecificPrices', 'WaterparkCostumelockers','WaterparkRecharges','WaterparkSettings','WaterparkBelts');
+                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates', 'Checkins', 'CheckinBillings', 'WaterparkPrices', 'WaterparkSpecificPrices', 'WaterparkCostumelockers','WaterparkRecharges','WaterparkSettings','WaterparkBelts','WaterparkTickets', 'Dashboard');
             $method_array = array();
 
             if(!empty($controller_array) && in_array($this->request->getParam('controller'),$controller_array) ||
