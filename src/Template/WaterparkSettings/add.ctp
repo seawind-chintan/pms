@@ -27,6 +27,7 @@
           <?php
             echo $this->Form->input('property_id', ['options' => $properties]);
             echo $this->Form->input('belt_code_prefix', ['style' => 'text-transform:uppercase;']);
+            echo $this->Form->input('ticket_code_prefix', ['style' => 'text-transform:uppercase;']);
           ?>
           </div>
           <!-- /.box-body -->

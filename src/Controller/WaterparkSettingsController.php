@@ -76,6 +76,7 @@ class WaterparkSettingsController extends AppController
             $waterparkSetting = $this->WaterparkSettings->patchEntity($waterparkSetting, $this->request->data);
             $waterparkSetting->user_id = $this->Auth->user('id');
             $waterparkSetting->belt_code_prefix = strtoupper($this->request->data['belt_code_prefix']);
+            $waterparkSetting->ticket_code_prefix = strtoupper($this->request->data['ticket_code_prefix']);
             if ($this->WaterparkSettings->save($waterparkSetting)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Setting'));
                 return $this->redirect(['action' => 'index']);
@@ -105,6 +106,7 @@ class WaterparkSettingsController extends AppController
             $waterparkSetting = $this->WaterparkSettings->patchEntity($waterparkSetting, $this->request->data);
             $waterparkSetting->user_id = $this->Auth->user('id');
             $waterparkSetting->belt_code_prefix = strtoupper($this->request->data['belt_code_prefix']);
+            $waterparkSetting->ticket_code_prefix = strtoupper($this->request->data['ticket_code_prefix']);
             if ($this->WaterparkSettings->save($waterparkSetting)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Setting'));
                 return $this->redirect(['action' => 'index']);

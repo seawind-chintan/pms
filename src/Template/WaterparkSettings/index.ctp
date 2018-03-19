@@ -32,6 +32,7 @@
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('property_id') ?></th>
                 <th><?= $this->Paginator->sort('belt_code_prefix') ?></th>
+                <th><?= $this->Paginator->sort('ticket_code_prefix') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
@@ -41,6 +42,7 @@
                 <td><?= $this->Number->format($waterparkSetting->id) ?></td>
                 <td><?= $waterparkSetting->has('property') ? $this->Html->link($waterparkSetting->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkSetting->property->id]) : '' ?></td>
                 <td><?= h($waterparkSetting->belt_code_prefix) ?></td>
+                <td><?= h($waterparkSetting->ticket_code_prefix) ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkSetting->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkSetting->id], ['class'=>'btn btn-warning btn-xs']) ?>

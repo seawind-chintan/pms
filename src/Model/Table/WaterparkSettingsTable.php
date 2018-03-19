@@ -72,6 +72,11 @@ class WaterparkSettingsTable extends Table
             ->maxLength('belt_code_prefix', 5)
             ->allowEmpty('belt_code_prefix');
 
+         $validator
+            ->scalar('ticket_code_prefix')
+            ->maxLength('ticket_code_prefix', 20)
+            ->allowEmpty('ticket_code_prefix');
+
         return $validator;
     }
 

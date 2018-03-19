@@ -21,12 +21,10 @@ class WaterparkTicketsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Properties', 'Users', 'Members' => function(\Cake\ORM\Query $q) {
-                return $q->where(['WaterparkTickets.member_type' => false]);
-            }]
+            'contain' => ['Properties', 'Users']
         ];
         $waterparkTickets = $this->paginate($this->WaterparkTickets);
-        pr($waterparkTickets);exit;
+        //pr($waterparkTickets);exit;
         $this->set(compact('waterparkTickets'));
     }
 

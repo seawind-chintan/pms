@@ -32,6 +32,7 @@ class WaterparkSetting extends Entity
         'user_id' => true,
         'property_id' => true,
         'belt_code_prefix' => true,
+        'ticket_code_prefix' => true,
         'created' => true,
         'modified' => true,
         'user' => true,
