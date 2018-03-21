@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * WaterparkPrices Controller
@@ -130,5 +131,77 @@ class WaterparkPricesController extends AppController
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Waterpark Price'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function gettodayprice(){
+
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $property_id = $postData['property_id'];
+            
+            $waterparkSpecificPricesTable = TableRegistry::get('WaterparkSpecificPrices');
+            $specific_prices = $waterparkSpecificPricesTable->find('all', [
+                'fields' => ['total_price', 'ticket_price'],
+                'conditions' => ['status' => 1, 'property_id' => $property_id, "OR" => ["single_date" => date('Y-m-d'), "AND" => ["from_date <=" => date('Y-m-d'), "to_date >=" => date('Y-m-d') ]]]
+            ]);
+
+            //pr($specific_prices->toArray());exit;
+            if(count($specific_prices->toArray()) > 0){
+                $specific_price = $specific_prices->first();
+                
+                $total_price = $specific_price->total_price;
+                $ticket_price = $specific_price->ticket_price;
+                /*$waterparkBeltsTable = TableRegistry::get('WaterparkBelts');
+                $waterparkBelt = $waterparkBeltsTable->find('all', [
+                    'conditions' => ['property_id' => $property_id]
+                ]);
+
+                if(!empty($waterparkBelt->last())){
+                    $lastCodeArr = explode($setting->belt_code_prefix, $waterparkBelt->last()->code);
+                    $lastWaterparkBelt = $lastCodeArr[1];
+                } else {
+                    $lastWaterparkBelt = 0;
+                }
+
+                //$lastWaterparkBelt = ((!empty($waterparkBelt->last())) ? explode($setting->belt_code_prefix, $waterparkBelt->last()->code[1]) : 0 );
+
+                //pr($lastWaterparkBelt);exit;
+
+                $newWaterparkBelt = (int) $lastWaterparkBelt + 1;
+
+                $new_code_to_be = $setting->belt_code_prefix.$newWaterparkBelt;
+                echo $new_code_to_be;exit;*/
+                //echo json_encode($setting);exit;
+                $return_data = array();
+                $return_data['total_price'] = $total_price;
+                $return_data['ticket_price'] = $ticket_price;
+                echo json_encode($return_data);exit;
+
+            } else {
+                
+                $current_day = strtolower(date('l'));
+                $prices = $this->WaterparkPrices->find('all', [
+                    'fields' => [$current_day.'_total_price', $current_day.'_ticket_price'],
+                    'conditions' => ['property_id' => $property_id]
+                ]);
+
+                if(count($prices->toArray()) > 0){
+                    $price = $prices->first();
+
+                    $total_price = $price->{$current_day.'_total_price'};
+                    $ticket_price = $price->{$current_day.'_ticket_price'};
+                    //pr($total_price);
+                    //pr($ticket_price);exit;
+                    $return_data = array();
+                    $return_data['total_price'] = $total_price;
+                    $return_data['ticket_price'] = $ticket_price;
+                    echo json_encode($return_data);exit;
+
+                } else {
+                    echo 'false';exit;
+                }
+            }
+        }
     }
 }

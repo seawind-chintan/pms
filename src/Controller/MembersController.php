@@ -368,7 +368,7 @@ class MembersController extends AppController
 
             $postData = $this->request->data('myData');
             $mobile = $postData['mobile'];
-            $member = $this->Members->find('all', ['conditions' => ['mobile' => $mobile]]);
+            $member = $this->Members->find('all', ['conditions' => ['mobile' => $mobile, 'status' => 1, 'parent' => $this->Auth->user('id')]]);
             $member = $member->first();
             $this->set(compact('member'));
         }

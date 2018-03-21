@@ -55,6 +55,7 @@ class WaterparkTicketsController extends AppController
         if ($this->request->is('post')) {
             $waterparkTicket = $this->WaterparkTickets->patchEntity($waterparkTicket, $this->request->data);
             $waterparkTicket->user_id = $this->Auth->user('id');
+            //pr($waterparkTicket);exit;
             if ($this->WaterparkTickets->save($waterparkTicket)) {
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Ticket'));
                 return $this->redirect(['action' => 'index']);
@@ -63,9 +64,13 @@ class WaterparkTicketsController extends AppController
             }
         }
         $properties = $this->WaterparkTickets->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
-        $users = $this->WaterparkTickets->Users->find('list', ['limit' => 200]);
-        $members = $this->WaterparkTickets->Members->find('list', ['limit' => 200]);
-        $this->set(compact('waterparkTicket', 'properties', 'users', 'members'));
+        $user = $this->WaterparkTickets->Users->get($this->Auth->user('id'), [
+            'contain' => ['UserDetails']
+        ]);
+        $members = $this->WaterparkTickets->Members->find('list', ['keyField' => 'id',
+            'valueField' => function ($row) { return $row['first_name'] . ' ' . $row['last_name']; }, 'conditions' => ['status' => 1, 'parent' => $this->Auth->user('id')], 'limit' => 200]);
+        //pr($members->toArray());exit;
+        $this->set(compact('waterparkTicket', 'properties', 'user', 'members'));
         $this->set('_serialize', ['waterparkTicket']);
     }
 
@@ -92,9 +97,11 @@ class WaterparkTicketsController extends AppController
             }
         }
         $properties = $this->WaterparkTickets->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
-        $users = $this->WaterparkTickets->Users->find('list', ['limit' => 200]);
+        $user = $this->WaterparkTickets->Users->get($this->Auth->user('id'), [
+            'contain' => ['UserDetails']
+        ]);
         $members = $this->WaterparkTickets->Members->find('list', ['limit' => 200]);
-        $this->set(compact('waterparkTicket', 'properties', 'users', 'members'));
+        $this->set(compact('waterparkTicket', 'properties', 'user', 'members'));
         $this->set('_serialize', ['waterparkTicket']);
     }
 

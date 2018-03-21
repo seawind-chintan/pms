@@ -180,4 +180,52 @@ class WaterparkSettingsController extends AppController
             }
         }
     }
+
+    public function getticketcodebyproperty(){
+
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $property_id = $postData['property_id'];
+            
+            $settings = $this->WaterparkSettings->find('all', [
+                'conditions' => ['property_id' => $property_id]
+            ]);
+
+            //pr(count($settings->toArray()));exit;
+            if(count($settings->toArray()) > 0){
+                $setting = $settings->first();
+
+                if(!empty($setting->ticket_code_prefix))
+                {
+                    $waterparkTicketsTable = TableRegistry::get('WaterparkTickets');
+                    $waterparkTicket = $waterparkTicketsTable->find('all', [
+                        'conditions' => ['property_id' => $property_id]
+                    ]);
+
+                    if(!empty($waterparkTicket->last())){
+                        $lastCodeArr = explode($setting->ticket_code_prefix, $waterparkTicket->last()->code);
+                        $lastWaterparkTicket= $lastCodeArr[1];
+                    } else {
+                        $lastWaterparkTicket = 0;
+                    }
+
+                    //$lastWaterparkBelt = ((!empty($waterparkBelt->last())) ? explode($setting->belt_code_prefix, $waterparkBelt->last()->code[1]) : 0 );
+
+                    //pr($lastWaterparkBelt);exit;
+
+                    $newWaterparkTicket = (int) $lastWaterparkTicket + 1;
+
+                    $new_code_to_be = $setting->ticket_code_prefix.$newWaterparkTicket;
+                    echo $new_code_to_be;exit;
+                    //echo json_encode($setting);exit;
+                } else {
+                    echo 'false';exit;
+                }
+
+            } else {
+                echo 'false';exit;
+            }
+        }
+    }
 }

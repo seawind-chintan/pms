@@ -99,6 +99,11 @@ class WaterparkTicketsTable extends Table
             ->allowEmpty('member_type');
 
         $validator
+            ->integer('mobileno')
+            ->requirePresence('mobileno', 'create')
+            ->notEmpty('mobileno');
+
+        $validator
             ->decimal('total_amount')
             ->requirePresence('total_amount', 'create')
             ->notEmpty('total_amount');
@@ -122,6 +127,11 @@ class WaterparkTicketsTable extends Table
             ->decimal('discount_amount')
             ->requirePresence('discount_amount', 'create')
             ->notEmpty('discount_amount');
+
+         $validator
+            ->decimal('net_amount')
+            ->requirePresence('net_amount', 'create')
+            ->notEmpty('net_amount');
 
         $validator
             ->integer('payment_mode')
@@ -157,7 +167,7 @@ class WaterparkTicketsTable extends Table
     {
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-        $rules->add($rules->existsIn(['member_id'], 'Members'));
+        //$rules->add($rules->existsIn(['member_id'], 'Members'));
 
         return $rules;
     }
