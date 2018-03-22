@@ -35,7 +35,7 @@
                 <th><?= $this->Paginator->sort('code', ['label' => 'Ticket No']) ?></th>
                 <th><?= $this->Paginator->sort('no_of_persons') ?></th>
                 <th><?= $this->Paginator->sort('net_amount', ['label' => 'Customer Paid Amount']) ?></th>
-                <th><?= $this->Paginator->sort('status') ?></th>
+                <!-- <th><?= $this->Paginator->sort('status') ?></th> -->
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
@@ -47,13 +47,15 @@
                 <!-- <td><?= $waterparkTicket->has('user') ? $this->Html->link($waterparkTicket->user->id, ['controller' => 'Users', 'action' => 'view', $waterparkTicket->user->id]) : '' ?></td> -->
                 <td><?= h($waterparkTicket->code) ?></td>
                 <td><?= $this->Number->format($waterparkTicket->no_of_persons) ?></td>
-                <td><?= $this->Number->format($waterparkTicket->net_amount) ?></td>
-                <td><?= $this->Number->format($waterparkTicket->status) ?></td>
+                <td><?= $this->Number->currency($waterparkTicket->net_amount, 'INR') ?></td>
+                <!-- <td><?= $this->Number->format($waterparkTicket->status) ?></td> -->
                 <td class="actions" style="white-space:nowrap">
-                  <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal">View for Print</button>
-                  <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkTicket->id], ['class'=>'btn btn-info btn-xs']) ?>
+                  <button type="button" data-ticket="<?=$waterparkTicket->id?>" class="view_for_print btn btn-info btn-xs">View &amp; Print</button> <!-- data-toggle="modal" data-target="#myModal" -->
+                  <!--<?= $this->Html->link(__('View'), ['action' => 'view', $waterparkTicket->id], ['class'=>'btn btn-info btn-xs']) ?>-->
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkTicket->id], ['class'=>'btn btn-warning btn-xs']) ?>
-                  <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $waterparkTicket->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
+                  <?= $this->Form->postLink(__('Junk'), ['action' => 'junk', $waterparkTicket->id], ['confirm' => __('Confirm to junk this ticket?'), 'class'=>'btn btn-danger btn-xs']) ?>
+                  <?= $this->Form->postLink(__('Close'), ['action' => 'close', $waterparkTicket->id], ['confirm' => __('Confirm to close this ticket?'), 'class'=>'btn btn-danger btn-xs']) ?>
+                  <!--<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $waterparkTicket->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>-->
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -76,34 +78,40 @@
 
 <div class="example-modal">
   <div class="modal" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Ticket Preview</h4>
-        </div>
-        <div class="modal-body">
-          <div>
-            <p style="text-align:center;"><span><b>Jolly Club</b></span></p>
-          </div>
-          <div>
-            <p><span>Ticket No <b>#32164654</b></span><span class="pull-right">Mobile No <b>987654321</b></span></p>
-          </div>
-          <div>
-            <p><span><b>-</b></span><span class="pull-right">No of Persons <b>2</b></span></p>
-          </div>
-          <hr>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Print</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
+    
     <!-- /.modal-dialog -->
   </div>
   <!-- /.modal -->
 </div>
 <!-- /.example-modal -->
+
+<?php $this->start('scriptBottom'); ?>
+<script>
+  $(function () {
+    $('.view_for_print').click(function(){
+      var ticketId = $(this).attr("data-ticket");
+      //alert(ticketId);
+      var postData = {
+          "ticket_id":ticketId
+      };
+      $.ajax({
+          url: "<?=DEFAULT_URL?>waterpark-tickets/ticketprintview/",
+          type: "POST",
+          data: {myData:postData},
+          success: function(data)
+           {
+            console.log(data);
+            if(data == 'null'){
+
+            } else {
+              console.log(data);
+              $('#myModal').html(data);
+              $('#myModal').modal('toggle');
+            }
+            //jQuery('#roomrack_display').html(data);
+           },
+      });
+    });
+  });
+</script>
+<?php $this->end(); ?>

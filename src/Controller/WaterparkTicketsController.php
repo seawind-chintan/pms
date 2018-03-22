@@ -2,7 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\I18n\Number;
+use Cake\View\Helper\HtmlHelper;
 /**
  * WaterparkTickets Controller
  *
@@ -23,7 +24,7 @@ class WaterparkTicketsController extends AppController
         $this->paginate = [
             'contain' => ['Properties', 'Users']
         ];
-        $waterparkTickets = $this->paginate($this->WaterparkTickets);
+        $waterparkTickets = $this->paginate($this->WaterparkTickets, ['conditions' => ['WaterparkTickets.status' => 1]]);
         //pr($waterparkTickets);exit;
         $this->set(compact('waterparkTickets'));
     }
@@ -35,10 +36,10 @@ class WaterparkTicketsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view_XXXXXXXXX($id = null)
     {
         $waterparkTicket = $this->WaterparkTickets->get($id, [
-            'contain' => ['Properties', 'Users', 'Members']
+            'contain' => ['Properties', 'Users']
         ]);
 
         $this->set('waterparkTicket', $waterparkTicket);
@@ -112,7 +113,7 @@ class WaterparkTicketsController extends AppController
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete_XXXXXXXX($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $waterparkTicket = $this->WaterparkTickets->get($id);
@@ -122,5 +123,68 @@ class WaterparkTicketsController extends AppController
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Waterpark Ticket'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+
+    public function junk($id = null)
+    {
+        $waterparkTicket = $this->WaterparkTickets->get($id, [
+            'contain' => []
+        ]);
+        
+        $waterparkTicket = $this->WaterparkTickets->patchEntity($waterparkTicket, $this->request->data);
+        $waterparkTicket->status = 2;
+        if ($this->WaterparkTickets->save($waterparkTicket)) {
+            $this->Flash->success(__('The {0} has been junked.', 'Waterpark Ticket'));
+            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->Flash->error(__('The {0} could not be junked. Please, try again.', 'Waterpark Ticket'));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function close($id = null)
+    {
+        $waterparkTicket = $this->WaterparkTickets->get($id, [
+            'contain' => []
+        ]);
+        
+        $waterparkTicket = $this->WaterparkTickets->patchEntity($waterparkTicket, $this->request->data);
+        $waterparkTicket->status = 3;
+        if ($this->WaterparkTickets->save($waterparkTicket)) {
+            $this->Flash->success(__('The {0} has been closed.', 'Waterpark Ticket'));
+            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->Flash->error(__('The {0} could not be closed. Please, try again.', 'Waterpark Ticket'));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+
+
+    public function ticketprintview(){
+
+        if ($this->request->is('ajax'))
+        {
+            $postData = $this->request->data('myData');
+            $ticket_id = $postData['ticket_id'];
+            
+            $waterparkTicket = $this->WaterparkTickets->get($ticket_id, [
+                'contain' => ['Properties']
+            ]);
+
+            //pr($waterparkTicket);
+            $this->set('waterparkTicket', $waterparkTicket);
+        }
+
+    }
+
+    public function printticket($id = null)
+    {
+        $waterparkTicket = $this->WaterparkTickets->get($id, [
+                'contain' => ['Properties']
+            ]);
+
+        $this->set('waterparkTicket', $waterparkTicket);
     }
 }

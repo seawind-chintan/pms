@@ -13,10 +13,11 @@ $session = $this->request->getSession();
 $current_user_data = $session->read('Auth.User');
 //pr($current_user_data);
 ?>
-<?php
+<ul class="sidebar-menu">
+    <?php
 if($current_user_data['role'] == 1){
 ?>
-<ul class="sidebar-menu">
+
     <li class="header">MAIN NAVIGATION</li>
     <li class="treeview">
         <a href="#">
@@ -224,12 +225,12 @@ if($current_user_data['role'] == 1){
     <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
     <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
     <li><a href="<?php echo $this->Url->build('/pages/debug'); ?>"><i class="fa fa-bug"></i> Debug</a></li>-->
-</ul>
+
 <?php
 }
 elseif($current_user_data['role'] == 2){
 ?>
-<ul class="sidebar-menu">
+
     <li class="header">MAIN NAVIGATION</li>
     <!-- <li class="treeview">
         <a href="#">
@@ -310,8 +311,76 @@ elseif($current_user_data['role'] == 2){
             <li><a href="<?php echo $this->Url->build('/waterpark-tickets'); ?>"><i class="fa fa-ticket"></i> Tickets </a></li>
         </ul>
     </li>
-</ul>
+
 <?php
 }
 ?>
 <?php } ?>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-circle-o"></i> <span>Restaurant Master</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <?php /* * ?>
+            <li><a href="<?php echo $this->Url->build('/restaurant-tables'); ?>"><i class="fa fa-list"></i> Create Table</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-tables/displayRestaurantTable'); ?>"><i class="fa fa-list"></i> Display Table</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-waiters'); ?>"><i class="fa fa-list"></i> Create Waiter</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-table-bookings'); ?>"><i class="fa fa-list"></i> Booking</a></li>
+            <?php /* */ ?>
+
+            <li><a href="<?php echo $this->Url->build('/restaurant-tables/defaultRestaurant'); ?>"><i class="fa fa-list"></i> Default Restaurant</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-kitchens'); ?>"><i class="fa fa-list"></i> Create Kitchen</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-menu-types'); ?>"><i class="fa fa-list"></i> Create Menu Type</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-menus'); ?>"><i class="fa fa-list"></i> Create Menu</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-circle-o"></i> <span>Waterpark KOTS</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/waterpark-taxes'); ?>"><i class="fa fa-list"></i> Tax Master</a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-kots/add'); ?>"><i class="fa fa-list"></i> New KOT</a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-kots/'); ?>"><i class="fa fa-list"></i> Open KOT List</a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-kots/closeKot'); ?>"><i class="fa fa-list"></i> Close KOT </a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-kots/cancelKot'); ?>"><i class="fa fa-list"></i> Cancel KOT </a></li>
+        </ul>
+    </li>
+    <?php /* * ?>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-circle-o"></i> <span>Restaurant Order</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/kots/add'); ?>"><i class="fa fa-list"></i> New KOT</a></li>
+            <li><a href="<?php echo $this->Url->build('/kots'); ?>"><i class="fa fa-list"></i> Close KOT </a></li>
+
+            
+            <li><a href="<?php echo $this->Url->build('/kots/change_table'); ?>"><i class="fa fa-list"></i> Shift Table</a></li>
+            <li><a href="<?php echo $this->Url->build('/restaurant-tables/displayRestaurantTable'); ?>"><i class="fa fa-list"></i> Display Table</a></li>
+            
+        </ul>
+    </li>
+    <?php /* */ ?>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-circle-o"></i> <span>Billing</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo $this->Url->build('/waterpark-kot-billings/unsettled_bill'); ?>"><i class="fa fa-list"></i> Unsettled Bill</a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-kot-billings/settled_bill'); ?>"><i class="fa fa-list"></i> Settled Bill</a></li>
+        </ul>
+    </li>
+</ul>

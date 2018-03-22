@@ -17,6 +17,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Utility\Inflector;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -40,8 +41,10 @@ class AppController extends Controller
      */
     public function initialize()
     {
-        parent::initialize();
+        date_default_timezone_set('Asia/Kolkata');
 
+        parent::initialize();
+        
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
@@ -75,7 +78,10 @@ class AppController extends Controller
         if (isset($user['role']) && $user['role'] === 2) {
 
             $controller_array = array('Users','Properties','Rooms','RoomTypes',
-                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates', 'Checkins', 'CheckinBillings', 'WaterparkPrices', 'WaterparkSpecificPrices', 'WaterparkCostumelockers','WaterparkRecharges','WaterparkSettings','WaterparkBelts','WaterparkTickets', 'Dashboard');
+                                        'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates', 'Checkins', 'CheckinBillings', 'WaterparkPrices', 'WaterparkSpecificPrices', 'WaterparkCostumelockers','WaterparkRecharges','WaterparkSettings','WaterparkBelts','WaterparkTickets', 'Dashboard',
+                                            'WaterparkTaxes', 'WaterparkKots', 'WaterparkKotBillings',
+                                            'RestaurantTables','RestaurantKitchens','RestaurantWaiters','RestaurantMenuTypes','RestaurantMenus','RestaurantTableBookings', 'Kots',
+                                        );
             $method_array = array();
 
             if(!empty($controller_array) && in_array($this->request->getParam('controller'),$controller_array) ||
@@ -185,6 +191,22 @@ class AppController extends Controller
 
     function getReservationTypes(){
         return ['inquiry' => 'Inquiry', 'booking' => 'Booking'];
+    }
+    function skin_array()
+    {
+        return ['blue'=>'Blue','red'=>'Red','white'=>'White', 'blue-light'=>'Blue Light', 'yellow'=>'Yellow', 'yellow-light'=>'Yellow Light', 'green'=>'Green', 'green-light'=>'Green Light', 'purple'=>'Purple', 'purple-light'=>'Purple Light', 'black'=>'Black', 'black-light'=>'Black Light'];
+    }
+    function restaurant_status_array()
+    {
+        return [0=>'Occupied',1=>'Not-Occupied',2=>'Booked'];
+    }
+    function restaurant_menu_category_array()
+    {
+        return [0=>'Breakfast',1=>'Lunch',2=>'Dinner'];
+    }
+    function restaurant_booking_status_array()
+    {
+        return [0=>'Attending',1=>'Booking Confirm',2=>'Booking Cancel'];
     }
 }
 

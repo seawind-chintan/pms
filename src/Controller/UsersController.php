@@ -388,6 +388,17 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
+                if($user['role']==3)
+                    $club_admin_user_id = $user['parent'];
+                else
+                    $club_admin_user_id = $user['id'];
+                $propertiesTable = TableRegistry::get('Properties');
+                $properties = $propertiesTable->find('all', ['conditions'=>['Properties.type' => 2,'Properties.user'=>$club_admin_user_id],'order'=>'id asc'])->first();
+
+                $session = $this->request->session();
+                $session->write('default_restaurant_id', $properties['id']);
+                $session->write('default_restaurant_name', $properties['name']);
+
                 $this->Auth->setUser($user);
                 return $this->redirect($this->Auth->redirectUrl());
             }
@@ -397,6 +408,8 @@ class UsersController extends AppController
 
     public function logout()
     {
+        $session = $this->request->session();
+        $session->destroy();
         return $this->redirect($this->Auth->logout());
     }
 }

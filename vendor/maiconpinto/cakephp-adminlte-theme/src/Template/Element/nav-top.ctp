@@ -25,7 +25,15 @@ $current_user_details = $users->get($id, [
   <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
     <span class="sr-only">Toggle navigation</span>
   </a>
-
+  <div class="col-sm-2">&nbsp;</div>
+  <div class="col-sm-4" style="border:0px solid red;">
+      <div style="color:#FFF;margin: 5px 0px">
+          <b>Default Restaurant : <?php echo $session->read('default_restaurant_name');?></b>&nbsp;
+          <a href="<?php echo DEFAULT_URL. 'restaurant-tables/defaultRestaurant';?>" class="btn btn-success">
+              Change
+          </a>
+      </div>
+  </div>
   <div class="navbar-custom-menu">
     <ul class="nav navbar-nav">
       <!-- Messages: style can be found in dropdown.less-->
