@@ -118,7 +118,7 @@ class WaterparkKotBillingsController extends AppController
             {
                 //Update kot to paid status
                 $waterparkKotsTable = TableRegistry::get('WaterparkKots');
-                $update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
+                //$update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
 
                 //waterpark_kot_billings
                 //`id`, `user_id`, `property_id`, `waterpark_kot_id`, `waterpark_belt_id`, `restaurant_kitchen_id`, `waterpark_kot_no`,
@@ -201,9 +201,13 @@ class WaterparkKotBillingsController extends AppController
                 $waterparkKotBilling = $this->WaterparkKotBillings->patchEntity($waterparkKotBilling_data, $new_kot_bill_array);
                 $last_kot_dtl = $this->WaterparkKotBillings->save($waterparkKotBilling);
 
-                //echo
+                pr($waterparkKotBilling);
+                exit;
+
+                echo
                 $waterpark_last_kot_id = $last_kot_dtl->id;
-    //            pr($waterparkKotBilling);
+                pr($waterparkKotBilling);
+                exit;
 
                 if($waterpark_last_kot_id)
                 {

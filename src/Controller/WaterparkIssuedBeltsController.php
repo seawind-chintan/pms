@@ -54,12 +54,15 @@ class WaterparkIssuedBeltsController extends AppController
         $waterparkIssuedBelt = $this->WaterparkIssuedBelts->newEntity();
         if ($this->request->is('post')) {
 
-            var_dump($this->request->data);
+            //var_dump($this->request->data);
 
             $waterparkTicket = $this->WaterparkIssuedBelts->WaterparkTickets->get($this->request->data['ticket_id'], [
                 'contain' => []
             ]);
 
+            $waterparkToAssignBelts = $this->WaterparkIssuedBelts->WaterparkBelts->find('all', ['fields' => ['id'], 'conditions' => ['property_id' => $this->request->data['property_id'], 'status' => 1], 'limit' => $waterparkTicket->no_of_persons]);
+
+            pr($waterparkToAssignBelts->toArray());
             pr($waterparkTicket->no_of_persons);
 
             $data = array();
