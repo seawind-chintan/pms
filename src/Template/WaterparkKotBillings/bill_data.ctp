@@ -112,7 +112,7 @@
                                             <div class="col-sm-3">
                                                 <?php
                                                 echo $this->Form->input('bill_id', [ 'type' => 'hidden', 'value' => $waterparkKotBilling->id, 'readonly' => true]);
-                                                echo $this->Form->input('belt_id', ['label' => false, 'options' => $issue_belt_array, 'style' => ['width:180px']]);
+                                                echo $this->Form->input('belt_id', ['label' => false, 'empty'=>'Select Belt For Pay', 'options' => $issue_belt_array, 'style' => ['width:180px']]);
                                                 ?>
                                             </div>                                        
                                             <div class="col-sm-7">

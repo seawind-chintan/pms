@@ -79,7 +79,7 @@ class AppController extends Controller
 
             $controller_array = array('Users','Properties','Rooms','RoomTypes',
                                         'Countries','States','Cities','Channels','Reservations', 'ReservationRooms', 'Members', 'UserServices', 'RoomOccupancies' , 'RoomPlans', 'RoomRates', 'Checkins', 'CheckinBillings', 'WaterparkPrices', 'WaterparkSpecificPrices', 'WaterparkCostumelockers','WaterparkRecharges','WaterparkSettings','WaterparkBelts','WaterparkTickets', 'Dashboard',
-                                            'WaterparkTaxes', 'WaterparkKots', 'WaterparkKotBillings',
+                                            'WaterparkTaxes', 'WaterparkKots', 'WaterparkKotBillings', 'WaterparkIssuedBelts',
                                             'RestaurantTables','RestaurantKitchens','RestaurantWaiters','RestaurantMenuTypes','RestaurantMenus','RestaurantTableBookings', 'Kots',
                                         );
             $method_array = array();

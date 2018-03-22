@@ -309,6 +309,7 @@ elseif($current_user_data['role'] == 2){
                 </ul>
             </li>
             <li><a href="<?php echo $this->Url->build('/waterpark-tickets'); ?>"><i class="fa fa-ticket"></i> Tickets </a></li>
+            <li><a href="<?php echo $this->Url->build('/waterpark-issued-belts'); ?>"><i class="fa fa-circle-o-notch"></i> Issued Belts </a></li>
         </ul>
     </li>
 

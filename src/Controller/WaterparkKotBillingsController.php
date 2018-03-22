@@ -21,7 +21,7 @@ class WaterparkKotBillingsController extends AppController
         
         $this->paginate = [
             'contain' => ['WaterparkKotItemBillings', 'RestaurantKitchens'],
-            'conditions'=>['WaterparkKotBillings.property_id'=> $select_restaurant_id,'waterparkKotBillings.bill_status'=> 0],
+            'conditions'=>['WaterparkKotBillings.property_id'=> $select_restaurant_id,'WaterparkKotBillings.bill_status'=> 0],
         ];
         $waterparkKotBillings = $this->paginate($this->WaterparkKotBillings);
 
@@ -53,14 +53,13 @@ class WaterparkKotBillingsController extends AppController
     }
 
     //Add data for Generate bill
-    public function generateBill($kotid = null)
+    function generateBill($kotid = null)
     {
-//        echo $kotid;
-//        exit;
 
         //For get default property id
         $session = $this->request->session();
         $select_restaurant_id = $session->read('default_restaurant_id');
+        $login_user_id = $this->Auth->User('id');
 
         //Get kot informationto generate bill
         $waterparkKotsTable = TableRegistry::get('WaterparkKots');
@@ -69,31 +68,11 @@ class WaterparkKotBillingsController extends AppController
                     'conditions'=>['WaterparkKots.property_id'=> $select_restaurant_id,'id'=>$kotid],
         ])->first();
 
+
+        // echo "test";
         // pr($waterpark_kot);
         // exit;
 
-        $login_user_id = $this->Auth->User('id');
-        $waterparkTaxesTable = TableRegistry::get('WaterparkTaxes');
-        $gettax_data = $waterparkTaxesTable->find('all', [
-                            'fields' => ['id','restaurant_menu_type_id', 'cgst','sgst'],
-                            'conditions'=>['user_id'=>$login_user_id],
-                            'order'=>array('id asc')
-                        ])->toArray();
-
-        if($gettax_data)
-        {
-            $tax_array = array();
-            for($i=0;$i<count($gettax_data);$i++)
-            {
-                $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['id'] = $gettax_data[$i]->id;
-                $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['restaurant_menu_type_id'] = $gettax_data[$i]->restaurant_menu_type_id;
-                $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['cgst'] = $gettax_data[$i]->cgst;
-                $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['sgst'] = $gettax_data[$i]->sgst;
-            }
-        }
-//        pr($gettax_data);
-       // pr($waterpark_kot);
-       // exit;
 
         if($waterpark_kot->kot_status==2)
         {
@@ -102,117 +81,144 @@ class WaterparkKotBillingsController extends AppController
             $set_bill_kot_data = $this->WaterparkKotBillings->find('all', [
                             'conditions'=>['waterpark_kot_id'=>$kotid]
                         ])->first();
-
-//            pr($set_bill_kot_data);
-//            exit;
+            // echo "test";
+            // pr($set_bill_kot_data);
+            // exit;
 
             return $this->redirect(['action' => 'bill_data/'.$set_bill_kot_data->id]);
         }
-
-        if($waterpark_kot)
+        else
         {
-            //Update kot to paid status
-            $waterparkKotsTable = TableRegistry::get('WaterparkKots');
-            $update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
+            // echo "Else";
+            // exit;
 
-            //waterpark_kot_billings
-            //`id`, `user_id`, `property_id`, `waterpark_kot_id`, `waterpark_belt_id`, `restaurant_kitchen_id`, `waterpark_kot_no`,
-            //`total_amount`, `total_qty`, `total_cgst`, `total_sgst`, `bill_status`, `bill_date`, `created`, `modified`
+            $waterparkTaxesTable = TableRegistry::get('WaterparkTaxes');
+            $gettax_data = $waterparkTaxesTable->find('all', [
+                                'fields' => ['id','restaurant_menu_type_id', 'cgst','sgst'],
+                                'conditions'=>['user_id'=>$login_user_id],
+                                'order'=>array('id asc')
+                            ])->toArray();
 
-            $new_kot_bill_array = array();
-            $new_kot_bill_array['user_id'] = $waterpark_kot->user_id;
-            $new_kot_bill_array['property_id'] = $waterpark_kot->property_id;
-            $new_kot_bill_array['waterpark_kot_id'] = $waterpark_kot->id;
-            $new_kot_bill_array['waterpark_belt_id'] = 0;
-            $new_kot_bill_array['restaurant_kitchen_id'] = $waterpark_kot->restaurant_kitchen_id;
-            $new_kot_bill_array['waterpark_kot_no'] = $waterpark_kot->waterpark_kot_no;
-            $new_kot_bill_array['total_amount'] = $waterpark_kot->total_amount;
-            $new_kot_bill_array['total_qty'] = $waterpark_kot->total_qty;
-            $new_kot_bill_array['total_cgst'] = 0;
-            $new_kot_bill_array['total_sgst'] = 0;
-            $new_kot_bill_array['bill_status'] = 0;   //0-generate, 1-paid
-            $new_kot_bill_array['bill_date'] = date('Y-m-d');
-
-//            pr($new_kot_bill_array);
-
-            //echo 'Total Items '.
-            $total_items = count($waterpark_kot->waterpark_kot_items);
-
-            // waterpark_kot_item_billings
-            //`id`, `property_id`, `waterpark_kot_id`, `waterpark_kot_billing_id`, `waterpark_kot_no`, `restaurant_kitchen_id`,
-            //`restaurant_menu_id`, restaurant_menu_type_id, `menu_code`, `menu_name`, `price`, `qty`, `total_price`,
-            //`cgst`, `sgst`, `kot_item_date`,
-            if($waterpark_kot->waterpark_kot_items)
+            if($gettax_data)
             {
-                $item_array = array();
-                $tot_cgst = $tot_sgst = 0;
-                for($i=0;$i<$total_items;$i++)
+                $tax_array = array();
+                for($i=0;$i<count($gettax_data);$i++)
                 {
-//                    echo '<br>Total Price '.$waterpark_kot->waterpark_kot_items[$i]->total_price;
-//                    echo '<br>Menu '.$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id;
-                    //calculate tax based on menu type id
-                    //cgst calculation
-                    //echo '<br>CGST '.
-                    $cal_cgst = $waterpark_kot->waterpark_kot_items[$i]->total_price * ($tax_array[$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id]['cgst']/100);
-                    //sgst calculation
-                    //echo '<br>SGST '.
-                    $cal_sgst = $waterpark_kot->waterpark_kot_items[$i]->total_price * ($tax_array[$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id]['sgst']/100);
-
-
-                    $single_item_data = $waterpark_kot->waterpark_kot_items[$i] ;
-//                    pr($single_item_data);
-//                    exit;
-
-                    $item_array[$i]['property_id'] = $single_item_data->property_id;
-                    $item_array[$i]['waterpark_kot_id'] = $single_item_data->waterpark_kot_id;
-                    $item_array[$i]['waterpark_kot_no'] = $single_item_data->waterpark_kot_no;
-                    $item_array[$i]['restaurant_kitchen_id'] = $single_item_data->id;
-                    $item_array[$i]['restaurant_menu_id'] = $single_item_data->restaurant_menu_id;
-                    $item_array[$i]['restaurant_menu_type_id'] = $single_item_data->restaurant_menu_type_id;
-                    $item_array[$i]['menu_code'] = $single_item_data->menu_code;
-                    $item_array[$i]['menu_name'] = $single_item_data->menu_name;
-                    $item_array[$i]['price'] = $single_item_data->price;
-                    $item_array[$i]['qty'] = $single_item_data->qty;
-                    $item_array[$i]['total_price'] = $single_item_data->total_price;
-                    $item_array[$i]['cgst'] = $cal_cgst;
-                    $item_array[$i]['sgst'] = $cal_sgst;
-                    $item_array[$i]['kot_item_date'] = date('Y-m-d');
-
-                    $tot_cgst = $tot_cgst + $cal_cgst;
-                    $tot_sgst = $tot_sgst + $cal_sgst;
+                    $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['id'] = $gettax_data[$i]->id;
+                    $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['restaurant_menu_type_id'] = $gettax_data[$i]->restaurant_menu_type_id;
+                    $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['cgst'] = $gettax_data[$i]->cgst;
+                    $tax_array[$gettax_data[$i]->restaurant_menu_type_id]['sgst'] = $gettax_data[$i]->sgst;
                 }
             }
-            //echo 'CGST-'.$tot_cgst.' SGST-'.$tot_sgst;
+            // pr($gettax_data);
+            // pr($waterpark_kot);
+            // exit;
 
-            $new_kot_bill_array['total_cgst'] = $tot_cgst;
-            $new_kot_bill_array['total_sgst'] = $tot_sgst;
-            $new_kot_bill_array['waterpark_kot_item_billings'] = $item_array;
-
-//            pr($new_kot_bill_array['waterpark_kot_item_billings']);
-//            pr($new_kot_bill_array);
-//            exit;
-
-            $waterparkKotBilling_data = $this->WaterparkKotBillings->newEntity();
-            $waterparkKotBilling = $this->WaterparkKotBillings->patchEntity($waterparkKotBilling_data, $new_kot_bill_array);
-            $last_kot_dtl = $this->WaterparkKotBillings->save($waterparkKotBilling);
-
-            //echo
-            $waterpark_last_kot_id = $last_kot_dtl->id;
-//            pr($waterparkKotBilling);
-
-            if($waterpark_last_kot_id)
+            if($waterpark_kot)
             {
-                return $this->redirect(['action' => 'bill_data/'.$waterpark_last_kot_id]);
-                exit;
+                //Update kot to paid status
+                $waterparkKotsTable = TableRegistry::get('WaterparkKots');
+                $update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
+
+                //waterpark_kot_billings
+                //`id`, `user_id`, `property_id`, `waterpark_kot_id`, `waterpark_belt_id`, `restaurant_kitchen_id`, `waterpark_kot_no`,
+                //`total_amount`, `total_qty`, `total_cgst`, `total_sgst`, `bill_status`, `bill_date`, `created`, `modified`
+
+                $new_kot_bill_array = array();
+                $new_kot_bill_array['user_id'] = $waterpark_kot->user_id;
+                $new_kot_bill_array['property_id'] = $waterpark_kot->property_id;
+                $new_kot_bill_array['waterpark_kot_id'] = $waterpark_kot->id;
+                $new_kot_bill_array['waterpark_belt_id'] = 0;
+                $new_kot_bill_array['restaurant_kitchen_id'] = $waterpark_kot->restaurant_kitchen_id;
+                $new_kot_bill_array['waterpark_kot_no'] = $waterpark_kot->waterpark_kot_no;
+                $new_kot_bill_array['total_amount'] = $waterpark_kot->total_amount;
+                $new_kot_bill_array['total_qty'] = $waterpark_kot->total_qty;
+                $new_kot_bill_array['total_cgst'] = 0;
+                $new_kot_bill_array['total_sgst'] = 0;
+                $new_kot_bill_array['bill_status'] = 0;   //0-generate, 1-paid
+                $new_kot_bill_array['bill_date'] = date('Y-m-d');
+
+    //            pr($new_kot_bill_array);
+
+                //echo 'Total Items '.
+                $total_items = count($waterpark_kot->waterpark_kot_items);
+
+                // waterpark_kot_item_billings
+                //`id`, `property_id`, `waterpark_kot_id`, `waterpark_kot_billing_id`, `waterpark_kot_no`, `restaurant_kitchen_id`,
+                //`restaurant_menu_id`, restaurant_menu_type_id, `menu_code`, `menu_name`, `price`, `qty`, `total_price`,
+                //`cgst`, `sgst`, `kot_item_date`,
+                if($waterpark_kot->waterpark_kot_items)
+                {
+                    $item_array = array();
+                    $tot_cgst = $tot_sgst = 0;
+                    for($i=0;$i<$total_items;$i++)
+                    {
+    //                    echo '<br>Total Price '.$waterpark_kot->waterpark_kot_items[$i]->total_price;
+    //                    echo '<br>Menu '.$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id;
+                        //calculate tax based on menu type id
+                        //cgst calculation
+                        //echo '<br>CGST '.
+                        $cal_cgst = $waterpark_kot->waterpark_kot_items[$i]->total_price * ($tax_array[$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id]['cgst']/100);
+                        //sgst calculation
+                        //echo '<br>SGST '.
+                        $cal_sgst = $waterpark_kot->waterpark_kot_items[$i]->total_price * ($tax_array[$waterpark_kot->waterpark_kot_items[$i]->restaurant_menu_type_id]['sgst']/100);
+
+
+                        $single_item_data = $waterpark_kot->waterpark_kot_items[$i] ;
+    //                    pr($single_item_data);
+    //                    exit;
+
+                        $item_array[$i]['property_id'] = $single_item_data->property_id;
+                        $item_array[$i]['waterpark_kot_id'] = $single_item_data->waterpark_kot_id;
+                        $item_array[$i]['waterpark_kot_no'] = $single_item_data->waterpark_kot_no;
+                        $item_array[$i]['restaurant_kitchen_id'] = $single_item_data->id;
+                        $item_array[$i]['restaurant_menu_id'] = $single_item_data->restaurant_menu_id;
+                        $item_array[$i]['restaurant_menu_type_id'] = $single_item_data->restaurant_menu_type_id;
+                        $item_array[$i]['menu_code'] = $single_item_data->menu_code;
+                        $item_array[$i]['menu_name'] = $single_item_data->menu_name;
+                        $item_array[$i]['price'] = $single_item_data->price;
+                        $item_array[$i]['qty'] = $single_item_data->qty;
+                        $item_array[$i]['total_price'] = $single_item_data->total_price;
+                        $item_array[$i]['cgst'] = $cal_cgst;
+                        $item_array[$i]['sgst'] = $cal_sgst;
+                        $item_array[$i]['kot_item_date'] = date('Y-m-d');
+
+                        $tot_cgst = $tot_cgst + $cal_cgst;
+                        $tot_sgst = $tot_sgst + $cal_sgst;
+                    }
+                }
+                //echo 'CGST-'.$tot_cgst.' SGST-'.$tot_sgst;
+
+                $new_kot_bill_array['total_cgst'] = $tot_cgst;
+                $new_kot_bill_array['total_sgst'] = $tot_sgst;
+                $new_kot_bill_array['waterpark_kot_item_billings'] = $item_array;
+
+    //            pr($new_kot_bill_array['waterpark_kot_item_billings']);
+               // pr($new_kot_bill_array);
+               // exit;
+
+                $waterparkKotBilling_data = $this->WaterparkKotBillings->newEntity();
+                $waterparkKotBilling = $this->WaterparkKotBillings->patchEntity($waterparkKotBilling_data, $new_kot_bill_array);
+                $last_kot_dtl = $this->WaterparkKotBillings->save($waterparkKotBilling);
+
+                //echo
+                $waterpark_last_kot_id = $last_kot_dtl->id;
+    //            pr($waterparkKotBilling);
+
+                if($waterpark_last_kot_id)
+                {
+                    return $this->redirect(['action' => 'bill_data/'.$waterpark_last_kot_id]);
+                    exit;
+                }
+
+    //            pr($new_kot_bill_array);
+    //            pr($item_array);
+    //            pr($waterpark_kot);
+    //            pr($waterparkKotBilling);
+    //            pr($new_kot_bill_array);
+
+
             }
-
-//            pr($new_kot_bill_array);
-//            pr($item_array);
-//            pr($waterpark_kot);
-//            pr($waterparkKotBilling);
-//            pr($new_kot_bill_array);
-
-
         }
     }
 
@@ -246,7 +252,7 @@ class WaterparkKotBillingsController extends AppController
 
         $waterparkIssuedBeltsTable = TableRegistry::get('WaterparkIssuedBelts');
         $issue_belt_data = $waterparkIssuedBeltsTable->find('all', [
-            'fields' => ['WaterparkIssuedBelts.id', 'WaterparkIssuedBelts.property_id', 'WaterparkIssuedBelts.ticket_id', 'WaterparkIssuedBelts.belt_id', 'WaterparkIssuedBelts.issued_date', 'WaterparkIssuedBelts.balance', 'WaterparkIssuedBelts.status', 'WaterparkBelts.property_id', 'WaterparkBelts.code'],
+            'fields' => ['WaterparkIssuedBelts.id', 'WaterparkIssuedBelts.property_id', 'WaterparkIssuedBelts.ticket_id', 'WaterparkIssuedBelts.belt_id', 'WaterparkIssuedBelts.issued_date', 'WaterparkIssuedBelts.status', 'WaterparkBelts.property_id', 'WaterparkBelts.code'],
             'conditions'=>['WaterparkIssuedBelts.property_id'=> $propperty_id],
             'order'=>array('WaterparkIssuedBelts.id asc')
         ])->join([
@@ -257,9 +263,11 @@ class WaterparkKotBillingsController extends AppController
                     ]
                 ])->toArray();
 
+        $issue_belt_array  = $belt_data_array = array();
+
         if($issue_belt_data)
         {
-            $issue_belt_array  = $belt_data_array = array();
+            
             for($i=0;$i<count($issue_belt_data);$i++)
             {
                 $belt_data_array[$issue_belt_data[$i]->belt_id]['id'] = $issue_belt_data[$i]->id;
