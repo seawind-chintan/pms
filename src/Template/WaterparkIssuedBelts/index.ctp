@@ -29,28 +29,28 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
+                <!-- <th><?= $this->Paginator->sort('id') ?></th> -->
                 <th><?= $this->Paginator->sort('property_id') ?></th>
                 <th><?= $this->Paginator->sort('ticket_id') ?></th>
                 <th><?= $this->Paginator->sort('belt_id') ?></th>
                 <th><?= $this->Paginator->sort('issued_date') ?></th>
-                <th><?= $this->Paginator->sort('status') ?></th>
+                <!-- <th><?= $this->Paginator->sort('status') ?></th> -->
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($waterparkIssuedBelts as $waterparkIssuedBelt): ?>
               <tr>
-                <td><?= $this->Number->format($waterparkIssuedBelt->id) ?></td>
+                <!-- <td><?= $this->Number->format($waterparkIssuedBelt->id) ?></td> -->
                 <td><?= $waterparkIssuedBelt->has('property') ? $this->Html->link($waterparkIssuedBelt->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkIssuedBelt->property->id]) : '' ?></td>
-                <td><?= $waterparkIssuedBelt->has('waterpark_ticket') ? $this->Html->link($waterparkIssuedBelt->waterpark_ticket->id, ['controller' => 'WaterparkTickets', 'action' => 'view', $waterparkIssuedBelt->waterpark_ticket->id]) : '' ?></td>
-                <td><?= $waterparkIssuedBelt->has('waterpark_belt') ? $this->Html->link($waterparkIssuedBelt->waterpark_belt->id, ['controller' => 'WaterparkBelts', 'action' => 'view', $waterparkIssuedBelt->waterpark_belt->id]) : '' ?></td>
+                <td><?= $waterparkIssuedBelt->has('waterpark_ticket') ? '#'.$this->Html->link($waterparkIssuedBelt->waterpark_ticket->code, ['controller' => 'WaterparkTickets', 'action' => 'view', $waterparkIssuedBelt->waterpark_ticket->id]) : '' ?></td>
+                <td><?= $waterparkIssuedBelt->has('waterpark_belt') ? $this->Html->link($waterparkIssuedBelt->waterpark_belt->code, ['controller' => 'WaterparkBelts', 'action' => 'view', $waterparkIssuedBelt->waterpark_belt->id]) : '' ?></td>
                 <td><?= h($waterparkIssuedBelt->issued_date) ?></td>
-                <td><?= $this->Number->format($waterparkIssuedBelt->status) ?></td>
+                <!-- <td><?= $this->Number->format($waterparkIssuedBelt->status) ?></td> -->
                 <td class="actions" style="white-space:nowrap">
-                  <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkIssuedBelt->id], ['class'=>'btn btn-info btn-xs']) ?>
-                  <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkIssuedBelt->id], ['class'=>'btn btn-warning btn-xs']) ?>
-                  <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $waterparkIssuedBelt->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
+                  <!-- <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkIssuedBelt->id], ['class'=>'btn btn-info btn-xs']) ?> -->
+                  <!-- <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkIssuedBelt->id], ['class'=>'btn btn-warning btn-xs']) ?> -->
+                  <?= $this->Form->postLink(__('Close'), ['action' => 'close', $waterparkIssuedBelt->id], ['confirm' => __('Confirm to delete this entry?'), 'class'=>'btn btn-danger btn-xs']) ?>
                 </td>
               </tr>
             <?php endforeach; ?>

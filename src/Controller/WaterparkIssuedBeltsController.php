@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * WaterparkIssuedBelts Controller
@@ -62,26 +63,44 @@ class WaterparkIssuedBeltsController extends AppController
 
             $waterparkToAssignBelts = $this->WaterparkIssuedBelts->WaterparkBelts->find('all', ['fields' => ['id'], 'conditions' => ['property_id' => $this->request->data['property_id'], 'status' => 1], 'limit' => $waterparkTicket->no_of_persons]);
 
-            pr($waterparkToAssignBelts->toArray());
-            pr($waterparkTicket->no_of_persons);
+            $toAssignBelts = $waterparkToAssignBelts->toArray();
+            //pr($waterparkTicket->no_of_persons);exit;
 
             $data = array();
+            $belt_data = array();
             for ($nop=1; $nop <= $waterparkTicket->no_of_persons; $nop++) { 
-                var_dump($nop);
+                //var_dump($nop);
                 $data[$nop]['property_id'] = $this->request->data['property_id'];
                 $data[$nop]['ticket_id'] = $this->request->data['ticket_id'];
+                $data[$nop]['belt_id'] = $toAssignBelts[$nop-1]->id;
+                $data[$nop]['issued_date'] = date('Y-m-d');
+                $data[$nop]['status'] = 0;
+
+                $belt_data[$nop]['id'] = $toAssignBelts[$nop-1]->id;
+                $belt_data[$nop]['status'] = 2;
             }
 
-            pr($data);
+            /*pr($data);
+            pr($belt_data);
+            exit;*/
 
-            exit;
-            $waterparkIssuedBelt = $this->WaterparkIssuedBelts->patchEntity($waterparkIssuedBelt, $this->request->data);
-            if ($this->WaterparkIssuedBelts->save($waterparkIssuedBelt)) {
-                $this->Flash->success(__('The {0} has been saved.', 'Waterpark Issued Belt'));
+            $waterparkIssuedBelts = $this->WaterparkIssuedBelts->newEntities($data);
+            //pr($waterparkIssuedBelts);exit;
+            if ($this->WaterparkIssuedBelts->saveMany($waterparkIssuedBelts)) {
+
+                $waterparkBeltsTable = TableRegistry::get('WaterparkBelts');
+                $list = $waterparkBeltsTable->find('all')->toArray();
+                //pr($list);exit;
+                $waterbelts = $waterparkBeltsTable->patchEntities($list, $belt_data);
+                //pr($waterbelts);exit;
+                $this->WaterparkIssuedBelts->WaterparkBelts->saveMany($waterbelts);
+
+                $this->Flash->success(__('The {0} has been saved.', 'Waterpark Belts Bulk'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Issued Belt'));
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Belts Bulk'));
             }
+
         }
         $properties = $this->WaterparkIssuedBelts->Properties->find('list', ['conditions' => ['type' => 5, 'user' => $this->Auth->user('id')], 'limit' => 200]);
         $waterparkTickets = $this->WaterparkIssuedBelts->WaterparkTickets->find('list', ['conditions' => ['WaterparkTickets.status' => 1], 'limit' => 200]);
@@ -97,7 +116,7 @@ class WaterparkIssuedBeltsController extends AppController
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit_FEFDFDGVDCXVBCXBDFGF($id = null)
     {
         $waterparkIssuedBelt = $this->WaterparkIssuedBelts->get($id, [
             'contain' => []
@@ -125,7 +144,7 @@ class WaterparkIssuedBeltsController extends AppController
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete_XXXFCSDFDSFDGDFGFG($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $waterparkIssuedBelt = $this->WaterparkIssuedBelts->get($id);
@@ -135,5 +154,32 @@ class WaterparkIssuedBeltsController extends AppController
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', 'Waterpark Issued Belt'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function close($id = null)
+    {
+        //pr($this->request->data);exit;
+        $waterparkIssuedBelt = $this->WaterparkIssuedBelts->get($id, [
+            'contain' => ['WaterparkBelts']
+        ]);
+
+        $waterparkIssuedBelt->status = 0;
+        //$waterparkIssuedBelt->waterpark_belt->status = 1;
+        $waterparkBeltsTable = TableRegistry::get('WaterparkBelts');
+        $waterparkbelt = $waterparkBeltsTable->get($waterparkIssuedBelt->belt_id);
+        //pr($waterparkbelt);
+        $waterparkbelt->status = 1;
+        //pr($waterparkbelt);exit;
+        //$waterparkbeltPatched = $waterparkBeltsTable->patchEntity($waterparkbelt, $this->request->data);
+        $waterparkIssuedBelt->waterpark_belt = $waterparkbelt;
+        //pr($this->WaterparkIssuedBelts);exit;
+        //pr($waterparkIssuedBelt);exit;
+
+        if ($this->WaterparkIssuedBelts->save($waterparkIssuedBelt)) {
+            $this->Flash->success(__('The {0} has been saved.', 'Waterpark Issued Belt'));
+            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->Flash->error(__('The {0} could not be saved. Please, try again.', 'Waterpark Issued Belt'));
+        }
     }
 }
