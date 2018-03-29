@@ -24,7 +24,7 @@ class WaterparkTicketsController extends AppController
         $this->paginate = [
             'contain' => ['Properties', 'Users']
         ];
-        $waterparkTickets = $this->paginate($this->WaterparkTickets, ['conditions' => ['WaterparkTickets.status' => 1]]);
+        $waterparkTickets = $this->paginate($this->WaterparkTickets, ['conditions' => ['WaterparkTickets.status IN' => [1,4]]]);
         //pr($waterparkTickets);exit;
         $this->set(compact('waterparkTickets'));
     }

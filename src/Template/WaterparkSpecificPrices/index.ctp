@@ -44,7 +44,7 @@
                 <td><?= $waterparkSpecificPrice->has('property') ? $this->Html->link($waterparkSpecificPrice->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkSpecificPrice->property->id]) : '' ?></td>
                 <td><?php if(empty($waterparkSpecificPrice->type)) { echo "Single Date"; } else { echo "Date Range"; } ?></td>
                 <td><?php if(empty($waterparkSpecificPrice->type)) { ?><?= h($waterparkSpecificPrice->single_date) ?><?php } else { ?><?= h($waterparkSpecificPrice->from_date) ?> - <?= h($waterparkSpecificPrice->to_date) ?><?php } ?></td>
-                <td><?= $this->Number->format($waterparkSpecificPrice->total_price) ?></td>
+                <td><?= $this->Number->currency($waterparkSpecificPrice->total_price, 'INR') ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkSpecificPrice->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkSpecificPrice->id], ['class'=>'btn btn-warning btn-xs']) ?>

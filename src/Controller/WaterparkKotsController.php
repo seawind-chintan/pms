@@ -161,7 +161,8 @@ class WaterparkKotsController extends AppController
         $this->paginate = [
 //            'contain' => ['Users', 'Properties', 'RestaurantKitchens'],
             'contain' => ['RestaurantKitchens'],
-            'conditions'=>['WaterparkKots.property_id'=> $select_restaurant_id,'WaterparkKots.kot_status in'=>[1,2]],
+            //'conditions'=>['WaterparkKots.property_id'=> $select_restaurant_id,'WaterparkKots.kot_status in'=>[1,2]],
+            'conditions'=>['WaterparkKots.property_id'=> $select_restaurant_id,'WaterparkKots.kot_status in'=>[1]],
             'order'=>array('WaterparkKots.id desc')
         ];
         $waterparkKots = $this->paginate($this->WaterparkKots);

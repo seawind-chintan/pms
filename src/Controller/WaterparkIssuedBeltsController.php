@@ -24,8 +24,8 @@ class WaterparkIssuedBeltsController extends AppController
         $this->paginate = [
             'contain' => ['Properties', 'WaterparkTickets', 'WaterparkBelts']
         ];
-        $waterparkIssuedBelts = $this->paginate($this->WaterparkIssuedBelts);
-
+        $waterparkIssuedBelts = $this->paginate($this->WaterparkIssuedBelts, ['conditions' => ['WaterparkIssuedBelts.status' => 1]]);
+        //pr($waterparkIssuedBelts);exit;
         $this->set(compact('waterparkIssuedBelts'));
     }
 
@@ -68,13 +68,14 @@ class WaterparkIssuedBeltsController extends AppController
 
             $data = array();
             $belt_data = array();
+            $ticket_data = array();
             for ($nop=1; $nop <= $waterparkTicket->no_of_persons; $nop++) { 
                 //var_dump($nop);
                 $data[$nop]['property_id'] = $this->request->data['property_id'];
                 $data[$nop]['ticket_id'] = $this->request->data['ticket_id'];
                 $data[$nop]['belt_id'] = $toAssignBelts[$nop-1]->id;
                 $data[$nop]['issued_date'] = date('Y-m-d');
-                $data[$nop]['status'] = 0;
+                $data[$nop]['status'] = 1;
 
                 $belt_data[$nop]['id'] = $toAssignBelts[$nop-1]->id;
                 $belt_data[$nop]['status'] = 2;
@@ -88,12 +89,18 @@ class WaterparkIssuedBeltsController extends AppController
             //pr($waterparkIssuedBelts);exit;
             if ($this->WaterparkIssuedBelts->saveMany($waterparkIssuedBelts)) {
 
+                // modify belts
                 $waterparkBeltsTable = TableRegistry::get('WaterparkBelts');
                 $list = $waterparkBeltsTable->find('all')->toArray();
-                //pr($list);exit;
                 $waterbelts = $waterparkBeltsTable->patchEntities($list, $belt_data);
-                //pr($waterbelts);exit;
                 $this->WaterparkIssuedBelts->WaterparkBelts->saveMany($waterbelts);
+
+                // modify ticket
+                $waterparkTicketsTable = TableRegistry::get('WaterparkTickets');
+                $waterparkticket = $waterparkTicketsTable->get($this->request->data['ticket_id']);
+                //pr($waterparkbelt);
+                $waterparkticket->status = 4;
+                $waterparkTicketsTable->save($waterparkticket);
 
                 $this->Flash->success(__('The {0} has been saved.', 'Waterpark Belts Bulk'));
                 return $this->redirect(['action' => 'index']);

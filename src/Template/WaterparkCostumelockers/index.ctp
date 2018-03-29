@@ -31,7 +31,9 @@
               <tr>
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('property_id') ?></th>
+                <th><?= $this->Paginator->sort('costume_deposit_price') ?></th>
                 <th><?= $this->Paginator->sort('costume_price') ?></th>
+                <th><?= $this->Paginator->sort('locker_deposit_price') ?></th>
                 <th><?= $this->Paginator->sort('locker_price') ?></th>
                 <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= __('Actions') ?></th>
@@ -42,8 +44,10 @@
               <tr>
                 <td><?= $this->Number->format($waterparkCostumelocker->id) ?></td>
                 <td><?= $waterparkCostumelocker->has('property') ? $this->Html->link($waterparkCostumelocker->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkCostumelocker->property->id]) : '' ?></td>
-                <td><?= $this->Number->format($waterparkCostumelocker->costume_price) ?></td>
-                <td><?= $this->Number->format($waterparkCostumelocker->locker_price) ?></td>
+                <td><?= $this->Number->currency($waterparkCostumelocker->costume_deposit_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkCostumelocker->costume_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkCostumelocker->locker_deposit_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkCostumelocker->locker_price, 'INR') ?></td>
                 <td><?php if(empty($waterparkCostumelocker->status)) { echo "Draft"; } else { echo "Published"; } ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkCostumelocker->id], ['class'=>'btn btn-info btn-xs']) ?>

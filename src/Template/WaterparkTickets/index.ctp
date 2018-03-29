@@ -35,7 +35,7 @@
                 <th><?= $this->Paginator->sort('code', ['label' => 'Ticket No']) ?></th>
                 <th><?= $this->Paginator->sort('no_of_persons') ?></th>
                 <th><?= $this->Paginator->sort('net_amount', ['label' => 'Customer Paid Amount']) ?></th>
-                <!-- <th><?= $this->Paginator->sort('status') ?></th> -->
+                <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= __('Actions') ?></th>
               </tr>
             </thead>
@@ -48,7 +48,7 @@
                 <td><?= h($waterparkTicket->code) ?></td>
                 <td><?= $this->Number->format($waterparkTicket->no_of_persons) ?></td>
                 <td><?= $this->Number->currency($waterparkTicket->net_amount, 'INR') ?></td>
-                <!-- <td><?= $this->Number->format($waterparkTicket->status) ?></td> -->
+                <td><?php if($waterparkTicket->status == "1") { echo "Ticket Generated"; } elseif($waterparkTicket->status == "4") { echo "Belts Issued"; } ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <button type="button" data-ticket="<?=$waterparkTicket->id?>" class="view_for_print btn btn-info btn-xs">View &amp; Print</button> <!-- data-toggle="modal" data-target="#myModal" -->
                   <!--<?= $this->Html->link(__('View'), ['action' => 'view', $waterparkTicket->id], ['class'=>'btn btn-info btn-xs']) ?>-->

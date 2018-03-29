@@ -62,7 +62,7 @@
                 <td><?= $menu_category_array[$restaurantMenu->menu_category] ?></td>
                 <td><?= h($restaurantMenu->code) ?></td>
                 <td><?= h($restaurantMenu->name) ?></td>
-                <td><?= h($restaurantMenu->price) ?></td>
+                <td><?= $this->Number->currency($restaurantMenu->price,'INR') ?></td>
                 <td><?= $status_options[$restaurantMenu->status] ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $restaurantMenu->id], ['class'=>'btn btn-info btn-xs']) ?>

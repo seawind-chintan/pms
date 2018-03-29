@@ -46,13 +46,13 @@
               <tr>
                 <td><?= $this->Number->format($waterparkPrice->id) ?></td>
                 <td><?= $waterparkPrice->has('property') ? $this->Html->link($waterparkPrice->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkPrice->property->id]) : '' ?></td>
-                <td><?= $this->Number->format($waterparkPrice->monday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->tuesday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->wednesday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->thursday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->friday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->saturday_total_price) ?></td>
-                <td><?= $this->Number->format($waterparkPrice->sunday_total_price) ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->monday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->tuesday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->wednesday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->thursday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->friday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->saturday_total_price, 'INR') ?></td>
+                <td><?= $this->Number->currency($waterparkPrice->sunday_total_price, 'INR') ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkPrice->id], ['class'=>'btn btn-info btn-xs']) ?>
                   <?= $this->Html->link(__('Edit'), ['action' => 'edit', $waterparkPrice->id], ['class'=>'btn btn-warning btn-xs']) ?>

@@ -43,7 +43,7 @@
                 <td><?= $this->Number->format($waterparkRecharge->id) ?></td>
                 <td><?= $waterparkRecharge->has('property') ? $this->Html->link($waterparkRecharge->property->name, ['controller' => 'Properties', 'action' => 'view', $waterparkRecharge->property->id]) : '' ?></td>
                 <td><?= h($waterparkRecharge->code) ?></td>
-                <td><?= $this->Number->format($waterparkRecharge->amount) ?></td>
+                <td><?= $this->Number->currency($waterparkRecharge->amount, 'INR') ?></td>
                 <td><?php if(empty($waterparkRecharge->status)) { echo "Draft"; } else { echo "Published"; } ?></td>
                 <td class="actions" style="white-space:nowrap">
                   <?= $this->Html->link(__('View'), ['action' => 'view', $waterparkRecharge->id], ['class'=>'btn btn-info btn-xs']) ?>

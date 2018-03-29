@@ -54,7 +54,7 @@
 
                                     <td><?= $waterparkKot->has('restaurant_kitchen') ? ($waterparkKot->restaurant_kitchen->name) : '' ?></td>
                                     <td><?= $this->Number->format($waterparkKot->total_qty) ?></td>
-                                    <td><?= $this->Number->format($waterparkKot->total_amount) ?></td>
+                                    <td><?= $this->Number->currency($waterparkKot->total_amount,'INR') ?></td>
                                     <td class="actions" style="white-space:nowrap">
 
                                         <?php //echo $this->Html->link(__('Modify'), ['action' => 'add-more/', $waterparkKot->id], ['class'=>'btn btn-info btn-xs']) ?>

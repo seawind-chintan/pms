@@ -53,9 +53,9 @@
                                     
                                     <td><?= $waterparkKotbill->has('restaurant_kitchen') ? ($waterparkKotbill->restaurant_kitchen->name) : '' ?></td>
                                     <td><?= $this->Number->format($waterparkKotbill->total_qty) ?></td>
-                                    <td><?= $total_amount = $this->Number->precision($waterparkKotbill->total_amount,2) ?></td>
-                                    <td><?= $tax_amount = $this->Number->precision($waterparkKotbill->total_cgst + $waterparkKotbill->total_sgst,2) ?></td>
-                                    <td><?= $this->Number->precision($total_amount + $tax_amount,2) ?></td>
+                                    <td><?= $this->Number->currency($total_amount = $waterparkKotbill->total_amount,'INR') ?></td>
+                                    <td><?= $this->Number->currency($tax_amount = $waterparkKotbill->total_cgst + $waterparkKotbill->total_sgst,'INR') ?></td>
+                                    <td><?= $this->Number->currency($total_amount + $tax_amount,'INR') ?></td>
                                     
                                     <td>
                                         <?php echo $this->Time->format($waterparkKotbill->created, 'dd-MM-yyyy HH:mm:ss') ?>

@@ -26,7 +26,9 @@
           <div class="box-body">
           <?php
             echo $this->Form->input('property_id', ['options' => $properties]);
+            echo $this->Form->input('costume_deposit_price');
             echo $this->Form->input('costume_price');
+            echo $this->Form->input('locker_deposit_price');
             echo $this->Form->input('locker_price');
             echo $this->Form->input('status', ['options' => ['Draft', 'Published']]);
           ?>

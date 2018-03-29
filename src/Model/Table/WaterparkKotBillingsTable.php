@@ -57,9 +57,9 @@ class WaterparkKotBillingsTable extends Table
             'foreignKey' => 'waterpark_kot_id',
             'joinType' => 'INNER'
         ]);
-//        $this->belongsTo('WaterparkBelts', [
-//            'foreignKey' => 'waterpark_belt_id'
-//        ]);
+        $this->belongsTo('WaterparkBelts', [
+            'foreignKey' => 'waterpark_belt_id'
+        ]);
         $this->belongsTo('RestaurantKitchens', [
             'foreignKey' => 'restaurant_kitchen_id'
         ]);

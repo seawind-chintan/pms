@@ -233,5 +233,15 @@ Configure::write('Theme', [
     'folder' => ROOT,
     'skin' => 'blue' // default is 'blue' ['white', 'blue', 'blue-light', 'yellow', 'yellow-light', 'green', 'green-light', 'purple', 'purple-light', 'red', 'red-light', 'black', 'black-light']
 ]);
+
+Configure::write('Session', [
+    'defaults' => 'php',
+    'ini' => [
+        // Invalidate the cookie after 120 minutes without visiting
+        // any page on the site.
+        'session.cookie_lifetime' => 7200
+    ]
+]);
+
 Plugin::load('Josegonzalez/Upload');
 Plugin::load('Proffer');

@@ -73,9 +73,19 @@ class WaterparkCostumelockersTable extends Table
             ->notEmpty('costume_price');
 
         $validator
+            ->decimal('costume_deposit_price')
+            ->requirePresence('costume_deposit_price', 'create')
+            ->notEmpty('costume_deposit_price');
+
+        $validator
             ->decimal('locker_price')
             ->requirePresence('locker_price', 'create')
             ->notEmpty('locker_price');
+
+        $validator
+            ->decimal('locker_deposit_price')
+            ->requirePresence('locker_deposit_price', 'create')
+            ->notEmpty('locker_deposit_price');
 
         $validator
             ->integer('status')
@@ -97,6 +107,38 @@ class WaterparkCostumelockersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['property_id'], 'Properties'));
         $rules->add($rules->isUnique(['property_id'], 'Costume & Locker Price for this property already added'));
+
+        $costumepricecheck = function($costumelocker) {
+            return $costumelocker->costume_price < $costumelocker->costume_deposit_price;
+        };
+        $rules->add($costumepricecheck, [
+            'errorField' => 'costume_price',
+            'message' => 'Costume Price should be lesser than Costume Deposit Price !'
+        ]);
+
+        $costumepricenotzero = function($costumelocker) {
+            return $costumelocker->costume_deposit_price > 0;
+        };
+        $rules->add($costumepricenotzero, [
+            'errorField' => 'costume_deposit_price',
+            'message' => 'Invalid Costume Deposit Price !'
+        ]);
+
+        $lockerpricecheck = function($costumelocker) {
+            return $costumelocker->locker_price < $costumelocker->locker_deposit_price;
+        };
+        $rules->add($lockerpricecheck, [
+            'errorField' => 'locker_price',
+            'message' => 'Locker Price should be lesser than Locker Deposit Price !'
+        ]);
+
+        $lockerpricenotzero = function($costumelocker) {
+            return $costumelocker->locker_deposit_price > 0;
+        };
+        $rules->add($lockerpricenotzero, [
+            'errorField' => 'locker_deposit_price',
+            'message' => 'Invalid Locker Deposit Price !'
+        ]);
 
         return $rules;
     }

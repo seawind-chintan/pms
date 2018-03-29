@@ -93,11 +93,12 @@
                                                 <td><?= $kitchen_list[$kotitem_data['restaurant_kitchen_id']] ?></td>
                                                 <td><?= $kotitem_data['menu_name'] ?></td>
                                                 <td><?= $kotitem_data['qty'] ?></td>
-                                                <td><?= $kotitem_data['price'] ?></td>
+                                                <td><?= $this->Number->currency($kotitem_data['price'], 'INR') ?></td>
                                                 <td>
                                                     <?php
-                                                    echo $sub_total = ($kotitem_data['qty'] * $kotitem_data['price']);
+                                                    $sub_total = ($kotitem_data['qty'] * $kotitem_data['price']);
                                                     $final_total = $final_total + $sub_total;
+                                                    echo $this->Number->currency($sub_total, 'INR');
                                                     ?>
                                                 </td>
                                                 <td class="actions" style="white-space:nowrap">
@@ -122,7 +123,7 @@
                                         <tr>
                                             <td colspan="5" class="text-right" style="font-weight: bold;">Total Amount</td>
                                             <td style="font-weight: bold;">
-                                                <?php echo $final_total; ?>
+                                                <?php echo $this->Number->currency($final_total, 'INR'); ?>
                                             </td>
                                         </tr>
                                     </tbody>

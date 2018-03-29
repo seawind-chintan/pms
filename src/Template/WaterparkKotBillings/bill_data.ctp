@@ -67,8 +67,8 @@
                                                 <td class="text-center"><?php echo ($i + 1); ?></td>
                                                 <td><?php echo $different_kitchen_item_array[$i]->menu_name; ?></td>
                                                 <td class="text-center"><?php echo $different_kitchen_item_array[$i]->qty; ?></td>
-                                                <td class="text-right"><?php echo $this->Number->precision($different_kitchen_item_array[$i]->price,2); ?></td>
-                                                <td class="text-right"><?php echo $this->Number->precision($different_kitchen_item_array[$i]->total_price,2); ?></td>
+                                                <td class="text-right"><?php echo $this->Number->currency($different_kitchen_item_array[$i]->price,'INR'); ?></td>
+                                                <td class="text-right"><?php echo $this->Number->currency($different_kitchen_item_array[$i]->total_price,'INR'); ?></td>
                                             </tr>
                                             <?php
                                         }
@@ -78,20 +78,20 @@
                                     <table class="itemdata" border="0" cellspacing="5" cellpadding="5" width="70%">
                                         <tr>
                                             <td width="80%"><strong><?= __('Total Amount') ?></strong></td>
-                                            <td class="text-right" width="20%"><?php echo $this->Number->precision($waterparkKotBilling->total_amount,2);?></td>
+                                            <td class="text-right" width="20%"><?php echo $this->Number->currency($waterparkKotBilling->total_amount,'INR');?></td>
                                         </tr>
                                         <tr>
                                             <td><strong><?= __('Total CGST') ?></strong></td>
-                                            <td class="text-right"><?php echo $this->Number->precision($waterparkKotBilling->total_cgst,2);?></td>
+                                            <td class="text-right"><?php echo $this->Number->currency($waterparkKotBilling->total_cgst,'INR');?></td>
                                         </tr>
                                         <tr>
                                             <td><strong><?= __('Total SGST') ?></strong></td>
-                                            <td class="text-right"><?php echo $this->Number->precision($waterparkKotBilling->total_sgst,2);?></td>
+                                            <td class="text-right"><?php echo $this->Number->currency($waterparkKotBilling->total_sgst,'INR');?></td>
                                         </tr>
                                         <tr>
                                             <td><strong><?= __('Net Amount') ?></strong></td>
                                             <td class="text-right">
-                                                <strong><?php echo $this->Number->precision(($waterparkKotBilling->total_amount + $waterparkKotBilling->total_cgst + $waterparkKotBilling->total_sgst),2);?></strong>
+                                                <strong><?php echo $this->Number->currency(($waterparkKotBilling->total_amount + $waterparkKotBilling->total_cgst + $waterparkKotBilling->total_sgst),'INR');?></strong>
                                             </td>
                                         </tr>
                                     </table>
@@ -114,10 +114,12 @@
                                                 echo $this->Form->input('bill_id', [ 'type' => 'hidden', 'value' => $waterparkKotBilling->id, 'readonly' => true]);
                                                 echo $this->Form->input('belt_id', ['label' => false, 'empty'=>'Select Belt For Pay', 'options' => $issue_belt_array, 'style' => ['width:180px']]);
                                                 ?>
-                                            </div>                                        
+                                            </div>
+                                            <?php  if($issue_belt_array){?>
                                             <div class="col-sm-7">
                                                 <?= $this->Form->button(__('Pay Bill')) ?>
                                             </div>
+                                            <?php }?>
                                         </div>
                                         <?php 
                                     }

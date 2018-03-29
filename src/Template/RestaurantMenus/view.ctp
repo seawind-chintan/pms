@@ -49,7 +49,7 @@
                         </dd>
                         <dt><?= __('Price') ?></dt>
                         <dd>
-                            <?= $this->Number->format($restaurantMenu->price) ?>
+                            <?= $this->Number->currency($restaurantMenu->price,'INR') ?>
                         </dd>
                         <?php /* * ?>
                         <dt><?= __('Discountable') ?></dt>

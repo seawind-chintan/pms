@@ -25,8 +25,8 @@ class WaterparkKotBillingsController extends AppController
         ];
         $waterparkKotBillings = $this->paginate($this->WaterparkKotBillings);
 
-        pr($waterparkKotBillings);
-        exit;
+        // pr($waterparkKotBillings);
+        // exit;
 
         $this->set(compact('waterparkKotBillings'));
     }
@@ -40,9 +40,33 @@ class WaterparkKotBillingsController extends AppController
 
 
         $this->paginate = [
-            'contain' => ['WaterparkKotItemBillings', 'RestaurantKitchens'],
-            'conditions'=>['WaterparkKotBillings.property_id'=> $select_restaurant_id,'waterparkKotBillings.bill_status'=> 0],
+           
+            /* 
+             'fields' => ['user_id', 'WaterparkKotBillings.property_id', 'WaterparkKotBillings.waterpark_kot_id', 'WaterparkKotBillings.waterpark_belt_id', 'WaterparkKotBillings.restaurant_kitchen_id', 'WaterparkKotBillings.waterpark_kot_no', 'WaterparkKotBillings.total_amount', 'WaterparkKotBillings.total_qty', 'WaterparkKotBillings.total_cgst', 'WaterparkKotBillings.total_sgst', 'WaterparkKotBillings.bill_status', 'WaterparkKotBillings.bill_date', 
+                'RestaurantKitchens.user_id', 'RestaurantKitchens.name', 
+                'WaterparkBelts.id'
+               ],
+            */
+            'contain' => [
+                    'RestaurantKitchens',
+                    'WaterparkBelts' => function (\Cake\ORM\Query $query) {
+                        return $query->select(['id', 'code'])->where(['WaterparkBelts.id <>' => 0]);
+                    }
+                    ],
+            'conditions'=>['WaterparkKotBillings.property_id'=> $select_restaurant_id,'WaterparkKotBillings.bill_status'=> 1],
+            /* *
+            'joins' =>array(
+
+                        array(
+                            'alias' => 'WaterparkBelts',
+                            'table' => 'waterpark_belts',
+                            'type' => 'inner',
+                            'conditions' => '(WaterparkBelts.id = WaterparkKotBillings.waterpark_belt_id)'                            
+                        )
+                    )
+            /* */
         ];
+
         
         $waterparkKotBillings = $this->paginate($this->WaterparkKotBillings);
 
@@ -116,9 +140,9 @@ class WaterparkKotBillingsController extends AppController
 
             if($waterpark_kot)
             {
-                //Update kot to paid status
+                //Update kot to generate billing status
                 $waterparkKotsTable = TableRegistry::get('WaterparkKots');
-                //$update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
+                $update_kot_id = $waterparkKotsTable->updateAll(array('kot_status'=>2), array('id'=>$kotid));
 
                 //waterpark_kot_billings
                 //`id`, `user_id`, `property_id`, `waterpark_kot_id`, `waterpark_belt_id`, `restaurant_kitchen_id`, `waterpark_kot_no`,
@@ -165,13 +189,13 @@ class WaterparkKotBillingsController extends AppController
 
 
                         $single_item_data = $waterpark_kot->waterpark_kot_items[$i] ;
-    //                    pr($single_item_data);
-    //                    exit;
+                       // pr($single_item_data);
+                       // exit;
 
                         $item_array[$i]['property_id'] = $single_item_data->property_id;
                         $item_array[$i]['waterpark_kot_id'] = $single_item_data->waterpark_kot_id;
                         $item_array[$i]['waterpark_kot_no'] = $single_item_data->waterpark_kot_no;
-                        $item_array[$i]['restaurant_kitchen_id'] = $single_item_data->id;
+                        $item_array[$i]['restaurant_kitchen_id'] = $single_item_data->restaurant_kitchen_id;
                         $item_array[$i]['restaurant_menu_id'] = $single_item_data->restaurant_menu_id;
                         $item_array[$i]['restaurant_menu_type_id'] = $single_item_data->restaurant_menu_type_id;
                         $item_array[$i]['menu_code'] = $single_item_data->menu_code;
@@ -201,13 +225,13 @@ class WaterparkKotBillingsController extends AppController
                 $waterparkKotBilling = $this->WaterparkKotBillings->patchEntity($waterparkKotBilling_data, $new_kot_bill_array);
                 $last_kot_dtl = $this->WaterparkKotBillings->save($waterparkKotBilling);
 
-                pr($waterparkKotBilling);
-                exit;
+                // pr($waterparkKotBilling);
+                // exit;
 
-                echo
+                // echo
                 $waterpark_last_kot_id = $last_kot_dtl->id;
-                pr($waterparkKotBilling);
-                exit;
+                // pr($waterparkKotBilling);
+                // exit;
 
                 if($waterpark_last_kot_id)
                 {
@@ -237,6 +261,7 @@ class WaterparkKotBillingsController extends AppController
         else
             $club_admin_user_id = $this->Auth->User('id');
 
+        //Get property data
         $properties = $this->WaterparkKotBillings->Properties->find('all', ['conditions' => ['type' => 5, 'user' => $club_admin_user_id]])->first();
 
         $waterparkKotBilling = $this->WaterparkKotBillings->get($billid, [
@@ -257,7 +282,7 @@ class WaterparkKotBillingsController extends AppController
         $waterparkIssuedBeltsTable = TableRegistry::get('WaterparkIssuedBelts');
         $issue_belt_data = $waterparkIssuedBeltsTable->find('all', [
             'fields' => ['WaterparkIssuedBelts.id', 'WaterparkIssuedBelts.property_id', 'WaterparkIssuedBelts.ticket_id', 'WaterparkIssuedBelts.belt_id', 'WaterparkIssuedBelts.issued_date', 'WaterparkIssuedBelts.status', 'WaterparkBelts.property_id', 'WaterparkBelts.code'],
-            'conditions'=>['WaterparkIssuedBelts.property_id'=> $propperty_id],
+            'conditions'=>['WaterparkIssuedBelts.property_id'=> $propperty_id,'WaterparkIssuedBelts.status'=>1],
             'order'=>array('WaterparkIssuedBelts.id asc')
         ])->join([
                     'WaterparkBelts' => [
@@ -278,7 +303,6 @@ class WaterparkKotBillingsController extends AppController
                 $belt_data_array[$issue_belt_data[$i]->belt_id]['property_id'] = $issue_belt_data[$i]->property_id;
                 $belt_data_array[$issue_belt_data[$i]->belt_id]['ticket_id'] = $issue_belt_data[$i]->ticket_id;
                 $belt_data_array[$issue_belt_data[$i]->belt_id]['belt_id'] = $issue_belt_data[$i]->belt_id;
-                $belt_data_array[$issue_belt_data[$i]->belt_id]['balance'] = $issue_belt_data[$i]->balance;
                 $belt_data_array[$issue_belt_data[$i]->belt_id]['code'] = $issue_belt_data[$i]->WaterparkBelts['code'];
 
                 $issue_belt_array[$issue_belt_data[$i]->belt_id] = $issue_belt_data[$i]->WaterparkBelts['code'];
@@ -287,10 +311,9 @@ class WaterparkKotBillingsController extends AppController
             }
         }
 
-
-//        pr($issue_belt_array);
-//        pr($belt_data_array);
-//        exit;
+       // pr($issue_belt_array);
+       // pr($belt_data_array);
+       // exit;
 
         $waterparkBeltTransactionsTable = TableRegistry::get('WaterparkBeltTransactions');
         $waterparkBeltTransaction = $waterparkBeltTransactionsTable->newEntity();
@@ -313,7 +336,7 @@ class WaterparkKotBillingsController extends AppController
             $add_transaction_array['property_id'] = $property_id;
             $add_transaction_array['belt_id'] = $this->request->data['belt_id'];
             $add_transaction_array['kot_billing_id'] = $this->request->data['bill_id'];
-            $add_transaction_array['transaction_type'] = 0;
+            $add_transaction_array['transaction_type'] = 0; //0 for food
             $add_transaction_array['bill_amount'] = $waterparkKotBilling->total_amount;
             $add_transaction_array['tax_amount'] = $tax_amount;
             $add_transaction_array['net_amount'] = $pay_amount;
@@ -348,7 +371,6 @@ class WaterparkKotBillingsController extends AppController
 
             if ($this->WaterparkKotBillings->save($waterparkKotBilling)) {
                 $this->Flash->success(__('The {0} has been paid.', 'Bill'));
-
                 return $this->redirect(['action' => 'bill_print/'.$waterparkKotBilling->id]);
             } else {
                 $this->Flash->error(__('The {0} could not be paid. Please, try again.', 'Bill'));

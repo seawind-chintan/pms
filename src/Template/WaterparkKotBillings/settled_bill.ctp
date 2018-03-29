@@ -47,16 +47,18 @@
                                     <td><?= $this->Number->format($waterparkKotbill->waterpark_kot_no) ?></td>
                                     
                                     <td><?= $waterparkKotbill->has('restaurant_kitchen') ? ($waterparkKotbill->restaurant_kitchen->name) : '' ?></td>
-                                    <td><?= $total_amount = $this->Number->precision($waterparkKotbill->total_amount,2) ?></td>
-                                    <td><?= $tax_amount = $this->Number->precision($waterparkKotbill->total_cgst + $waterparkKotbill->total_sgst,2) ?></td>
-
-                                    <td><?= $this->Number->precision($total_amount + $tax_amount,2) ?></td>
-
+                                    <td><?= $this->Number->currency($total_amount = $waterparkKotbill->total_amount,'INR') ?></td>
+                                    <td><?= $this->Number->currency($tax_amount = $waterparkKotbill->total_cgst + $waterparkKotbill->total_sgst,'INR') ?></td>
+                                    <td><?= $this->Number->currency($total_amount + $tax_amount,'INR') ?></td>
+                                    <td><?php echo  $waterparkKotbill->waterpark_belt->code;?></td>
                                     <td>
                                         <?php echo $this->Time->format($waterparkKotbill->created, 'dd-MM-yyyy HH:mm:ss') ?>
                                     </td>
                                     <td class="actions" style="white-space:nowrap">
-                                        <?php echo $this->Html->link(__('Pay Bill'), ['controller'=>'waterpark-kot-billings', 'action' => 'bill_data/', $waterparkKotbill->id], ['class'=>'btn btn-info btn-xs']) ?>
+                                        <?php //echo $this->Html->link(__(''), ['controller'=>'waterpark-kot-billings', 'action' => 'bill_data/', $waterparkKotbill->id], ['class'=>'btn btn-info btn-xs']) ?>
+
+                                        <a target="_blank" href="<?php echo DEFAULT_URL.'waterpark-kot-billings/bill_print/'.$waterparkKotbill->id;?>" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+                                        
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

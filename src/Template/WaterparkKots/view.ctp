@@ -47,7 +47,7 @@
                         </dd>
                         <dt><?= __('Total Amount') ?></dt>
                         <dd>
-                            <?= $this->Number->format($waterparkKot->total_amount) ?>
+                            <?= $this->Number->currency($waterparkKot->total_amount,'INR') ?>
                         </dd>
 
 
@@ -109,10 +109,10 @@
                                             <?= h($waterparkKotItems->qty) ?>
                                         </td>
                                         <td>
-                                            <?= h($waterparkKotItems->price) ?>
+                                            <?= $this->Number->currency($waterparkKotItems->price, 'INR') ?>
                                         </td>
                                         <td>
-                                            <?= h($waterparkKotItems->total_price) ?>
+                                            <?= $this->Number->currency($waterparkKotItems->total_price, 'INR') ?>
                                         </td>
                                     </tr>
                                 <?php
